@@ -1,4 +1,7 @@
 var express = require('express');
+const deleteController = require('../controllers/deleteController');
+const patchController = require('../controllers/patchController');
+const postController = require('../controllers/postController');
 const CharacteristicName = require('../models/CharacteristicName');
 var router = express.Router();
 
@@ -27,27 +30,10 @@ router.get('/:id', async (req, res, next) => {
   }
 });
 
-router.post('/', async (req, res, next) => {
-  try {
-    const { name } = req.body;
-    await CharacteristicName.query()
-      .insert({ name });
-    return res.sendStatus(200);
-  } catch (err) {
-    console.log(err);
-    return res.sendStatus(400)
-  }
-})
+router.post('/', postController);
 
-router.delete('/:id', async (req, res, next) => {
-  try {
-    await CharacteristicName.query()
-      .deleteById(req.params.id)
-    return res.sendStatus(200)
-  } catch (err) {
-    console.log(err);
-    return res.sendStatus(500);
-  }
-})
+router.patch('/:id', patchController);
+
+router.delete('/:id', deleteController);
 
 module.exports = router;

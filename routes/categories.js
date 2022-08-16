@@ -2,6 +2,9 @@ var express = require('express');
 const Category = require('../models/Categoty');
 var router = express.Router();
 const objection = require('objection');
+const patchController = require('../controllers/patchController');
+const deleteController = require('../controllers/deleteController');
+const postController = require('../controllers/postController');
 
 router.get('/', async (req, res, next) => {
   try {
@@ -27,26 +30,10 @@ router.get('/:id', async (req, res, next) => {
   }
 })
 
-router.post('/', async (req, res, next) => {
-  try {
-    const { name } = req.body;
-    await Category.query()
-      .insert({ name });
-    return res.sendStatus(200);
-  } catch (err) {
-    console.log(err);
-    return res.sendStatus(400)
-  }
-})
+router.post('/', postController);
 
-router.delete('/:id', async (req, res, next) => {
-  try {
-    await Category.query().deleteById(req.params.id)
-    return res.sendStatus(200)
-  } catch (err) {
-    console.log(err);
-    return res.sendStatus(500);
-  }
-})
+router.patch('/:id', patchController);
+
+router.delete('/:id', deleteController);
 
 module.exports = router;

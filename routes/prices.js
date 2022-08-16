@@ -1,4 +1,7 @@
 var express = require('express');
+const deleteController = require('../controllers/deleteController');
+const patchController = require('../controllers/patchController');
+const postController = require('../controllers/postController');
 const Price = require('../models/Price');
 var router = express.Router();
 
@@ -26,32 +29,10 @@ router.get('/:id', async (req, res, next) => {
   }
 });
 
-router.post('/', async (req, res, next) => {
-  try {
-    // new Date().toJSON().slice(0, 10)
-    const { price, date, product_id } = req.body;
-    await Price.query()
-      .insert({
-        price,
-        date,
-        product_id
-      });
-    return res.sendStatus(200);
-  } catch (err) {
-    console.log(err);
-    return res.sendStatus(400)
-  }
-})
+router.post('/', postController);
 
-router.delete('/:id', async (req, res, next) => {
-  try {
-    await Price.query()
-      .deleteById(req.params.id)
-    return res.sendStatus(200)
-  } catch (err) {
-    console.log(err);
-    return res.sendStatus(500);
-  }
-})
+router.patch('/:id', patchController);
+
+router.delete('/:id', deleteController);
 
 module.exports = router;

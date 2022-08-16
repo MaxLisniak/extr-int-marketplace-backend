@@ -1,4 +1,7 @@
 var express = require('express');
+const deleteController = require('../controllers/deleteController');
+const patchController = require('../controllers/patchController');
+const postController = require('../controllers/postController');
 const Favorite = require('../models/Favorite');
 var router = express.Router();
 
@@ -26,31 +29,10 @@ router.get('/:id', async (req, res, next) => {
   }
 });
 
-router.post('/', async (req, res, next) => {
-  try {
-    // new Date().toISOString().slice(0, 19).replace('T', ' ');
-    const { user_id, product_id } = req.body;
-    await Favorite.query()
-      .insert({
-        user_id,
-        product_id
-      });
-    return res.sendStatus(200);
-  } catch (err) {
-    console.log(err);
-    return res.sendStatus(400)
-  }
-})
+router.post('/', postController);
 
-router.delete('/:id', async (req, res, next) => {
-  try {
-    await Favorite.query()
-      .deleteById(req.params.id)
-    return res.sendStatus(200)
-  } catch (err) {
-    console.log(err);
-    return res.sendStatus(500);
-  }
-})
+router.patch('/:id', patchController);
+
+router.delete('/:id', deleteController);
 
 module.exports = router;
