@@ -28,6 +28,24 @@ router.get('/:id', async (req, res, next) => {
   }
 });
 
+router.post('/', async (req, res, next) => {
+  try {
+    // new Date().toISOString().slice(0, 19).replace('T', ' ');
+    const { text, created, user_id, product_id } = req.body;
+    await Comment.query()
+      .insert({
+        text,
+        created,
+        user_id,
+        product_id
+      });
+    return res.sendStatus(200);
+  } catch (err) {
+    console.log(err);
+    return res.sendStatus(400)
+  }
+})
+
 router.delete('/:id', async (req, res, next) => {
   try {
     await Comment.query().deleteById(req.params.id)

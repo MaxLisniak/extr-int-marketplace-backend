@@ -1,6 +1,7 @@
 var express = require('express');
 const Category = require('../models/Categoty');
 var router = express.Router();
+const objection = require('objection');
 
 router.get('/', async (req, res, next) => {
   try {
@@ -23,6 +24,18 @@ router.get('/:id', async (req, res, next) => {
     console.log(err);
     // Internal Server Error
     return res.sendStatus(500);
+  }
+})
+
+router.post('/', async (req, res, next) => {
+  try {
+    const { name } = req.body;
+    await Category.query()
+      .insert({ name });
+    return res.sendStatus(200);
+  } catch (err) {
+    console.log(err);
+    return res.sendStatus(400)
   }
 })
 

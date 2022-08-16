@@ -29,6 +29,22 @@ router.get('/:id', async (req, res, next) => {
   }
 });
 
+router.post('/', async (req, res, next) => {
+  try {
+    const { value, product_id, characteristic_name_id } = req.body;
+    await Characteristic.query()
+      .insert({
+        value,
+        product_id,
+        characteristic_name_id
+      });
+    return res.sendStatus(200);
+  } catch (err) {
+    console.log(err);
+    return res.sendStatus(400)
+  }
+})
+
 router.delete('/:id', async (req, res, next) => {
   try {
     await Characteristic.query()

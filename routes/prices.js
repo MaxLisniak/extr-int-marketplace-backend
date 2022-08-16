@@ -26,6 +26,23 @@ router.get('/:id', async (req, res, next) => {
   }
 });
 
+router.post('/', async (req, res, next) => {
+  try {
+    // new Date().toJSON().slice(0, 10)
+    const { price, date, product_id } = req.body;
+    await Price.query()
+      .insert({
+        price,
+        date,
+        product_id
+      });
+    return res.sendStatus(200);
+  } catch (err) {
+    console.log(err);
+    return res.sendStatus(400)
+  }
+})
+
 router.delete('/:id', async (req, res, next) => {
   try {
     await Price.query()

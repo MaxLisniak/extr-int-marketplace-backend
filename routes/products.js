@@ -43,6 +43,23 @@ router.get('/:id', async (req, res, next) => {
   }
 });
 
+router.post('/', async (req, res, next) => {
+  try {
+    const { name, description, image_url, subcategory_id } = req.body;
+    await Product.query()
+      .insert({
+        name,
+        description,
+        image_url,
+        subcategory_id
+      });
+    return res.sendStatus(200);
+  } catch (err) {
+    console.log(err);
+    return res.sendStatus(400)
+  }
+})
+
 router.delete('/:id', async (req, res, next) => {
   try {
     await Product.query()

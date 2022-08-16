@@ -18,6 +18,25 @@ class Characteristic extends Model {
     },
   }
 
+  static get jsonSchema() {
+    return {
+      type: 'object',
+      required: [
+        'value',
+        'characteristic_name_id',
+        'product_id'
+      ],
+      properties: {
+        id: { type: 'integer' },
+        value: { type: 'string', minLength: 1, maxLength: 64 },
+        characteristic_name_id: { type: 'integer' },
+        product_id: { type: 'integer' }
+      }
+    };
+  }
+
+
+
 }
 
 module.exports = Characteristic;

@@ -26,6 +26,22 @@ router.get('/:id', async (req, res, next) => {
   }
 });
 
+router.post('/', async (req, res, next) => {
+  try {
+    // new Date().toISOString().slice(0, 19).replace('T', ' ');
+    const { user_id, product_id } = req.body;
+    await Favorite.query()
+      .insert({
+        user_id,
+        product_id
+      });
+    return res.sendStatus(200);
+  } catch (err) {
+    console.log(err);
+    return res.sendStatus(400)
+  }
+})
+
 router.delete('/:id', async (req, res, next) => {
   try {
     await Favorite.query()

@@ -27,6 +27,25 @@ class Comment extends Model {
     };
   }
 
+  static get jsonSchema() {
+    return {
+      type: 'object',
+      required: [
+        'text',
+        'created',
+        'user_id',
+        'product_id',
+      ],
+      properties: {
+        id: { type: 'integer' },
+        text: { type: 'string', minLength: 1, maxLength: 512 },
+        created: { type: 'string' },
+        user_id: { type: 'integer' },
+        product_id: { type: 'integer' }
+      }
+    };
+  }
+
 }
 
 module.exports = Comment;
