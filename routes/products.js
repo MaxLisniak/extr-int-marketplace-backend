@@ -25,6 +25,26 @@ router.get('/', async (req, res, next) => {
   }
 });
 
+router.get('/brief', async (req, res, next) => {
+  try {
+    const product = await Product
+      .query()
+      .select(
+        ['id', 'name', 'image_url'],
+        Product.relatedQuery('favorites')
+          .count()
+          .as("number_of_favorites")
+      )
+      .withGraphFetched(
+        "[characteristics(defaultSelects).[characteristic_name]]")
+    return res.send(product);
+  } catch (err) {
+    console.log(err);
+    // Internal Server Error
+    return res.sendStatus(500);
+  }
+});
+
 router.get('/:id', async (req, res, next) => {
   try {
     const product = await Product

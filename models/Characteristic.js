@@ -18,6 +18,14 @@ class Characteristic extends Model {
     },
   }
 
+  static get modifiers() {
+    return {
+      defaultSelects(builder) {
+        builder.select('id', 'value');
+      },
+    };
+  }
+
   static get jsonSchema() {
     return {
       type: 'object',
