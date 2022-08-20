@@ -1,9 +1,22 @@
 const Model = require("./BaseModel");
+const path = require('path')
+// const Subcategory = require("./Subcategory");
 
 class Category extends Model {
 
   static get tableName() {
     return "categories"
+  }
+
+  static relationMappings = {
+    subcategories: {
+      relation: Model.HasManyRelation,
+      modelClass: path.join(__dirname, 'Subcategory'),
+      join: {
+        from: "categories.id",
+        to: "subcategories.category_id"
+      }
+    }
   }
 
   static get jsonSchema() {

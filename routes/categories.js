@@ -9,6 +9,7 @@ const postController = require('../controllers/postController');
 router.get('/', async (req, res, next) => {
   try {
     const categories = await Category.query()
+      .withGraphFetched('subcategories')
     return res.send(categories);
   } catch (err) {
     console.log(err);
@@ -22,6 +23,7 @@ router.get('/:id', async (req, res, next) => {
     const category = await Category
       .query()
       .findById(req.params.id)
+      .withGraphFetched('subcategories')
     return res.send(category);
   } catch (err) {
     console.log(err);
