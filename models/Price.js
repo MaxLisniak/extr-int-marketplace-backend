@@ -23,6 +23,16 @@ class Price extends Model {
     };
   }
 
+  static get modifiers() {
+    return {
+      selectLatest(builder) {
+        builder.select('id', 'price')
+          .orderBy('date', "desc")
+          .limit(1)
+      },
+    };
+  }
+
 }
 
 module.exports = Price;
