@@ -1,4 +1,5 @@
 var express = require('express');
+const { val } = require('objection');
 const deleteController = require('../controllers/deleteController');
 const patchController = require('../controllers/patchController');
 const postController = require('../controllers/postController');
@@ -34,8 +35,11 @@ router.get('/brief', async (req, res, next) => {
       selectedCategoryName,
       selectedSubcategoryName,
       minPrice,
-      maxPrice
+      maxPrice,
     } = req.query;
+
+    let { selectedCharacteristics } = req.query;
+    selectedCharacteristics = JSON.parse(selectedCharacteristics);
 
     const category = await Category.query()
       .where("name", selectedCategoryName);
@@ -43,9 +47,9 @@ router.get('/brief', async (req, res, next) => {
     if (!category[0])
       return res.sendStatus(400);
 
-    let allProducts = [];
 
-    allProducts = await
+
+    const allProducts = await
       Product.query()
         .select(
           ['products.id', 'products.name', 'products.image_url'],
@@ -61,74 +65,70 @@ router.get('/brief', async (req, res, next) => {
         .withGraphFetched(
           "[characteristics(defaultSelects).[characteristic_name], subcategory]"
         )
-        .innerJoin('subcategories', 'products.subcategory_id', 'subcategories.id')
-        .innerJoin('categories', 'subcategories.category_id', 'categories.id')
+        .innerJoin(
+          'subcategories',
+          'products.subcategory_id',
+          'subcategories.id'
+        )
+        .innerJoin(
+          'categories',
+          'subcategories.category_id',
+          'categories.id'
+        )
         .skipUndefined()
         .where("categories.name", selectedCategoryName)
         .skipUndefined()
         .where("subcategories.name", selectedSubcategoryName)
         .havingBetween('latest_price', [minPrice, maxPrice])
-        // .modifyGraph('subcategory', builder => {
-        //   builder.
-        //     skipUndefined()
-        //     .where('name', selectedSubcategoryName)
-        //   // if (selectedSubcategoryName)
-        //   // .select('name', 'id', 'category_id')
-        // })
+        // .innerJoin(
+        //   "characteristics",
+        //   "characteristics.product_id",
+        //   "products.id"
+        // )
         .orderBy('latest_price', priceOrder);
 
-    console.log(allProducts)
-    // else {
-    //   const allProducts = await Subcategory.relatedQuery('category')
-    //     .for(category.id)
-    //     .select('*')
+    const filtered = allProducts.filter(product => {
+      let filter = true;
+      // console.log("Considering " + product.name)
+      for (const item of Object.entries(selectedCharacteristics)) {
+        let [characteristic_name_id, values] = item;
+        if (values.length === 0) continue;
+        characteristic_name_id = Number(characteristic_name_id);
+        // console.log("\ttesting for " + characteristic_name_id + " characteristic")
+        for (const productChar of product.characteristics) {
+          // console.log("checking characteristic " + productChar.characteristic_name_id)
+          if (productChar.characteristic_name_id === characteristic_name_id) {
+            // console.log("match!")
+            // console.log(values)
+            if (!values.includes(productChar.value)) {
+              filter = false
+            }
+            break;
+          }
+        }
+        if (!filter) break;
+      }
 
-    // }
+      return filter;
+      //make verdict for this product
+    })
+
+    // subquery += `where characteristics.characteristic_name_id = ${characteristic_name_id}\n`;
+    // values.map(value => {
+    //   subquery += `\tand characteristics.value = "${value}"\n`
+    // })
 
 
-    // console.log(allProducts)
+    // console.log(selectedCharacteristics)
+    // console.log("all products")
+    // console.log(allProducts.map(p => p.name))
+    // console.log("filtered")
+    // console.log(filtered.map(p => p.name))
 
-
-    // Product.query()
-    //   .findByIds(
-    //     Subcategory.query()
-    //       .findById(
-    //         Category.query()
-    //           .where('name', selectedCategoryName)
-    //           .select('id')
-    //       )
-    //       .select('id')
-    //   )
-    // console.log(products)
-
-    const product = await Product
-      .query()
-      .select(
-        ['id', 'name', 'image_url'],
-        Product.relatedQuery('favorites')
-          .count()
-          .as("number_of_favorites"),
-        Product.relatedQuery('prices')
-          .select('price')
-          .orderBy('date', 'desc')
-          .limit(1)
-          .as('latest_price'),
-        // Product.relatedQuery('subcategory')
-        //   .select('id')
-        //   .as('subcategory_id'),
-      )
-      .withGraphFetched(
-        "[characteristics(defaultSelects).[characteristic_name], subcategory]")
-      // .join('subcategories', 'products.subcategory_id', 'subcategories.id')
-      // .skipUndefined()
-      // .where('subcategories.id', selectedSubcategory)
-      // .skipUndefined()
-      // .where('subcategories.category_id, selectedCategoryName)
-      // .skipUndefined()
-      // .where('category_id', selectedCategory)
-      .orderBy('latest_price', priceOrder)
-    // console.log(product)
-    return res.send(allProducts);
+    // allProducts.map(prod => {
+    //   console.log(prod.characteristics)
+    // })
+    return res.send(filtered);
   } catch (err) {
     console.log(err);
     // Internal Server Error
