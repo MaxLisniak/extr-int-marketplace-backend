@@ -21,8 +21,11 @@ class Characteristic extends Model {
   static get modifiers() {
     return {
       defaultSelects(builder) {
-        builder.select('id', 'value');
+        builder.select('id', 'value', 'characteristic_name_id');
       },
+      onlyUniqueValues(builder) {
+        builder.groupBy('value')
+      }
     };
   }
 

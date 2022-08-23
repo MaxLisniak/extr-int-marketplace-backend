@@ -1,4 +1,5 @@
 const Model = require("./BaseModel");
+const path = require('path')
 
 class CharacteristicName extends Model {
 
@@ -15,6 +16,17 @@ class CharacteristicName extends Model {
         name: { type: 'string', minLength: 1, maxLength: 32 },
       }
     };
+  }
+
+  static relationMappings = {
+    characteristics: {
+      relation: Model.HasManyRelation,
+      modelClass: path.join(__dirname, "Characteristic"),
+      join: {
+        from: "characteristic_names.id",
+        to: "characteristics.characteristic_name_id"
+      }
+    },
   }
 
 }
