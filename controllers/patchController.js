@@ -8,8 +8,11 @@ async function patchController(req, res, next) {
     const queryResult = await objects[objName].query()
       .findById(id)
       .patch(req.body);
-    if (queryResult)
-      return res.sendStatus(200)
+    if (queryResult) {
+      const newObject = await objects[objName].query()
+        .findById(id);
+      return res.send(newObject);
+    }
     else res.sendStatus(400)
   } catch (err) {
     console.log(err);
