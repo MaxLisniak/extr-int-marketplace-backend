@@ -7,6 +7,18 @@ var router = express.Router();
 
 router.get('/', async (req, res, next) => {
   try {
+    const characteristic_names = await CharacteristicName
+      .query()
+    return res.send(characteristic_names);
+  } catch (err) {
+    console.log(err);
+    // Internal Server Error
+    return res.sendStatus(500);
+  }
+})
+
+router.get('/parameterized/', async (req, res, next) => {
+  try {
     const { selectedSubcategoryName, selectedCategoryName } = req.query;
     console.log(selectedCategoryName, selectedSubcategoryName)
     if (!selectedCategoryName) return res.send("no categories")
