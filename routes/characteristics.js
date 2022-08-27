@@ -9,7 +9,8 @@ router.get('/', async (req, res, next) => {
   try {
     const characteristics = await Characteristic
       .query()
-      .withGraphFetched('characteristic_name');
+      .withGraphFetched('characteristic_name')
+      .orderBy("characteristic_name_id", "ASC")
     return res.send(characteristics);
   } catch (err) {
     console.log(err);

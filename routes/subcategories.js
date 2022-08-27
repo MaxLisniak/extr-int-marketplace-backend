@@ -10,7 +10,7 @@ router.get('/', async (req, res, next) => {
   try {
     const subcategories =
       await Subcategory.query()
-        .withGraphFetched("category")
+    // .withGraphFetched("category")
     return res.send(subcategories);
   } catch (err) {
     console.log(err);

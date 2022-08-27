@@ -4,11 +4,26 @@ const deleteController = require('../controllers/deleteController');
 const patchController = require('../controllers/patchController');
 const postController = require('../controllers/postController');
 const Category = require('../models/Categoty');
+const Characteristic = require('../models/Characteristic');
+const CharacteristicName = require('../models/CharacteristicName');
 const Product = require('../models/Product');
 const Subcategory = require('../models/Subcategory');
 var router = express.Router();
 
 router.get('/', async (req, res, next) => {
+  try {
+    const products = await Product
+      .query()
+      .orderBy('id', "DESC")
+    return res.send(products);
+  } catch (err) {
+    console.log(err);
+    // Internal Server Error
+    return res.sendStatus(500);
+  }
+});
+
+router.get('/full/', async (req, res, next) => {
   try {
     const products = await Product
       .query()
@@ -157,7 +172,34 @@ router.get('/:id', async (req, res, next) => {
   }
 });
 
-router.post('/', postController);
+router.post('/', async function postController(req, res, next) {
+  try {
+    const product = await Product.query()
+      .insert(req.body);
+    if (product) {
+      const subcategory_id = product.subcategory_id;
+      const characteristic_names = await CharacteristicName.query()
+        .where("for_subcategory_id", subcategory_id)
+        .orderBy("id", "DESC");
+      console.log(characteristic_names);
+      const characteristics = characteristic_names
+        .map(characteristic_name => {
+          return {
+            characteristic_name_id: characteristic_name.id,
+            product_id: product.id,
+            value: ""
+          }
+        })
+      await Characteristic.query()
+        .insertGraph(characteristics);
+      return res.send(product);
+    }
+    else res.sendStatus(400)
+  } catch (err) {
+    console.log(err);
+    return res.sendStatus(400)
+  }
+});
 
 router.patch('/:id', patchController);
 

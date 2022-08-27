@@ -9,6 +9,18 @@ const postController = require('../controllers/postController');
 router.get('/', async (req, res, next) => {
   try {
     const categories = await Category.query()
+      .orderBy('id', 'DESC');
+    return res.send(categories);
+  } catch (err) {
+    console.log(err);
+    // Internal Server Error
+    return res.sendStatus(500);
+  }
+});
+
+router.get('/extended/', async (req, res, next) => {
+  try {
+    const categories = await Category.query()
       .withGraphFetched('subcategories')
     return res.send(categories);
   } catch (err) {
