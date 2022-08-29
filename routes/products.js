@@ -1,13 +1,9 @@
 var express = require('express');
-const { val } = require('objection');
 const deleteController = require('../controllers/deleteController');
 const patchController = require('../controllers/patchController');
-const postController = require('../controllers/postController');
-const Category = require('../models/Categoty');
 const Characteristic = require('../models/Characteristic');
 const CharacteristicName = require('../models/CharacteristicName');
 const Product = require('../models/Product');
-const Subcategory = require('../models/Subcategory');
 var router = express.Router();
 
 router.get('/', async (req, res, next) => {
@@ -46,19 +42,13 @@ router.get('/full/', async (req, res, next) => {
 router.get('/explore', async (req, res, next) => {
   try {
     const {
-      // priceOrder,
       selectedCategoryName,
       selectedSubcategoryName,
-      // minPrice,
-      // maxPrice,
     } = req.query;
 
     if (!selectedCategoryName || !selectedSubcategoryName) {
       return res.sendStatus(400);
     }
-
-    let { selectedCharacteristics } = req.query;
-    // selectedCharacteristics = JSON.parse(selectedCharacteristics);
 
     const allProducts = await
       Product.query()
