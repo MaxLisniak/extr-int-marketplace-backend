@@ -16,6 +16,21 @@ router.get('/', async (req, res, next) => {
   }
 });
 
+router.get('/search', async (req, res, next) => {
+  try {
+    const { q } = req.query;
+    const keywords = await Keyword.query()
+      .whereRaw(`keyword like '%${q}%'`)
+      .withGraphFetched("product")
+
+    return res.send(keywords);
+  } catch (err) {
+    console.log(err);
+    // Internal Server Error
+    return res.sendStatus(500);
+  }
+});
+
 router.get('/:id', async (req, res, next) => {
   try {
     const keyword = await Keyword

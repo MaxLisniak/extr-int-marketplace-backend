@@ -19,6 +19,19 @@ router.get('/', async (req, res, next) => {
   }
 });
 
+router.get('/search', async (req, res, next) => {
+  try {
+    const { q } = req.query;
+    const products = await Product.query()
+      .whereRaw(`name like '%${q}%'`)
+    return res.send(products);
+  } catch (err) {
+    console.log(err);
+    // Internal Server Error
+    return res.sendStatus(500);
+  }
+});
+
 router.get('/full/', async (req, res, next) => {
   try {
     const products = await Product

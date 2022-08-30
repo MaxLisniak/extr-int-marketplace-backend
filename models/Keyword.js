@@ -1,4 +1,5 @@
 const Model = require("./BaseModel");
+const Product = require("./Product");
 
 class Keyword extends Model {
 
@@ -19,6 +20,17 @@ class Keyword extends Model {
         product_id: { type: 'integer' }
       }
     };
+  }
+
+  static relationMappings = {
+    product: {
+      relation: Model.BelongsToOneRelation,
+      modelClass: Product,
+      join: {
+        from: 'products.id',
+        to: 'keywords.product_id'
+      }
+    },
   }
 
 }
