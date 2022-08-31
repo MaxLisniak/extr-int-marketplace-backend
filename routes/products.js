@@ -32,26 +32,6 @@ router.get('/search', async (req, res, next) => {
   }
 });
 
-router.get('/full/', async (req, res, next) => {
-  try {
-    const products = await Product
-      .query()
-      .select(
-        'products.*',
-        Product.relatedQuery('favorites')
-          .count()
-          .as("number_of_favorites")
-      )
-      .withGraphFetched(
-        "[subcategory.[category], comments.[user], prices, characteristics.[characteristic_name]]")
-    return res.send(products);
-  } catch (err) {
-    console.log(err);
-    // Internal Server Error
-    return res.sendStatus(500);
-  }
-});
-
 router.get('/explore', async (req, res, next) => {
   try {
     const {
@@ -138,7 +118,12 @@ router.get('/:id', async (req, res, next) => {
         'products.*',
         Product.relatedQuery('favorites')
           .count()
-          .as("number_of_favorites")
+          .as("number_of_favorites"),
+        Product.relatedQuery('prices')
+          .select('price')
+          .orderBy('date', 'desc')
+          .limit(1)
+          .as('latest_price'),
       )
       .withGraphFetched(
         "[subcategory.[category], comments.[user], prices, characteristics.[characteristic_name]]")
