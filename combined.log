@@ -1,0 +1,179 @@
+08.31.22 07:01:42 | info: Trying to sign up a new user
+08.31.22 07:01:42 | error: An error occured while trying to sign up: {}
+08.31.22 07:03:49 | info: Trying to sign up a new user
+08.31.22 07:03:49 | error: An error occured while trying to sign up: Password and Password confirmation do not match
+08.31.22 07:04:50 | info: Trying to sign up a new user
+08.31.22 07:04:50 | error: A user couldn't sign up since max@mail.com already exists
+08.31.22 07:05:35 | info: Trying to sign up a new user
+08.31.22 07:05:35 | error: A user couldn't sign up since max@mail.com already exists
+08.31.22 07:05:56 | info: Trying to sign up a new user
+08.31.22 07:05:56 | error: A user couldn't sign up since max@mail.com already exists
+08.31.22 07:06:29 | info: Trying to sign up a new user
+08.31.22 07:06:29 | error: A user couldn't sign up since 1 already exists
+08.31.22 07:07:33 | info: Trying to sign up a new user
+08.31.22 07:07:33 | error: A user couldn't sign up since 1 already exists
+08.31.22 07:07:39 | info: Trying to sign up a new user
+08.31.22 07:07:39 | error: A user couldn't sign up since 1 already exists
+08.31.22 07:07:59 | info: Trying to sign up a new user
+08.31.22 07:07:59 | info: A user signed up as Maksym Lisniak
+08.31.22 07:11:17 | info: A user is trying to sign in
+08.31.22 07:11:17 | error: An error occured while trying to sign in: {}
+08.31.22 07:11:48 | info: A user is trying to sign in
+08.31.22 07:11:48 | error: An error occured while trying to sign in: {}
+08.31.22 07:13:14 | info: A user is trying to sign in
+08.31.22 07:13:14 | error: An error occured while trying to sign in: {}
+08.31.22 07:14:59 | info: A user is trying to sign in
+08.31.22 07:14:59 | error: An error occured while trying to sign in: {}
+08.31.22 07:15:16 | info: A user is trying to sign in
+08.31.22 07:15:16 | error: An error occured while trying to sign in: {}
+08.31.22 07:15:22 | info: A user is trying to sign in
+08.31.22 07:15:22 | error: An error occured while trying to sign in: {}
+08.31.22 07:17:45 | info: A user is trying to sign in
+08.31.22 07:17:45 | error: An error occured while trying to sign in: {}
+08.31.22 07:17:55 | info: A user is trying to sign in
+08.31.22 07:17:55 | error: An error occured while trying to sign in: {}
+08.31.22 07:20:01 | info: A user is trying to sign in
+08.31.22 07:20:02 | error: An error occured while trying to sign in: {}
+08.31.22 07:20:18 | info: A user is trying to sign in
+08.31.22 07:20:18 | error: An error occured while trying to sign in: {}
+08.31.22 07:21:55 | info: A user is trying to sign in
+08.31.22 07:21:55 | error: An error occured while trying to sign in: {}
+08.31.22 07:22:18 | info: A user is trying to sign in
+08.31.22 07:22:18 | error: An error occured while trying to sign in: {}
+08.31.22 08:01:59 | info: A user is trying to sign in
+08.31.22 08:01:59 | error: An error occured while trying to sign in: {}
+08.31.22 08:02:17 | info: A user is trying to sign in
+08.31.22 08:02:17 | error: An error occured while trying to sign in: {}
+08.31.22 08:02:46 | info: A user is trying to sign in
+08.31.22 08:02:46 | error: An error occured while trying to sign in: {}
+08.31.22 08:02:54 | info: A user is trying to sign in
+08.31.22 08:02:54 | error: An error occured while trying to sign in: {}
+08.31.22 08:03:54 | info: A user is trying to sign in
+08.31.22 08:03:54 | error: An error occured while trying to sign in: {}
+08.31.22 08:04:04 | info: A user is trying to sign in
+08.31.22 08:04:04 | error: An error occured while trying to sign in: {}
+08.31.22 08:05:11 | info: A user is trying to sign in
+08.31.22 08:05:11 | error: An error occured while trying to sign in: {"name":"ValidationError","type":"ModelValidation","data":{"first_name":[{"message":"must have required property 'first_name'","keyword":"required","params":{"missingProperty":"first_name"}}]},"statusCode":400}
+08.31.22 08:05:50 | info: A user is trying to sign in
+08.31.22 08:05:50 | error: An error occured while trying to sign in: {"name":"ValidationError","type":"ModelValidation","data":{"first_name":[{"message":"must have required property 'first_name'","keyword":"required","params":{"missingProperty":"first_name"}}]},"statusCode":400}
+08.31.22 08:06:00 | info: A user is trying to sign in
+08.31.22 08:06:00 | error: An error occured while trying to sign in: {"name":"ValidationError","type":"ModelValidation","data":{"first_name":[{"message":"must have required property 'first_name'","keyword":"required","params":{"missingProperty":"first_name"}}]},"statusCode":400}
+08.31.22 08:07:07 | info: A user is trying to sign in
+08.31.22 08:07:07 | info: A user is logged in as: max@mail.com
+08.31.22 08:07:14 | info: A user is trying to sign in
+08.31.22 08:07:14 | info: A user is logged in as: max@mail.com
+08.31.22 08:07:15 | info: A user is trying to sign in
+08.31.22 08:07:15 | info: A user is logged in as: max@mail.com
+08.31.22 08:07:16 | info: A user is trying to sign in
+08.31.22 08:07:16 | info: A user is logged in as: max@mail.com
+08.31.22 08:07:34 | info: A user is trying to sign in
+08.31.22 08:07:34 | info: A user is logged in as: max@mail.com
+08.31.22 08:09:04 | info: Trying to sign out
+08.31.22 08:09:31 | info: Trying to sign out
+08.31.22 08:10:02 | info: Trying to sign out
+09.01.22 09:01:53 | info: Trying to sign out
+09.01.22 09:02:50 | info: Trying to sign out
+09.01.22 09:03:34 | info: Trying to sign out
+09.01.22 09:04:13 | info: Trying to sign out
+09.01.22 09:04:38 | info: Trying to sign out
+09.01.22 09:04:38 | info: User with the username max@mail.com is signed out
+09.01.22 10:50:14 | info: Trying to sign up a new user
+09.01.22 10:50:14 | error: An error occured while trying to sign up: {}
+09.01.22 10:51:28 | info: Trying to sign up a new user
+09.01.22 10:51:28 | error: An error occured while trying to sign up: {}
+09.01.22 10:54:51 | info: Trying to sign up a new user
+09.01.22 10:54:51 | error: An error occured while trying to sign up: {}
+09.01.22 10:55:15 | info: Trying to sign up a new user
+09.01.22 10:55:15 | error: An error occured while trying to sign up: Error: data and salt arguments required
+09.01.22 10:56:46 | info: Trying to sign up a new user
+09.01.22 10:56:46 | error: An error occured while trying to sign up: Error: data and salt arguments required
+09.01.22 10:58:48 | info: Trying to sign up a new user
+09.01.22 10:58:48 | error: An error occured while trying to sign up: ValidationError: last_name: must NOT have fewer than 1 characters
+09.01.22 11:01:11 | info: Trying to sign up a new user
+09.01.22 11:01:12 | info: A user signed up as dan dann
+09.01.22 11:02:13 | info: A user is trying to sign in
+09.01.22 11:02:13 | error: An error occured while trying to sign in: {}
+09.01.22 11:02:55 | info: A user is trying to sign in
+09.01.22 11:02:55 | error: An error occured while trying to sign in: {}
+09.01.22 11:03:39 | info: A user is trying to sign in
+09.01.22 11:03:39 | error: An error occured while trying to sign is, user with the email dan doesn't exist
+09.01.22 11:04:27 | info: A user is trying to sign in
+09.01.22 11:04:27 | error: An error occured while trying to sign is, user with the email dan doesn't exist
+09.01.22 11:04:29 | info: A user is trying to sign in
+09.01.22 11:04:29 | error: An error occured while trying to sign is, user with the email dan doesn't exist
+09.01.22 11:06:10 | info: A user is trying to sign in
+09.01.22 11:06:10 | error: An error occured while trying to sign is, user with the email dan doesn't exist
+09.01.22 11:08:13 | info: A user is trying to sign in
+09.01.22 11:08:13 | error: An error occured while trying to sign is, user with the email dan doesn't exist
+09.01.22 11:09:33 | info: A user is trying to sign in
+09.01.22 11:09:33 | error: An error occured while trying to sign is, user with the email dan doesn't exist
+09.01.22 11:12:00 | info: A user is trying to sign in
+09.01.22 11:12:00 | error: An error occured while trying to sign is, user with the email dan doesn't exist
+09.01.22 11:12:22 | info: A user is trying to sign in
+09.01.22 11:12:22 | info: A user is logged in as: dan@mail.com
+09.01.22 11:13:22 | info: A user is trying to sign in
+09.01.22 11:13:22 | error: An error occured while trying to sign is, user with the email d doesn't exist
+09.01.22 11:13:25 | info: A user is trying to sign in
+09.01.22 11:13:25 | error: An error occured while trying to sign is, user with the email d doesn't exist
+09.01.22 11:13:26 | info: A user is trying to sign in
+09.01.22 11:13:26 | error: An error occured while trying to sign is, user with the email d doesn't exist
+09.01.22 11:14:51 | info: A user is trying to sign in
+09.01.22 11:14:51 | error: An error occured while trying to sign is, user with the email f doesn't exist
+09.01.22 11:14:53 | info: A user is trying to sign in
+09.01.22 11:14:53 | error: An error occured while trying to sign is, user with the email f doesn't exist
+09.01.22 11:14:54 | info: A user is trying to sign in
+09.01.22 11:14:54 | error: An error occured while trying to sign is, user with the email f doesn't exist
+09.01.22 11:14:55 | info: A user is trying to sign in
+09.01.22 11:14:55 | error: An error occured while trying to sign is, user with the email f doesn't exist
+09.01.22 11:16:13 | info: A user is trying to sign in
+09.01.22 11:16:13 | info: A user is logged in as: dan@mail.com
+09.01.22 11:17:37 | info: A user is trying to sign in
+09.01.22 11:17:37 | info: A user is logged in as: dan@mail.com
+09.01.22 11:19:17 | info: A user is trying to sign in
+09.01.22 11:19:17 | info: A user is logged in as: dan@mail.com
+09.01.22 11:19:22 | info: A user is trying to sign in
+09.01.22 11:19:23 | info: A user is logged in as: dan@mail.com
+09.01.22 11:19:40 | info: A user is trying to sign in
+09.01.22 11:19:40 | info: A user is logged in as: dan@mail.com
+09.01.22 11:20:17 | info: A user is trying to sign in
+09.01.22 11:20:17 | info: A user is logged in as: dan@mail.com
+09.01.22 11:22:26 | info: A user is trying to sign in
+09.01.22 11:22:26 | info: A user is logged in as: dan@mail.com
+09.01.22 11:23:22 | info: A user is trying to sign in
+09.01.22 11:23:22 | info: A user is logged in as: dan@mail.com
+09.01.22 11:24:02 | info: A user is trying to sign in
+09.01.22 11:24:02 | info: A user is logged in as: dan@mail.com
+09.01.22 11:26:38 | info: A user is trying to sign in
+09.01.22 11:26:38 | info: A user is logged in as: dan@mail.com
+09.01.22 11:27:15 | info: A user is trying to sign in
+09.01.22 11:27:15 | info: A user is logged in as: dan@mail.com
+09.01.22 11:28:15 | info: A user is trying to sign in
+09.01.22 11:28:15 | info: A user is logged in as: dan@mail.com
+09.01.22 12:54:59 | info: A user is trying to sign in
+09.01.22 12:54:59 | info: A user is logged in as: dan@mail.com
+09.01.22 01:02:14 | info: Trying to sign out
+09.01.22 01:02:14 | info: User with the username dan@mail.com is signed out
+09.01.22 01:03:57 | info: A user is trying to sign in
+09.01.22 01:03:57 | info: A user is logged in as: dan@mail.com
+09.01.22 01:12:22 | info: Trying to sign out
+09.01.22 01:12:22 | info: User with the username dan@mail.com is signed out
+09.01.22 01:12:31 | info: A user is trying to sign in
+09.01.22 01:12:31 | error: An error occured while trying to sign in: Wrong password is provided
+09.01.22 01:12:40 | info: A user is trying to sign in
+09.01.22 01:12:40 | info: A user is logged in as: max@mail.com
+09.01.22 01:15:42 | info: Trying to sign out
+09.01.22 01:15:42 | info: User with the username max@mail.com is signed out
+09.01.22 01:16:04 | info: Trying to sign up a new user
+09.01.22 01:16:04 | info: A user signed up as john j
+09.01.22 01:16:18 | info: A user is trying to sign in
+09.01.22 01:16:18 | info: A user is logged in as: john@mail.com
+09.01.22 01:20:35 | info: Trying to sign out
+09.01.22 01:20:36 | info: User with the username john@mail.com is signed out
+09.01.22 01:22:04 | info: A user is trying to sign in
+09.01.22 01:22:04 | info: A user is logged in as: dan@mail.com
+09.01.22 01:22:07 | info: Trying to sign out
+09.01.22 01:22:07 | info: User with the username dan@mail.com is signed out
+09.01.22 01:22:15 | info: A user is trying to sign in
+09.01.22 01:22:15 | info: A user is logged in as: max@mail.com
+09.01.22 01:26:44 | info: Trying to sign out
+09.01.22 01:26:44 | info: User with the username max@mail.com is signed out

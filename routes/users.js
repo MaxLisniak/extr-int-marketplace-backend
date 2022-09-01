@@ -4,6 +4,7 @@ const patchController = require('../controllers/patchController');
 const postController = require('../controllers/postController');
 const User = require('../models/User');
 var router = express.Router();
+const { signin, signup, signout } = require("../controllers/user");
 
 router.get('/', async (req, res, next) => {
   try {
@@ -33,5 +34,11 @@ router.post('/', postController);
 router.patch('/:id', patchController);
 
 router.delete('/:id', deleteController);
+
+router.post('/sign-in', signin);
+
+router.post('/sign-out', signout);
+
+router.post('/sign-up', signup);
 
 module.exports = router;
