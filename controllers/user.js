@@ -131,9 +131,49 @@ const signout = async (req, res) => {
 		return res.sendStatus(500);
 	}
 }
+const handleRefreshToken = async (req, res) => {
+	logger.info("User is trying to refresh a token...");
+	const cookies = req.cookies;
+	// check if a refresh token was provided
+	if (!cookies?.refreshToken) {
+		logger.error("A token cannot be refreshed as no refresh token provided")
+		return res.sendStatus(401);
+	}
+	const refreshToken = cookies.refreshToken;
+
+	// find user by refresh token
+	// let foundUser = await database("users")
+	// .where("refreshToken", refreshToken);
+	const foundUser = await User.query()
+		.findOne("refresh_token", refreshToken)
+	if (!foundUser) {
+		logger.error("A token cannot be refreshed, as the user hasn't been validly authenticated")
+		return res.sendStatus(403);
+	} //Forbidden 
+	// evaluate jwt 
+	jwt.verify(
+		refreshToken,
+		process.env.REFRESH_TOKEN_SECRET,
+		(err, decoded) => {
+			if (err || foundUser.email !== decoded.email) {
+				logger.error("An error occured while verifying the privided refresh token")
+				return res.sendStatus(403)
+			}
+			// new access token
+			const accessToken = jwt.sign(
+				{ userId: decoded.userId, email: decoded.email },
+				process.env.ACCESS_TOKEN_SECRET,
+				{ expiresIn: '15s' },
+			);
+			logger.info(`The access token is refreshed`)
+			res.json({ accessToken })
+		}
+	);
+}
 
 module.exports = {
 	signup,
 	signin,
-	signout
+	signout,
+	handleRefreshToken,
 }
