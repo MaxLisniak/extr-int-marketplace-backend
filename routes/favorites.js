@@ -16,6 +16,29 @@ router.get('/', async (req, res, next) => {
   }
 });
 
+router.post('/toggle', async (req, res) => {
+  try {
+    const { product_id, user_id } = req.body;
+    console.log(req.body)
+    const fav = await Favorite.query()
+      .findOne({ product_id, user_id });
+    if (!fav) {
+      await Favorite.query()
+        .insert({
+          product_id,
+          user_id
+        })
+    } else {
+      await Favorite.query()
+        .deleteById(fav.id);
+    }
+    return res.sendStatus(200);
+  } catch (err) {
+    console.log(err);
+    return res.sendStatus(500);
+  }
+})
+
 router.get('/:id', async (req, res, next) => {
   try {
     const favorite = await Favorite

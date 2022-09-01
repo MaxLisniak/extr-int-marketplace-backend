@@ -9165,3 +9165,15 @@
 09.01.22 03:33:56 | info: The access token is refreshed
 09.01.22 03:35:05 | info: User is trying to refresh a token...
 09.01.22 03:35:05 | info: The access token is refreshed
+09.01.22 03:37:14 | info: Trying to sign out
+09.01.22 03:37:15 | info: User with the username max@mail.com is signed out
+09.01.22 04:06:56 | info: A user is trying to sign in
+09.01.22 04:06:56 | info: A user is logged in as: max@mail.com
+09.01.22 04:07:10 | info: Trying to sign out
+09.01.22 04:07:10 | info: User with the username max@mail.com is signed out
+09.01.22 05:24:19 | info: A user is trying to sign in
+09.01.22 05:24:20 | info: A user is logged in as: max@mail.com
+09.01.22 06:06:00 | info: Trying to sign out
+09.01.22 06:06:00 | info: User with the username max@mail.com is signed out
+09.01.22 06:06:17 | info: Trying to sign up a new user
+09.01.22 06:06:17 | info: A user signed up as Joe Joe
