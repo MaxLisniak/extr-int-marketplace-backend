@@ -1,7 +1,6 @@
 var express = require('express');
 const Category = require('../models/Categoty');
 var router = express.Router();
-const objection = require('objection');
 const patchController = require('../controllers/patchController');
 const deleteController = require('../controllers/deleteController');
 const postController = require('../controllers/postController');

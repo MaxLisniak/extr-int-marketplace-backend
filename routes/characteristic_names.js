@@ -1,7 +1,6 @@
 var express = require('express');
 const deleteController = require('../controllers/deleteController');
 const patchController = require('../controllers/patchController');
-const postController = require('../controllers/postController');
 const Characteristic = require('../models/Characteristic');
 const CharacteristicName = require('../models/CharacteristicName');
 const Product = require('../models/Product');
