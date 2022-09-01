@@ -1,3 +1,4 @@
+const path = require("path");
 const Model = require("./BaseModel");
 
 class Favorite extends Model {
@@ -21,6 +22,16 @@ class Favorite extends Model {
     };
   }
 
+  static relationMappings = {
+    product: {
+      relation: Model.BelongsToOneRelation,
+      modelClass: path.join(__dirname, "Product"),
+      join: {
+        from: 'products.id',
+        to: 'favorites.product_id'
+      }
+    },
+  }
 }
 
 module.exports = Favorite;
