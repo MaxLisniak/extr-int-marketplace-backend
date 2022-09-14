@@ -9295,3 +9295,75 @@
 09.01.22 08:45:23 | info: The access token is refreshed
 09.01.22 08:45:40 | info: User is trying to refresh a token...
 09.01.22 08:45:40 | info: The access token is refreshed
+09.01.22 08:51:40 | info: User is trying to refresh a token...
+09.01.22 08:51:40 | info: The access token is refreshed
+09.01.22 08:52:51 | info: User is trying to refresh a token...
+09.01.22 08:52:51 | info: The access token is refreshed
+09.01.22 08:53:12 | info: User is trying to refresh a token...
+09.01.22 08:53:12 | info: The access token is refreshed
+09.01.22 08:53:32 | info: User is trying to refresh a token...
+09.01.22 08:53:32 | info: The access token is refreshed
+09.01.22 08:53:56 | info: Trying to sign out
+09.01.22 08:53:56 | info: User with the username max@mail.com is signed out
+09.01.22 08:57:36 | info: A user is trying to sign in
+09.01.22 08:57:36 | info: A user is logged in as: max@mail.com
+09.01.22 08:57:43 | info: Trying to sign out
+09.01.22 08:57:43 | info: User with the username max@mail.com is signed out
+09.01.22 08:58:36 | info: User is trying to refresh a token...
+09.01.22 08:58:36 | error: A token cannot be refreshed as no refresh token provided
+09.01.22 08:58:43 | info: A user is trying to sign in
+09.01.22 08:58:43 | info: A user is logged in as: max@mail.com
+09.01.22 08:58:47 | info: Trying to sign out
+09.01.22 08:58:47 | info: User with the username max@mail.com is signed out
+09.01.22 08:58:47 | info: User is trying to refresh a token...
+09.01.22 08:58:47 | error: A token cannot be refreshed as no refresh token provided
+09.01.22 08:58:50 | info: User is trying to refresh a token...
+09.01.22 08:58:50 | error: A token cannot be refreshed as no refresh token provided
+09.01.22 08:59:18 | info: A user is trying to sign in
+09.01.22 08:59:18 | info: A user is logged in as: max@mail.com
+09.01.22 08:59:31 | info: Trying to sign out
+09.01.22 08:59:31 | info: User with the username max@mail.com is signed out
+09.01.22 08:59:32 | info: User is trying to refresh a token...
+09.01.22 08:59:32 | error: A token cannot be refreshed as no refresh token provided
+09.01.22 09:01:08 | info: User is trying to refresh a token...
+09.01.22 09:01:08 | error: A token cannot be refreshed as no refresh token provided
+09.01.22 09:01:18 | info: A user is trying to sign in
+09.01.22 09:01:19 | info: A user is logged in as: max@mail.com
+09.01.22 09:01:22 | info: Trying to sign out
+09.01.22 09:01:22 | info: User with the username max@mail.com is signed out
+09.01.22 09:01:22 | info: User is trying to refresh a token...
+09.01.22 09:01:22 | error: A token cannot be refreshed as no refresh token provided
+09.01.22 09:01:35 | info: User is trying to refresh a token...
+09.01.22 09:01:35 | error: A token cannot be refreshed as no refresh token provided
+09.01.22 09:02:14 | info: Trying to sign up a new user
+09.01.22 09:02:14 | info: A user signed up as oleg Oleg12
+09.01.22 09:02:24 | info: A user is trying to sign in
+09.01.22 09:02:24 | info: A user is logged in as: oleg@mail.com
+09.01.22 09:02:39 | info: User is trying to refresh a token...
+09.01.22 09:02:39 | info: The access token is refreshed
+09.01.22 09:02:50 | info: Trying to sign out
+09.01.22 09:02:50 | info: User with the username oleg@mail.com is signed out
+09.01.22 09:02:50 | info: User is trying to refresh a token...
+09.01.22 09:02:50 | error: A token cannot be refreshed as no refresh token provided
+09.01.22 09:03:00 | info: A user is trying to sign in
+09.01.22 09:03:00 | info: A user is logged in as: max@mail.com
+09.01.22 09:04:25 | info: Trying to sign out
+09.01.22 09:04:25 | info: User with the username max@mail.com is signed out
+09.01.22 09:04:30 | info: User is trying to refresh a token...
+09.01.22 09:04:30 | error: A token cannot be refreshed as no refresh token provided
+09.01.22 09:04:54 | info: Trying to sign up a new user
+09.01.22 09:04:54 | info: A user signed up as peter parker
+09.01.22 09:05:02 | info: A user is trying to sign in
+09.01.22 09:05:02 | info: A user is logged in as: peter@mail.com
+09.01.22 09:05:17 | info: User is trying to refresh a token...
+09.01.22 09:05:17 | info: The access token is refreshed
+09.01.22 09:05:35 | info: User is trying to refresh a token...
+09.01.22 09:05:35 | info: The access token is refreshed
+09.01.22 09:05:41 | info: Trying to sign out
+09.01.22 09:05:41 | info: User with the username peter@mail.com is signed out
+09.01.22 09:05:41 | info: User is trying to refresh a token...
+09.01.22 09:05:41 | error: A token cannot be refreshed as no refresh token provided
+09.01.22 09:05:47 | info: A user is trying to sign in
+09.01.22 09:05:47 | info: A user is logged in as: max@mail.com
+09.01.22 09:05:55 | info: Trying to sign out
+09.01.22 09:05:55 | info: User with the username max@mail.com is signed out
