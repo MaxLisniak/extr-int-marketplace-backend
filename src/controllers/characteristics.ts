@@ -69,7 +69,6 @@ export const deleteCharacteristic: RequestHandler =
   async (req, res) => {
     try {
       const id = req.params.id
-      const objName: string = req.baseUrl.slice(1);
       const queryResult = await Characteristic.query()
         .deleteById(id)
       if (queryResult)

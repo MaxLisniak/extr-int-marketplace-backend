@@ -36,8 +36,7 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
-// app.use(cors({ origin: '*' }));
+app.use(express.static('./public'));
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
@@ -59,13 +58,13 @@ app.use(error404Handler);
 
 // error handler
 export type ErrorRequestHandler = (err: any, req: Request, res: Response, next: NextFunction) => any;
-const errorHandler: ErrorRequestHandler = (err: any, req, res, next) => {
+const errorHandler: ErrorRequestHandler = (err: any, req, res) => {
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
 
   // render the error page
-  res.sendStatus(err.status || 500);
+  return res.sendStatus(err.status || 500);
   // res.render('error');
 }
 app.use(errorHandler);

@@ -1,5 +1,5 @@
 import Model from "./BaseModel";
-import Product from "./Product";
+import path from "path";
 
 class Keyword extends Model {
 
@@ -25,7 +25,7 @@ class Keyword extends Model {
   static relationMappings = {
     product: {
       relation: Model.BelongsToOneRelation,
-      modelClass: Product,
+      modelClass: path.join(__dirname, "Product"),
       join: {
         from: 'products.id',
         to: 'keywords.product_id'

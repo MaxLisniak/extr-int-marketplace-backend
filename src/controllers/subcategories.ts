@@ -31,7 +31,7 @@ export const getSubcategoryById: RequestHandler =
   }
 
 export const getSubcategoryByCategoryId: RequestHandler =
-  async (req, res, next) => {
+  async (req, res) => {
     try {
       const id = req.params.id;
       const subcategories =

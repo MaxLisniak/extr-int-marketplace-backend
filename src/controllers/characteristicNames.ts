@@ -1,10 +1,7 @@
 import { RequestHandler } from "express";
 import Product from "../models/Product";
 import CharacteristicName from "../models/CharacteristicName";
-import { CharacteristicName as CharacteristicNameType } from "../types";
-import { Characteristic as CharacteristicType } from "../types";
 import Characteristic from "../models/Characteristic";
-import { Product as ProductType } from '../types';
 
 
 export const getAllCharacteristicNames: RequestHandler =

@@ -17,7 +17,7 @@ class CharacteristicName extends Model {
       properties: {
         id: { type: 'integer' },
         name: { type: 'string', minLength: 1, maxLength: 32 },
-        for_subcategory_id: { type: 'inyeger' },
+        for_subcategory_id: { type: 'integer' },
       }
     };
   }
