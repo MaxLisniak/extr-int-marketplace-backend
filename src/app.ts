@@ -6,7 +6,7 @@ import logger from 'morgan';
 import cors from 'cors';
 import type { NextFunction, RequestHandler, Request, Response } from "express";
 import dotenv from 'dotenv';
-dotenv.config();
+dotenv.config(); // TODO: заюзай пакет dotenv-cli
 
 import indexRouter from './routes/index';
 import usersRouter from './routes/users';
@@ -38,6 +38,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static('./public'));
 
+// TODO: вынеси роуты в отдельный файл
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/categories', categoriesRouter);
@@ -51,18 +52,20 @@ app.use('/characteristic_names', characteristicNamesRouter);
 app.use('/characteristics', characteristicsRouter);
 
 // catch 404 and forward to error handler
-const error404Handler: RequestHandler = (req, res, next) => {
+const error404Handler: RequestHandler = (req, res, next) => { //TODO: вместо объявления переменной сразу передай ее в app.use()
   next(createError(404));
 }
 app.use(error404Handler);
 
 // error handler
-export type ErrorRequestHandler = (err: any, req: Request, res: Response, next: NextFunction) => any;
+export type ErrorRequestHandler = (err: any, req: Request, res: Response, next: NextFunction) => any; // TODO: это объявление не надо, в нем нет смысла - TS от тебя этого не требует и тебе в нем нет никакой пользы
+// TODO: здесь не надо объявлять тип возвращяемых данных, вынеси код в отдельный файл в папке middleware
 const errorHandler: ErrorRequestHandler = (err, req, res, next) => {
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
 
+  // TODO: возвращемые данные должны быть структурированными: {status: "error", message: error_message}
   console.log("An error occured")
   console.log(err.name)
   if (err.name === 'ValidationError')

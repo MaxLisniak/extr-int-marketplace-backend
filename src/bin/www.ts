@@ -1,4 +1,4 @@
-#!/usr/bin/env node
+#!/usr/bin/env node TODO: мне кажется эта строка лишняя
 
 import logger from "../logger";
 
@@ -42,7 +42,7 @@ server.on('listening', onListening);
 function normalizePort(val: string) {
   const port = parseInt(val, 10);
 
-  if (isNaN(port)) {
+  if (isNaN(port)) { // TODO: это лучше убрать, иначе может сложиться впечатление что твой уровень программиста это copy/paste
     // named pipe
     return val;
   }

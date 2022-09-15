@@ -2,6 +2,8 @@
  * @param { import("knex").Knex } knex
  * @returns { Promise<void> }
  */
+// TODO: вместо одного большоно init файла создай отдельные файлы для каждой сущнасти (пожалей людей, которые будут работать с твоим кодом)
+// TODO: если код еще не на проде и тебе надо изменить структуру таблицы, лучше вносить изменения в существующие миграции, вместо того, что-бы добавлять новые
 exports.up = function (knex) {
   return knex.schema
     .createTable('users', function (table) {
@@ -13,6 +15,7 @@ exports.up = function (knex) {
       table.increments();
       table.string("name", 32).unique().notNullable();
     })
+      // TODO: нет смысла создавать отельную табилцу для категорий и сабкатегорий, должна быть одна таблица: categories {id, name, parent_id?}
     .createTable('subcategories', function (table) {
       table.increments();
       table.string("name", 32).unique().notNullable();
@@ -52,6 +55,7 @@ exports.up = function (knex) {
         .inTable("products")
         .onDelete("CASCADE");
     })
+      // TODO: в отдельной таблице нет смысла, если только нет отношения один продукт к многим ценам (но это не наш случай)
     .createTable('prices', function (table) {
       table.increments();
       table.integer('price').notNullable();
