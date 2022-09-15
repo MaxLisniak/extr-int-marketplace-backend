@@ -58,13 +58,17 @@ app.use(error404Handler);
 
 // error handler
 export type ErrorRequestHandler = (err: any, req: Request, res: Response, next: NextFunction) => any;
-const errorHandler: ErrorRequestHandler = (err: any, req, res) => {
+const errorHandler: ErrorRequestHandler = (err, req, res, next) => {
   // set locals, only providing error in development
-  res.locals.message = err.message;
-  res.locals.error = req.app.get('env') === 'development' ? err : {};
+  // res.locals.message = err.message;
+  // res.locals.error = req.app.get('env') === 'development' ? err : {};
 
-  // render the error page
+  console.log("An error occured")
+  console.log(err.name)
+  if (err.name === 'ValidationError') return res.send(err.errors)
+
   return res.sendStatus(err.status || 500);
+  // render the error page
   // res.render('error');
 }
 app.use(errorHandler);

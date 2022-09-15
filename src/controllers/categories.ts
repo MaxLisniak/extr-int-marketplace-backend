@@ -1,5 +1,6 @@
 import { RequestHandler } from "express";
 import Category from "../models/Categoty";
+import { categorySchema } from "../validationSchemas/category";
 
 export const getAllCategories: RequestHandler =
   async (req, res, next) => {
@@ -29,6 +30,8 @@ export const getCategoryById: RequestHandler =
 
 export const postCategoty: RequestHandler =
   async (req, res, next) => {
+    categorySchema.validate(req.body)
+      .catch(err => next(err))
     const category = await Category.query()
       .insertAndFetch(req.body)
       .catch(error => next(error));

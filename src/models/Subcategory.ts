@@ -26,18 +26,6 @@ class Subcategory extends Model {
     };
   }
 
-  static get jsonSchema() {
-    return {
-      type: 'object',
-      required: ['name', 'category_id'],
-      properties: {
-        id: { type: 'integer' },
-        name: { type: 'string', minLength: 1, maxLength: 32 },
-        category_id: { type: 'integer' }
-      }
-    };
-  }
-
 }
 
 export default Subcategory;

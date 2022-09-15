@@ -10,18 +10,6 @@ class CharacteristicName extends Model {
     return "characteristic_names"
   }
 
-  static get jsonSchema() {
-    return {
-      type: 'object',
-      required: ['name'],
-      properties: {
-        id: { type: 'integer' },
-        name: { type: 'string', minLength: 1, maxLength: 32 },
-        for_subcategory_id: { type: 'integer' },
-      }
-    };
-  }
-
   static relationMappings = {
     characteristics: {
       relation: Model.HasManyRelation,

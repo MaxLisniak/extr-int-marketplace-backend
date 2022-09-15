@@ -71,20 +71,6 @@ class Product extends Model {
 
   }
 
-  static get jsonSchema() {
-    return {
-      type: 'object',
-      required: ['name'],
-      properties: {
-        id: { type: 'integer' },
-        name: { type: 'string', minLength: 1, maxLength: 64 },
-        description: { type: 'string', minLength: 1, maxLength: 512 },
-        image_url: { type: 'string' },
-        subcategory_id: { type: 'integer' }
-      }
-    };
-  }
-
 }
 
 export default Product;

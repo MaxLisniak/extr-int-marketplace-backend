@@ -20,19 +20,6 @@ class User extends Model {
     };
   }
 
-  static get jsonSchema() {
-    return {
-      type: 'object',
-      required: ['first_name'],
-      properties: {
-        id: { type: 'integer' },
-        first_name: { type: 'string', minLength: 1, maxLength: 32 },
-        last_name: { type: 'string', minLength: 1, maxLength: 32 },
-        email: { type: 'string', minLength: 1, maxLength: 64 },
-      }
-    };
-  }
-
 }
 
 export default User;
