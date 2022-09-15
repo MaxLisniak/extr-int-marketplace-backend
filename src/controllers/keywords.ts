@@ -1,4 +1,5 @@
 import { RequestHandler } from "express";
+import { keywordSchema } from "../validationSchemas/keyword";
 import Keyword from "../models/Keyword";
 
 export const getAllKeywords: RequestHandler =
@@ -31,6 +32,8 @@ export const getKeywordById: RequestHandler =
 
 export const postKeyword: RequestHandler =
   async (req, res, next) => {
+    keywordSchema.validate(req.body)
+      .catch(err => next(err))
     const keyword = await Keyword
       .query()
       .insertAndFetch(req.body)
@@ -40,6 +43,8 @@ export const postKeyword: RequestHandler =
 
 export const patchKeyword: RequestHandler =
   async (req, res, next) => {
+    keywordSchema.validate(req.body)
+      .catch(err => next(err))
     const id = req.params.id
     const keyword = await Keyword
       .query()

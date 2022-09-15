@@ -2,6 +2,7 @@ import { RequestHandler } from "express";
 import Product from "../models/Product";
 import CharacteristicName from "../models/CharacteristicName";
 import Characteristic from "../models/Characteristic";
+import { productSchema } from "../validationSchemas/product";
 
 export const getAllProducts: RequestHandler =
   async (req, res, next) => {
@@ -90,6 +91,8 @@ export const getProductById: RequestHandler =
 
 export const postProduct: RequestHandler =
   async (req, res, next) => {
+    productSchema.validate(req.body)
+      .catch(err => next(err))
     const product = await Product
       .query()
       .insertAndFetch(req.body)
@@ -122,6 +125,8 @@ export const postProduct: RequestHandler =
 
 export const patchProduct: RequestHandler =
   async (req, res, next) => {
+    productSchema.validate(req.body)
+      .catch(err => next(err))
     const id = req.params.id
     const product = await Product
       .query()

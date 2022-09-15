@@ -2,6 +2,7 @@ import { RequestHandler } from "express";
 import Product from "../models/Product";
 import CharacteristicName from "../models/CharacteristicName";
 import Characteristic from "../models/Characteristic";
+import { characteristicNameSchema } from "../validationSchemas/characteristicName";
 
 
 export const getAllCharacteristicNames: RequestHandler =
@@ -58,6 +59,8 @@ export const getCharacteristicNameById: RequestHandler =
 
 export const postCharacteristicName: RequestHandler =
   async (req, res, next) => {
+    characteristicNameSchema.validate(req.body)
+      .catch(err => next(err))
     const characteristic_name = await CharacteristicName
       .query()
       .insertAndFetch(req.body)
@@ -89,6 +92,8 @@ export const postCharacteristicName: RequestHandler =
 
 export const patchCharacteristicName: RequestHandler =
   async (req, res, next) => {
+    characteristicNameSchema.validate(req.body)
+      .catch(err => next(err))
     const id = req.params.id
     const characteristicName = await CharacteristicName
       .query()

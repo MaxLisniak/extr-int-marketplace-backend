@@ -1,18 +1,14 @@
 import * as yup from 'yup';
 
 export const priceSchema = yup.object().shape({
-
   price: yup
     .number()
     .integer()
-    .positive()
-    .required(),
+    .positive(),
   product_id: yup
     .number()
     .integer()
-    .positive()
-    .required(),
+    .positive(),
   date: yup
-    .date()
-    .required()
+    .date(),
 });

@@ -4,11 +4,9 @@ export const favoriteSchema = yup.object().shape({
   user_id: yup
     .number()
     .integer()
-    .positive()
-    .required(),
+    .positive(),
   product_id: yup
     .number()
     .integer()
     .positive()
-    .required(),
 });

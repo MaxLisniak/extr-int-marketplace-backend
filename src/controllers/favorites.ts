@@ -1,4 +1,5 @@
 import { RequestHandler } from "express";
+import { favoriteSchema } from "../validationSchemas/favorite";
 import Favorite from "../models/Favorite";
 
 export const getAllFavorites: RequestHandler =
@@ -57,6 +58,8 @@ export const getFavoriteById: RequestHandler =
 
 export const postFavorite: RequestHandler =
   async (req, res, next) => {
+    favoriteSchema.validate(req.body)
+      .catch(err => next(err))
     const favorite = await Favorite
       .query()
       .insertAndFetch(req.body)
@@ -66,6 +69,8 @@ export const postFavorite: RequestHandler =
 
 export const patchFavorite: RequestHandler =
   async (req, res, next) => {
+    favoriteSchema.validate(req.body)
+      .catch(err => next(err))
     const id = req.params.id
     const favorite = await Favorite
       .query()

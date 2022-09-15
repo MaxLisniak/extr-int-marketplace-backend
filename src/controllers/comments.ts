@@ -1,4 +1,5 @@
 import { RequestHandler } from "express";
+import { commentSchema } from "../validationSchemas/comment";
 import Comment from "../models/Comment";
 
 export const getAllComments: RequestHandler =
@@ -33,6 +34,8 @@ export const getCommentById: RequestHandler =
 
 export const postComment: RequestHandler =
   async (req, res, next) => {
+    commentSchema.validate(req.body)
+      .catch(err => next(err))
     const comment = await Comment
       .query()
       .insertAndFetch(req.body)
@@ -42,6 +45,8 @@ export const postComment: RequestHandler =
 
 export const patchComment: RequestHandler =
   async (req, res, next) => {
+    commentSchema.validate(req.body)
+      .catch(err => next(err))
     const id = req.params.id
     const comment = await Comment
       .query()

@@ -40,6 +40,8 @@ export const postCategoty: RequestHandler =
 
 export const patchCategory: RequestHandler =
   async (req, res, next) => {
+    categorySchema.validate(req.body)
+      .catch(err => next(err))
     const id = req.params.id
     const category = await Category.query()
       .patchAndFetchById(id, req.body)

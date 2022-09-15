@@ -1,4 +1,5 @@
 import { RequestHandler } from "express";
+import { characteristicSchema } from "../validationSchemas/characteristic";
 import Characteristic from "../models/Characteristic";
 
 export const getAllCharacteristics: RequestHandler =
@@ -23,6 +24,8 @@ export const getCharacteristicById: RequestHandler =
 
 export const postCharacteristic: RequestHandler =
   async (req, res, next) => {
+    characteristicSchema.validate(req.body)
+      .catch(err => next(err))
     const characteristic = await Characteristic
       .query()
       .insertAndFetch(req.body)
@@ -32,6 +35,8 @@ export const postCharacteristic: RequestHandler =
 
 export const patchCharacteristic: RequestHandler =
   async (req, res, next) => {
+    characteristicSchema.validate(req.body)
+      .catch(err => next(err))
     const id = req.params.id
     const characteristic = await Characteristic
       .query()

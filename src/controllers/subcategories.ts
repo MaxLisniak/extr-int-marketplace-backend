@@ -1,6 +1,7 @@
 import { RequestHandler } from "express";
 import Subcategory from "../models/Subcategory";
 import Category from "../models/Categoty";
+import { subcategorySchema } from "../validationSchemas/subcategory";
 
 export const getAllSubcategories: RequestHandler =
   async (req, res, next) => {
@@ -32,6 +33,8 @@ export const getSubcategoryByCategoryId: RequestHandler =
 
 export const postSubcategory: RequestHandler =
   async (req, res, next) => {
+    subcategorySchema.validate(req.body)
+      .catch(err => next(err))
     const subcategory = await Subcategory
       .query()
       .insertAndFetch(req.body)
@@ -41,6 +44,8 @@ export const postSubcategory: RequestHandler =
 
 export const patchSubcategory: RequestHandler =
   async (req, res, next) => {
+    subcategorySchema.validate(req.body)
+      .catch(err => next(err))
     const id = req.params.id
     const subcategory = await Subcategory
       .query()

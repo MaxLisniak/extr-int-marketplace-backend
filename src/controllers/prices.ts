@@ -1,4 +1,5 @@
 import { RequestHandler } from "express";
+import { priceSchema } from "../validationSchemas/price";
 import Price from "../models/Price";
 
 
@@ -21,6 +22,8 @@ export const getPriceById: RequestHandler =
 
 export const postPrice: RequestHandler =
   async (req, res, next) => {
+    priceSchema.validate(req.body)
+      .catch(err => next(err))
     const price = await Price
       .query()
       .insertAndFetch(req.body)
@@ -30,6 +33,8 @@ export const postPrice: RequestHandler =
 
 export const patchPrice: RequestHandler =
   async (req, res, next) => {
+    priceSchema.validate(req.body)
+      .catch(err => next(err))
     const id = req.params.id
     const price = await Price
       .query()

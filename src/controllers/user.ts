@@ -3,6 +3,7 @@ import bcrypt from "bcrypt";
 import jwt, { JsonWebTokenError, JwtPayload } from "jsonwebtoken";
 import logger from "../logger";
 import User from "../models/User";
+import { userSchema } from "../validationSchemas/user";
 
 export const getAllUsers: RequestHandler =
 	async (req, res, next) => {
@@ -23,6 +24,8 @@ export const getUserById: RequestHandler =
 
 export const postUser: RequestHandler =
 	async (req, res, next) => {
+		userSchema.validate(req.body)
+			.catch(err => next(err))
 		const user = await User
 			.query()
 			.insertAndFetch(req.body)
@@ -32,6 +35,8 @@ export const postUser: RequestHandler =
 
 export const patchUser: RequestHandler =
 	async (req, res, next) => {
+		userSchema.validate(req.body)
+			.catch(err => next(err))
 		const id = req.params.id
 		const user = await User
 			.query()
