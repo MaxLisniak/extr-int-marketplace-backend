@@ -2,78 +2,84 @@ import { RequestHandler } from "express";
 import Favorite from "../models/Favorite";
 
 export const getAllFavorites: RequestHandler =
-  async (req, res) => {
-    const favorites = await Favorite.query()
+  async (req, res, next) => {
+    const favorites = await Favorite
+      .query()
+      .catch(error => next(error))
     return res.send(favorites);
   }
 
 export const toggleFavorite: RequestHandler =
-  async (req, res) => {
+  async (req, res, next) => {
     const { product_id, user_id } = req.body;
-    const fav = await Favorite.query()
-      .findOne({ product_id, user_id });
+    const fav = await Favorite
+      .query()
+      .findOne({ product_id, user_id })
+      .catch(error => next(error))
     if (!fav) {
       await Favorite.query()
         .insert({
           product_id,
           user_id
         })
+        .catch(error => next(error))
     } else {
-      await Favorite.query()
-        .deleteById(fav.id);
+      await Favorite
+        .query()
+        .deleteById(fav.id)
+        .catch(error => next(error))
     }
     return res.sendStatus(200);
   }
 
 export const getFavoritesForUser: RequestHandler =
-  async (req, res) => {
+  async (req, res, next) => {
     const { user_id } = req.query;
-    const favorites = await Favorite.query()
+    const favorites = await Favorite
+      .query()
       .withGraphFetched("product")
       .where({ user_id: user_id })
-    const products = favorites.map((fav) => fav.product);
-    return res.send(products);
+      .catch(error => next(error))
+    if (favorites) {
+      const products = favorites.map((fav) => fav.product);
+      return res.send(products);
+    }
   }
 
 export const getFavoriteById: RequestHandler =
-  async (req, res) => {
+  async (req, res, next) => {
     const favorite = await Favorite
       .query()
       .findById(req.params.id)
+      .catch(error => next(error))
     return res.send(favorite);
   }
 
 export const postFavorite: RequestHandler =
-  async (req, res) => {
-    const queryResult = await Favorite.query()
-      .insert(req.body);
-    if (queryResult) {
-      return res.send(queryResult);
-    }
-    else res.sendStatus(400)
+  async (req, res, next) => {
+    const favorite = await Favorite
+      .query()
+      .insertAndFetch(req.body)
+      .catch(error => next(error))
+    return res.send(favorite)
   }
 
 export const patchFavorite: RequestHandler =
-  async (req, res,) => {
+  async (req, res, next) => {
     const id = req.params.id
-    const queryResult = await Favorite.query()
-      .findById(id)
-      .patch(req.body);
-    if (queryResult) {
-      const newObject = await Favorite.query()
-        .findById(id);
-      return res.send(newObject);
-    }
-    else res.sendStatus(400)
+    const favorite = await Favorite
+      .query()
+      .patchAndFetchById(id, req.body)
+      .catch(error => next(error))
+    return res.send(favorite)
   }
 
 export const deleteFavorite: RequestHandler =
-  async (req, res) => {
+  async (req, res, next) => {
     const id = req.params.id
-    const queryResult = await Favorite.query()
+    const queryResult = await Favorite
+      .query()
       .deleteById(id)
-    if (queryResult)
-      return res.sendStatus(200);
-    else
-      return res.sendStatus(400);
+      .catch(error => next(error))
+    return res.sendStatus(200);
   }

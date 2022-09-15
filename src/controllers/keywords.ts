@@ -2,61 +2,60 @@ import { RequestHandler } from "express";
 import Keyword from "../models/Keyword";
 
 export const getAllKeywords: RequestHandler =
-  async (req, res) => {
-    const keywords = await Keyword.query()
+  async (req, res, next) => {
+    const keywords = await Keyword
+      .query()
+      .catch(error => next(error))
     return res.send(keywords);
   }
 
 export const getKeywordsByQuery: RequestHandler =
-  async (req, res) => {
+  async (req, res, next) => {
     const { q } = req.query;
-    const keywords = await Keyword.query()
+    const keywords = await Keyword
+      .query()
       .where('keyword', 'like', `%${q}%`)
       .withGraphFetched("product")
+      .catch(error => next(error))
     return res.send(keywords);
   }
 
 export const getKeywordById: RequestHandler =
-  async (req, res) => {
+  async (req, res, next) => {
     const keyword = await Keyword
       .query()
       .findById(req.params.id)
+      .catch(error => next(error))
     return res.send(keyword);
   }
 
 export const postKeyword: RequestHandler =
-  async (req, res) => {
-    const queryResult = await Keyword.query()
-      .insert(req.body);
-    if (queryResult) {
-      return res.send(queryResult);
-    }
-    else res.sendStatus(400)
+  async (req, res, next) => {
+    const keyword = await Keyword
+      .query()
+      .insertAndFetch(req.body)
+      .catch(error => next(error))
+    return res.send(keyword)
   }
 
 export const patchKeyword: RequestHandler =
-  async (req, res,) => {
+  async (req, res, next) => {
     const id = req.params.id
-    const queryResult = await Keyword.query()
-      .findById(id)
-      .patch(req.body);
-    if (queryResult) {
-      const newObject = await Keyword.query()
-        .findById(id);
-      return res.send(newObject);
-    }
-    else res.sendStatus(400)
+    const keyword = await Keyword
+      .query()
+      .patchAndFetchById(id, req.body)
+      .catch(error => next(error))
+    return res.send(keyword)
   }
 
 export const deleteKeyword: RequestHandler =
-  async (req, res) => {
+  async (req, res, next) => {
     const id = req.params.id
-    const queryResult = await Keyword.query()
+    const queryResult = await Keyword
+      .query()
       .deleteById(id)
-    if (queryResult)
-      return res.sendStatus(200);
-    else
-      return res.sendStatus(400);
+      .catch(error => next(error))
+    return res.sendStatus(200);
   }
 
 

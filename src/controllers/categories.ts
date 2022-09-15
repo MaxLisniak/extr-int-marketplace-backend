@@ -30,7 +30,7 @@ export const getCategoryById: RequestHandler =
 export const postCategoty: RequestHandler =
   async (req, res, next) => {
     const category = await Category.query()
-      .insert(req.body)
+      .insertAndFetch(req.body)
       .catch(error => next(error));
     return res.send(category);
   }
@@ -50,5 +50,5 @@ export const deleteCategory: RequestHandler =
     const queryResult = await Category.query()
       .deleteById(id)
       .catch(error => next(error))
-    return res.send(queryResult);
+    return res.sendStatus(200);
   }

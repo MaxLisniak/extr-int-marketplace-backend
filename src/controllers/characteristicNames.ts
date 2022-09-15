@@ -104,5 +104,5 @@ export const deleteCharacteristicName: RequestHandler =
       .query()
       .deleteById(id)
       .catch(error => next(error))
-    return res.send(queryResult);
+    return res.sendStatus(200);
   }

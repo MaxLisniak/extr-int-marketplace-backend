@@ -25,7 +25,7 @@ export const postCharacteristic: RequestHandler =
   async (req, res, next) => {
     const characteristic = await Characteristic
       .query()
-      .insert(req.body)
+      .insertAndFetch(req.body)
       .catch(error => next(error))
     return res.send(characteristic);
   }
@@ -47,5 +47,5 @@ export const deleteCharacteristic: RequestHandler =
       .query()
       .deleteById(id)
       .catch(error => next(error))
-    return res.send(queryResult)
+    return res.sendStatus(200);
   }

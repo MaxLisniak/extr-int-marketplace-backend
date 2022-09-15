@@ -4,23 +4,26 @@ import CharacteristicName from "../models/CharacteristicName";
 import Characteristic from "../models/Characteristic";
 
 export const getAllProducts: RequestHandler =
-  async (req, res) => {
+  async (req, res, next) => {
     const products = await Product
       .query()
       .orderBy('id', "DESC")
+      .catch(error => next(error))
     return res.send(products);
   }
 
 export const getProductsByQuery: RequestHandler =
-  async (req, res) => {
+  async (req, res, next) => {
     const { q } = req.query;
-    const products = await Product.query()
+    const products = await Product
+      .query()
       .where('name', 'like', `%${q}%`)
+      .catch(error => next(error))
     return res.send(products);
   }
 
 export const getProductsParametrized: RequestHandler =
-  async (req, res) => {
+  async (req, res, next) => {
     const {
       selectedCategoryName,
       selectedSubcategoryName,
@@ -31,7 +34,8 @@ export const getProductsParametrized: RequestHandler =
     }
 
     const allProducts = await
-      Product.query()
+      Product
+        .query()
         .select(
           ['products.id', 'products.name', 'products.image_url'],
           Product.relatedQuery('favorites')
@@ -58,12 +62,12 @@ export const getProductsParametrized: RequestHandler =
         )
         .where("categories.name", String(selectedCategoryName))
         .where("subcategories.name", String(selectedSubcategoryName))
-
+        .catch(error => next(error))
     return res.send(allProducts);
   }
 
 export const getProductById: RequestHandler =
-  async (req, res) => {
+  async (req, res, next) => {
     const product = await Product
       .query()
       .findById(req.params.id)
@@ -80,55 +84,58 @@ export const getProductById: RequestHandler =
       )
       .withGraphFetched(
         "[subcategory.[category], comments.[user], prices, characteristics.[characteristic_name]]")
+      .catch(error => next(error))
     return res.send(product);
   }
 
 export const postProduct: RequestHandler =
-  async (req, res) => {
-    const product = await Product.query()
-      .insert(req.body);
+  async (req, res, next) => {
+    const product = await Product
+      .query()
+      .insertAndFetch(req.body)
+      .catch(error => next(error))
     if (product) {
       const subcategory_id = product.subcategory_id;
-      const characteristic_names = await CharacteristicName.query()
+      const characteristic_names = await CharacteristicName
+        .query()
         .where("for_subcategory_id", subcategory_id)
-        .orderBy("id", "DESC");
-      console.log(characteristic_names);
-      const characteristics = characteristic_names
-        .map((characteristic_name) => {
-          return {
-            characteristic_name_id: characteristic_name.id,
-            product_id: product.id,
-            value: ""
-          }
-        })
-      await Characteristic.query()
-        .insertGraph(characteristics as []);
-      return res.send(product);
+        .orderBy("id", "DESC")
+        .catch(error => next(error))
+      if (characteristic_names) {
+        const characteristics = characteristic_names
+          .map((characteristic_name) => {
+            return {
+              characteristic_name_id: characteristic_name.id,
+              product_id: product.id,
+              value: ""
+            }
+          })
+        await Characteristic
+          .query()
+          .insertGraph(characteristics as [])
+          .catch(error => next(error))
+        return res.send(product);
+      } else res.sendStatus(400)
     }
     else res.sendStatus(400)
   }
 
 export const patchProduct: RequestHandler =
-  async (req, res,) => {
+  async (req, res, next) => {
     const id = req.params.id
-    const queryResult = await Product.query()
-      .findById(id)
-      .patch(req.body);
-    if (queryResult) {
-      const newObject = await Product.query()
-        .findById(id);
-      return res.send(newObject);
-    }
-    else res.sendStatus(400)
+    const product = await Product
+      .query()
+      .patchAndFetchById(id, req.body)
+      .catch(error => next(error))
+    return res.send(product)
   }
 
 export const deleteProduct: RequestHandler =
-  async (req, res) => {
+  async (req, res, next) => {
     const id = req.params.id
-    const queryResult = await Product.query()
+    const queryResult = await Product
+      .query()
       .deleteById(id)
-    if (queryResult)
-      return res.sendStatus(200);
-    else
-      return res.sendStatus(400);
+      .catch(error => next(error))
+    return res.sendStatus(200);
   }

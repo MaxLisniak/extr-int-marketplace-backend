@@ -5,69 +5,69 @@ import logger from "../logger";
 import User from "../models/User";
 
 export const getAllUsers: RequestHandler =
-	async (req, res) => {
-		const users = await User.query()
+	async (req, res, next) => {
+		const users = await User
+			.query()
+			.catch(error => next(error))
 		return res.send(users);
 	}
 
 export const getUserById: RequestHandler =
-	async (req, res) => {
-		const users = await User.query()
+	async (req, res, next) => {
+		const users = await User
+			.query()
 			.findById(req.params.id)
+			.catch(error => next(error))
 		return res.send(users);
 	}
 
 export const postUser: RequestHandler =
-	async (req, res) => {
-		const queryResult = await User.query()
-			.insert(req.body);
-		if (queryResult) {
-			return res.send(queryResult);
-		}
-		else res.sendStatus(400)
+	async (req, res, next) => {
+		const user = await User
+			.query()
+			.insertAndFetch(req.body)
+			.catch(error => next(error))
+		return res.send(user)
 	}
 
 export const patchUser: RequestHandler =
-	async (req, res,) => {
+	async (req, res, next) => {
 		const id = req.params.id
-		const queryResult = await User.query()
-			.findById(id)
-			.patch(req.body);
-		if (queryResult) {
-			const newObject = await User.query()
-				.findById(id);
-			return res.send(newObject);
-		}
-		else res.sendStatus(400)
+		const user = await User
+			.query()
+			.patchAndFetchById(id, req.body)
+			.catch(error => next(error))
+		return res.send(user)
 	}
 
 export const deleteUser: RequestHandler =
-	async (req, res) => {
+	async (req, res, next) => {
 		const id = req.params.id
-		const queryResult = await User.query()
+		const queryResult = await User
+			.query()
 			.deleteById(id)
-		if (queryResult)
-			return res.sendStatus(200);
-		else
-			return res.sendStatus(400);
+			.catch(error => next(error))
+		return res.sendStatus(200);
 	}
 
 export const signup: RequestHandler =
-	async (req, res) => {
-
-		logger.info("Trying to sign up a new user")
+	async (req, res, next) => {
+		logger.info("A user is trying to sign up")
 		const { first_name, last_name, email, password, confPassword } = req.body;
 		if (password !== confPassword) {
 			logger.error("An error occured while trying to sign up: Password and Password confirmation do not match");
-			return res.status(400).json({ errors: [{ msg: "Password and Password confirmation do not match" }] })
+			return res
+				.status(400)
+				.json({ errors: [{ msg: "Password and Password confirmation do not match" }] })
 		}
-		console.log(first_name, last_name, email, password, confPassword)
 		// hash password
 		const salt = await bcrypt.genSalt();
 		const hashedPassword = await bcrypt.hash(password, salt);
 		// check if the user already exists
-		const user = await User.query()
-			.findOne({ email });
+		const user = await User
+			.query()
+			.findOne({ email })
+			.catch(error => next(error))
 		if (user) {
 			logger.error(`A user couldn't sign up since ${email} already exists`)
 			return res.status(409).json("User with such email already exists");
@@ -81,63 +81,73 @@ export const signup: RequestHandler =
 			is_admin: false,
 		};
 		// insert new user
-		await User.query()
-			.insert(newUser)
-		logger.info(`A user signed up as ${first_name} ${last_name}`)
-		return res.sendStatus(200);
+		const registeredUser = await User
+			.query()
+			.insertAndFetch(newUser)
+			.catch(error => next(error))
+		logger.info(`A user signed up as ${first_name} ${last_name} ${email}`)
+		return res.send(registeredUser);
 	}
 
 export const signin: RequestHandler =
-	async (req, res) => {
+	async (req, res, next) => {
 		logger.info("A user is trying to sign in")
 		// find user
-		const user = await User.query()
+		const user = await User
+			.query()
 			.findOne({ email: req.body.email })
-		console.log("user", user)
+			.catch(error => next(error))
 
 		// check is user exists
 		if (!user) {
 			logger.error(`An error occured while trying to sign is, user with the email ${req.body.email} doesn't exist`)
-			return res.status(404).json({ errors: [{ msg: "User not found" }] });
+			return res
+				.status(404)
+				.json({ errors: [{ msg: "User not found" }] });
 		}
 		// check password
 		const match = await bcrypt.compare(req.body.password, user.password_hash);
 		// send an error message is password is incorrect
 		if (!match) {
 			logger.error("An error occured while trying to sign in: Wrong password is provided")
-			return res.status(400).json({ errors: [{ msg: "Wrong Password" }] })
+			return res
+				.status(400)
+				.json({ errors: [{ msg: "Wrong Password" }] })
 		}
 		const { id, email } = user;
 		const userId = id;
 
 		// generate access and refresh tokens
-		const accessToken = jwt.sign({ userId, email }, process.env.ACCESS_TOKEN_SECRET, {
-			expiresIn: '15s'
-		});
+		const accessToken = jwt.sign(
+			{ userId, email },
+			process.env.ACCESS_TOKEN_SECRET,
+			{ expiresIn: '15s' }
+		);
 
-		const refreshToken = jwt.sign({ userId, email }, process.env.REFRESH_TOKEN_SECRET, {
-			expiresIn: '7d'
-		});
+		const refreshToken = jwt.sign(
+			{ userId, email },
+			process.env.REFRESH_TOKEN_SECRET,
+			{ expiresIn: '7d' }
+		);
 
 		// add refresh token to a user in database
-		await User.query()
-			.where("id", userId)
-			.patch({ refresh_token: refreshToken });
-		const loggedUser = await User.query()
-			.findOne("id", userId);
+		const signedInUser = await User
+			.query()
+			.patchAndFetchById(userId, { refresh_token: refreshToken })
+			.catch(error => next(error))
+
 		// add the refresh token to the response as a cookie
 		res.cookie('refreshToken', refreshToken, {
 			httpOnly: true,
 			maxAge: 7 * 24 * 60 * 60 * 1000,
 		});
 		logger.info(`A user is logged in as: ${email}`)
-		res.json({ accessToken, loggedUser });
+		res.json({ accessToken, signedInUser });
 	}
 
 export const signout: RequestHandler =
-	async (req, res) => {
-
-		logger.info("Trying to sign out")
+	async (req, res, next) => {
+		logger.info("A user is trying to sign out")
 
 		const refreshToken = req.cookies.refreshToken;
 		if (!refreshToken) {
@@ -146,8 +156,10 @@ export const signout: RequestHandler =
 		}
 
 		// query a user by refresh token and check if it exists
-		const user = await User.query()
+		const user = await User
+			.query()
 			.findOne({ refresh_token: refreshToken })
+			.catch(error => next(error))
 
 		if (!user) {
 			logger.error("An error occured while trying to sign out: User with provided refresh token is not signed in")
@@ -155,9 +167,11 @@ export const signout: RequestHandler =
 		}
 
 		// remove the refresh token from the user in database
-		await User.query()
+		await User
+			.query()
 			.where("refresh_token", refreshToken)
-			.patch({ refresh_token: null });
+			.patch({ refresh_token: null })
+			.catch(error => next(error))
 
 		// remove the refresh token cookie from the user
 		res.clearCookie('refreshToken');
@@ -166,7 +180,7 @@ export const signout: RequestHandler =
 	}
 
 export const handleRefreshToken: RequestHandler =
-	async (req, res) => {
+	async (req, res, next) => {
 		logger.info("User is trying to refresh a token...");
 		const cookies = req.cookies;
 		// check if a refresh token was provided
@@ -176,12 +190,16 @@ export const handleRefreshToken: RequestHandler =
 		}
 		const refreshToken = cookies.refreshToken;
 
-		const foundUser = await User.query()
+		const foundUser = await User
+			.query()
 			.findOne("refresh_token", refreshToken)
+			.catch(error => next(error))
+
 		if (!foundUser) {
 			logger.error("A token cannot be refreshed, as the user hasn't been validly authenticated")
 			return res.sendStatus(403);
 		} //Forbidden 
+
 		// evaluate jwt 
 		jwt.verify(
 			refreshToken,

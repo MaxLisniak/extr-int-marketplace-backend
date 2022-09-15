@@ -3,62 +3,58 @@ import Subcategory from "../models/Subcategory";
 import Category from "../models/Categoty";
 
 export const getAllSubcategories: RequestHandler =
-  async (req, res) => {
-    const subcategories =
-      await Subcategory.query()
+  async (req, res, next) => {
+    const subcategories = await Subcategory
+      .query()
+      .catch(error => next(error))
     return res.send(subcategories);
   }
 
 export const getSubcategoryById: RequestHandler =
-  async (req, res) => {
-    const subcategory =
-      await Subcategory.query()
-        .findById(req.params.id)
-        .withGraphFetched("category")
+  async (req, res, next) => {
+    const subcategory = await Subcategory
+      .query()
+      .findById(req.params.id)
+      .withGraphFetched("category")
+      .catch(error => next(error))
     return res.send(subcategory);
   }
 
 export const getSubcategoryByCategoryId: RequestHandler =
-  async (req, res) => {
+  async (req, res, next) => {
     const id = req.params.id;
-    const subcategories =
-      await Category
-        .relatedQuery('subcategories')
-        .for(id)
+    const subcategories = await Category
+      .relatedQuery('subcategories')
+      .for(id)
+      .catch(error => next(error))
     return res.send(subcategories);
   }
 
 export const postSubcategory: RequestHandler =
-  async (req, res) => {
-    const queryResult = await Subcategory.query()
-      .insert(req.body);
-    if (queryResult) {
-      return res.send(queryResult);
-    }
-    else res.sendStatus(400)
+  async (req, res, next) => {
+    const subcategory = await Subcategory
+      .query()
+      .insertAndFetch(req.body)
+      .catch(error => next(error))
+    return res.send(subcategory)
   }
 
 export const patchSubcategory: RequestHandler =
-  async (req, res,) => {
+  async (req, res, next) => {
     const id = req.params.id
-    const queryResult = await Subcategory.query()
-      .findById(id)
-      .patch(req.body);
-    if (queryResult) {
-      const newObject = await Subcategory.query()
-        .findById(id);
-      return res.send(newObject);
-    }
-    else res.sendStatus(400)
+    const subcategory = await Subcategory
+      .query()
+      .patchAndFetchById(id, req.body)
+      .catch(error => next(error))
+    return res.send(subcategory)
   }
 
 export const deleteSubcategory: RequestHandler =
-  async (req, res) => {
+  async (req, res, next) => {
     const id = req.params.id
-    const queryResult = await Subcategory.query()
+    const queryResult = await Subcategory
+      .query()
       .deleteById(id)
-    if (queryResult)
-      return res.sendStatus(200);
-    else
-      return res.sendStatus(400);
+      .catch(error => next(error))
+    return res.sendStatus(200);
   }
