@@ -1,10 +1,10 @@
-import logger from "../logger";
+import logger from "./logger";
 
 /**
  * Module dependencies.
  */
 
-import app from '../app';
+import app from './app';
 import Debug from "debug";
 import http from 'http';
 const debug = Debug('express:server');
@@ -13,8 +13,7 @@ const debug = Debug('express:server');
  * Get port from environment and store in Express.
  */
 
-// const port = normalizePort(process.env.PORT || '3000');
-const port = parseInt(process.env.PORT) || '3000';
+const port = parseInt(process.env.PORT);
 app.set('port', port);
 
 /**
@@ -31,29 +30,6 @@ server.listen(port);
 server.on('error', onError);
 server.on('listening', onListening);
 
-/**
- * Normalize a port into a number, string, or false.
- */
-
-// function normalizePort(val: string) {
-//   const port = parseInt(val, 10);
-
-//   if (isNaN(port)) { // TODO: это лучше убрать, иначе может сложиться впечатление что твой уровень программиста это copy/paste
-//     // named pipe
-//     return val;
-//   }
-
-//   if (port >= 0) {
-//     // port number
-//     return port;
-//   }
-
-//   return false;
-// }
-
-/**
- * Event listener for HTTP server "error" event.
- */
 
 function onError(error: any) {
   if (error.syscall !== 'listen') {
