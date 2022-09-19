@@ -3,7 +3,6 @@ import {
   deleteCharacteristicName,
   getAllCharacteristicNames,
   getCharacteristicNameById,
-  getCharacteristicNamesParametrized,
   getCharacteristicsByCategoryId,
   patchCharacteristicName,
   postCharacteristicName
@@ -13,7 +12,6 @@ import Router from "express-promise-router";
 const router = Router();
 
 router.get('/', getAllCharacteristicNames)
-router.get('/parameterized/', getCharacteristicNamesParametrized);
 router.get('/category-id/:id', getCharacteristicsByCategoryId);
 router.get('/:id', getCharacteristicNameById);
 router.post('/', postCharacteristicName);
