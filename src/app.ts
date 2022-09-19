@@ -4,10 +4,8 @@ import path from 'path';
 import cookieParser from 'cookie-parser';
 import logger from 'morgan';
 import cors from 'cors';
-import dotenv from 'dotenv';
 import errorHandler from './middleware/errorHandler';
 import rootRouter from './routes/root';
-dotenv.config(); // TODO: заюзай пакет dotenv-cli
 
 const app = express();
 
