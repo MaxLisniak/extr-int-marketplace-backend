@@ -1,79 +1,44 @@
-import { RequestHandler } from "express";
+import { Request, Response, NextFunction } from "express";
 import Product from "../models/Product";
 import CharacteristicName from "../models/CharacteristicName";
 import Characteristic from "../models/Characteristic";
 import { productSchema } from "../validationSchemas/product";
 
-export const getAllProducts: RequestHandler =
-  async (req, res, next) => {
-    const products = await Product
-      .query()
-      .orderBy('id', "DESC")
+export async function getAllProducts
+  (req: Request, res: Response): Promise<void> {
+  const products = await Product
+    .query()
+    .orderBy('id', "DESC")
 
-    return res.send(products);
+  res.send({ data: { products } });
+}
+
+export async function getProductsByQuery
+  (req: Request, res: Response): Promise<void> {
+  const { q } = req.query;
+  const products = await Product
+    .query()
+    .where('name', 'like', `%${q}%`)
+
+  res.send({ data: { products } });
+}
+
+export async function getProductsParametrized
+  (req: Request, res: Response): Promise<void> {
+  const {
+    selectedCategoryName,
+    selectedSubcategoryName,
+  } = req.query;
+
+  if (!selectedCategoryName || !selectedSubcategoryName) {
+    res.sendStatus(400);
   }
 
-export const getProductsByQuery: RequestHandler =
-  async (req, res, next) => {
-    const { q } = req.query;
-    const products = await Product
+  const products = await
+    Product
       .query()
-      .where('name', 'like', `%${q}%`)
-
-    return res.send(products);
-  }
-
-export const getProductsParametrized: RequestHandler =
-  async (req, res, next) => {
-    const {
-      selectedCategoryName,
-      selectedSubcategoryName,
-    } = req.query;
-
-    if (!selectedCategoryName || !selectedSubcategoryName) {
-      return res.sendStatus(400);
-    }
-
-    const allProducts = await
-      Product
-        .query()
-        .select(
-          ['products.id', 'products.name', 'products.image_url'],
-          Product.relatedQuery('favorites')
-            .count()
-            .as("number_of_favorites"),
-          Product.relatedQuery('prices')
-            .select('price')
-            .orderBy('date', 'desc')
-            .limit(1)
-            .as('latest_price'),
-        )
-        .withGraphFetched(
-          "[characteristics(defaultSelects).[characteristic_name], subcategory]"
-        )
-        .innerJoin(
-          'subcategories',
-          'products.subcategory_id',
-          'subcategories.id'
-        )
-        .innerJoin(
-          'categories',
-          'subcategories.category_id',
-          'categories.id'
-        )
-        .where("categories.name", String(selectedCategoryName))
-        .where("subcategories.name", String(selectedSubcategoryName))
-
-    return res.send(allProducts);
-  }
-
-export const getProductById: RequestHandler =
-  async (req, res, next) => {
-    const product = await Product
-      .query()
-      .findById(req.params.id)
       .select(
-        'products.*',
+        ['products.id', 'products.name', 'products.image_url'],
         Product.relatedQuery('favorites')
           .count()
           .as("number_of_favorites"),
@@ -84,63 +49,98 @@ export const getProductById: RequestHandler =
           .as('latest_price'),
       )
       .withGraphFetched(
-        "[subcategory.[category], comments.[user], prices, characteristics.[characteristic_name]]")
+        "[characteristics(defaultSelects).[characteristic_name], subcategory]"
+      )
+      .innerJoin(
+        'subcategories',
+        'products.subcategory_id',
+        'subcategories.id'
+      )
+      .innerJoin(
+        'categories',
+        'subcategories.category_id',
+        'categories.id'
+      )
+      .where("categories.name", String(selectedCategoryName))
+      .where("subcategories.name", String(selectedSubcategoryName))
 
-    return res.send(product);
-  }
+  res.send({ data: { products } });
+}
 
-export const postProduct: RequestHandler =
-  async (req, res, next) => {
-    productSchema.validate(req.body)
-      .catch(err => next(err))
-    const product = await Product
+export async function getProductById
+  (req: Request, res: Response): Promise<void> {
+  const product = await Product
+    .query()
+    .findById(req.params.id)
+    .select(
+      'products.*',
+      Product.relatedQuery('favorites')
+        .count()
+        .as("number_of_favorites"),
+      Product.relatedQuery('prices')
+        .select('price')
+        .orderBy('date', 'desc')
+        .limit(1)
+        .as('latest_price'),
+    )
+    .withGraphFetched(
+      "[subcategory.[category], comments.[user], prices, characteristics.[characteristic_name]]")
+
+  res.send({ data: { product } });
+}
+
+export async function postProduct
+  (req: Request, res: Response, next: NextFunction): Promise<void> {
+  productSchema.validate(req.body)
+    .catch(err => next(err))
+  const product = await Product
+    .query()
+    .insertAndFetch(req.body)
+
+  if (product) {
+    const subcategoryId = product.subcategory_id;
+    const characteristicNames = await CharacteristicName
       .query()
-      .insertAndFetch(req.body)
+      .where("for_subcategory_id", subcategoryId)
+      .orderBy("id", "DESC")
 
-    if (product) {
-      const subcategory_id = product.subcategory_id;
-      const characteristic_names = await CharacteristicName
+    if (characteristicNames) {
+      const characteristics = characteristicNames
+        .map((characteristicName) => {
+          return {
+            characteristic_name_id: characteristicName.id,
+            product_id: product.id,
+            value: ""
+          }
+        })
+      await Characteristic
         .query()
-        .where("for_subcategory_id", subcategory_id)
-        .orderBy("id", "DESC")
+        .insertGraph(characteristics as [])
 
-      if (characteristic_names) {
-        const characteristics = characteristic_names
-          .map((characteristic_name) => {
-            return {
-              characteristic_name_id: characteristic_name.id,
-              product_id: product.id,
-              value: ""
-            }
-          })
-        await Characteristic
-          .query()
-          .insertGraph(characteristics as [])
-
-        return res.send(product);
-      } else res.sendStatus(400)
-    }
-    else res.sendStatus(400)
+      res.send({ data: { product } });
+    } else res.sendStatus(400)
   }
+  else res.sendStatus(400)
+}
 
-export const patchProduct: RequestHandler =
-  async (req, res, next) => {
-    productSchema.validate(req.body)
-      .catch(err => next(err))
-    const id = req.params.id
-    const product = await Product
-      .query()
-      .patchAndFetchById(id, req.body)
+export async function patchProduct
+  (req: Request, res: Response, next: NextFunction): Promise<void> {
+  productSchema.validate(req.body)
+    .catch(err => next(err))
+  const id = req.params.id
+  const product = await Product
+    .query()
+    .patchAndFetchById(id, req.body)
 
-    return res.send(product)
-  }
+  res.send({ data: { product } })
+}
 
-export const deleteProduct: RequestHandler =
-  async (req, res, next) => {
-    const id = req.params.id
-    const queryResult = await Product
-      .query()
-      .deleteById(id)
+export async function deleteProduct
+  (req: Request, res: Response): Promise<void> {
+  const id = req.params.id
+  const queryResult = await Product
+    .query()
+    .deleteById(id)
 
-    return res.sendStatus(200);
-  }
+  res.sendStatus(200);
+}

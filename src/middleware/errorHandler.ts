@@ -10,11 +10,12 @@ const errorHandler = (err: any, req: Request, res: Response, next: NextFunction)
 
   if (err.name === 'ValidationError')
     return res
-      .status(400)
+      .status(err.status || 500)
       .send({
-        status: "error",
-        errorName: err.name,
-        errorMessages: err.errors
+        error: {
+          name: err.name,
+          messages: err.errors
+        }
       })
   if (err.name === 'DBError' || err.name === 'NotNullViolationError') {
     console.log(`SQL query: ${err.nativeError.sql}`)
@@ -22,9 +23,10 @@ const errorHandler = (err: any, req: Request, res: Response, next: NextFunction)
     return res
       .status(400)
       .send({
-        status: "error",
-        errorName: err.name,
-        errorMessages: [err.nativeError.sqlMessage]
+        error: {
+          name: err.name,
+          messages: [err.nativeError.sqlMessage]
+        }
       })
   }
 

@@ -1,90 +1,89 @@
-import { RequestHandler } from "express";
+import { Request, Response, NextFunction } from "express";
 import { favoriteSchema } from "../validationSchemas/favorite";
 import Favorite from "../models/Favorite";
 
-export const getAllFavorites: RequestHandler =
-  async (req, res, next) => {
-    const favorites = await Favorite
+export async function getAllFavorites
+  (req: Request, res: Response): Promise<void> {
+  const favorites = await Favorite
+    .query()
+  res.send({ data: { favorites } });
+}
+
+export async function toggleFavorite
+  (req: Request, res: Response): Promise<void> {
+  const { product_id, user_id } = req.body;
+  const fav = await Favorite
+    .query()
+    .findOne({ product_id, user_id })
+
+  if (!fav) {
+    await Favorite.query()
+      .insert({
+        product_id,
+        user_id
+      })
+
+  } else {
+    await Favorite
       .query()
+      .deleteById(fav.id)
 
-    return res.send(favorites);
   }
+  res.sendStatus(200);
+}
 
-export const toggleFavorite: RequestHandler =
-  async (req, res, next) => {
-    const { product_id, user_id } = req.body;
-    const fav = await Favorite
-      .query()
-      .findOne({ product_id, user_id })
+export async function getFavoritesForUser
+  (req: Request, res: Response): Promise<void> {
+  const { user_id } = req.query;
+  const favorites = await Favorite
+    .query()
+    .withGraphFetched("product")
+    .where({ user_id: user_id })
 
-    if (!fav) {
-      await Favorite.query()
-        .insert({
-          product_id,
-          user_id
-        })
-
-    } else {
-      await Favorite
-        .query()
-        .deleteById(fav.id)
-
-    }
-    return res.sendStatus(200);
+  if (favorites) {
+    const products = favorites.map((fav) => fav.product);
+    res.send({ data: { products } });
   }
+}
 
-export const getFavoritesForUser: RequestHandler =
-  async (req, res, next) => {
-    const { user_id } = req.query;
-    const favorites = await Favorite
-      .query()
-      .withGraphFetched("product")
-      .where({ user_id: user_id })
+export async function getFavoriteById
+  (req: Request, res: Response): Promise<void> {
+  const favorite = await Favorite
+    .query()
+    .findById(req.params.id)
 
-    if (favorites) {
-      const products = favorites.map((fav) => fav.product);
-      return res.send(products);
-    }
-  }
+  res.send({ data: { favorite } });
+}
 
-export const getFavoriteById: RequestHandler =
-  async (req, res, next) => {
-    const favorite = await Favorite
-      .query()
-      .findById(req.params.id)
+export async function postFavorite
+  (req: Request, res: Response, next: NextFunction): Promise<void> {
+  favoriteSchema.validate(req.body)
+    .catch(err => next(err))
+  const favorite = await Favorite
+    .query()
+    .insertAndFetch(req.body)
 
-    return res.send(favorite);
-  }
+  res.send({ data: { favorite } })
+}
 
-export const postFavorite: RequestHandler =
-  async (req, res, next) => {
-    favoriteSchema.validate(req.body)
-      .catch(err => next(err))
-    const favorite = await Favorite
-      .query()
-      .insertAndFetch(req.body)
+export async function patchFavorite
+  (req: Request, res: Response, next: NextFunction): Promise<void> {
+  favoriteSchema.validate(req.body)
+    .catch(err => next(err))
+  const id = req.params.id
+  const favorite = await Favorite
+    .query()
+    .patchAndFetchById(id, req.body)
 
-    return res.send(favorite)
-  }
+  res.send({ data: { favorite } })
+}
 
-export const patchFavorite: RequestHandler =
-  async (req, res, next) => {
-    favoriteSchema.validate(req.body)
-      .catch(err => next(err))
-    const id = req.params.id
-    const favorite = await Favorite
-      .query()
-      .patchAndFetchById(id, req.body)
+export async function deleteFavorite
+  (req: Request, res: Response): Promise<void> {
+  const id = req.params.id
+  const queryResult = await Favorite
+    .query()
+    .deleteById(id)
 
-    return res.send(favorite)
-  }
-
-export const deleteFavorite: RequestHandler =
-  async (req, res, next) => {
-    const id = req.params.id
-    const queryResult = await Favorite
-      .query()
-      .deleteById(id)
-
-    return res.sendStatus(200);
-  }
+  res.sendStatus(200);
+}

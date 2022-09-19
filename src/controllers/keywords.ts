@@ -1,67 +1,67 @@
-import { RequestHandler } from "express";
+import { Request, Response, NextFunction } from "express";
 import { keywordSchema } from "../validationSchemas/keyword";
 import Keyword from "../models/Keyword";
 
-export const getAllKeywords: RequestHandler =
-  async (req, res, next) => {
-    const keywords = await Keyword
-      .query()
+export async function getAllKeywords
+  (req: Request, res: Response): Promise<void> {
+  const keywords = await Keyword
+    .query()
 
-    return res.send(keywords);
-  }
+  res.send({ data: { keywords } });
+}
 
-export const getKeywordsByQuery: RequestHandler =
-  async (req, res, next) => {
-    const { q } = req.query;
-    const keywords = await Keyword
-      .query()
-      .where('keyword', 'like', `%${q}%`)
-      .withGraphFetched("product")
+export async function getKeywordsByQuery
+  (req: Request, res: Response): Promise<void> {
+  const { q } = req.query;
+  const keywords = await Keyword
+    .query()
+    .where('keyword', 'like', `%${q}%`)
+    .withGraphFetched("product")
 
-    return res.send(keywords);
-  }
+  res.send({ data: { keywords } });
+}
 
-export const getKeywordById: RequestHandler =
-  async (req, res, next) => {
-    const keyword = await Keyword
-      .query()
-      .findById(req.params.id)
+export async function getKeywordById
+  (req: Request, res: Response): Promise<void> {
+  const keyword = await Keyword
+    .query()
+    .findById(req.params.id)
 
-    return res.send(keyword);
-  }
+  res.send({ data: { keyword } });
+}
 
-export const postKeyword: RequestHandler =
-  async (req, res, next) => {
-    keywordSchema.validate(req.body)
-      .catch(err => next(err))
-    const keyword = await Keyword
-      .query()
-      .insertAndFetch(req.body)
+export async function postKeyword
+  (req: Request, res: Response, next: NextFunction): Promise<void> {
+  keywordSchema.validate(req.body)
+    .catch(err => next(err))
+  const keyword = await Keyword
+    .query()
+    .insertAndFetch(req.body)
 
-    return res.send(keyword)
-  }
+  res.send({ data: { keyword } })
+}
 
-export const patchKeyword: RequestHandler =
-  async (req, res, next) => {
-    keywordSchema.validate(req.body)
-      .catch(err => next(err))
-    const id = req.params.id
-    const keyword = await Keyword
-      .query()
-      .patchAndFetchById(id, req.body)
+export async function patchKeyword
+  (req: Request, res: Response, next: NextFunction): Promise<void> {
+  keywordSchema.validate(req.body)
+    .catch(err => next(err))
+  const id = req.params.id
+  const keyword = await Keyword
+    .query()
+    .patchAndFetchById(id, req.body)
 
-    return res.send(keyword)
-  }
+  res.send({ data: { keyword } })
+}
 
-export const deleteKeyword: RequestHandler =
-  async (req, res, next) => {
-    const id = req.params.id
-    const queryResult = await Keyword
-      .query()
-      .deleteById(id)
+export async function deleteKeyword
+  (req: Request, res: Response): Promise<void> {
+  const id = req.params.id
+  const queryResult = await Keyword
+    .query()
+    .deleteById(id)
 
-    return res.sendStatus(200);
-  }
+  res.sendStatus(200);
+}
 
 
 
