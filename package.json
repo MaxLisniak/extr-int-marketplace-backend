@@ -7,10 +7,10 @@
     "lint": "eslint . --ext .ts",
     "tsc": "tsc",
     "copy-assets": "ts-node tools/copyAssets",
-    "build": "npm-run-all clean lint tsc copy-assets",
-    "node-clean": "node ./dist/src/bin/www.js",
-    "clean-start": "npm-run-all build node-clean",
-    "dev-start": "nodemon ./src/bin/www.ts"
+    "build": "npm run clean && npm run lint && npm run tsc && npm run copy-assets",
+    "node-clean": "node ./dist/src/index.js",
+    "clean-start": "npm run build && npm run node-clean",
+    "dev-start": "nodemon ./src/index.ts"
   },
   "dependencies": {
     "bcrypt": "^5.0.1",
@@ -26,7 +26,6 @@
     "morgan": "~1.9.1",
     "mysql": "^2.18.1",
     "nodemon": "^2.0.19",
-    "npm-run-all": "^4.1.5",
     "objection": "^3.0.1",
     "rimraf": "^3.0.2",
     "shelljs": "^0.8.5",
