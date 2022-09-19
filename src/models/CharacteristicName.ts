@@ -4,7 +4,7 @@ import path from "path";
 class CharacteristicName extends Model {
   id: number
   name: string
-  for_subcategory_id: number
+  category_id: number
 
   static get tableName() {
     return "characteristic_names"

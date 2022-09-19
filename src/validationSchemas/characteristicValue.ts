@@ -1,6 +1,6 @@
 import * as yup from 'yup';
 
-export const characteristicSchema = yup.object().shape({
+export const characteristicValueSchema = yup.object().shape({
   value: yup
     .string()
     .min(0)

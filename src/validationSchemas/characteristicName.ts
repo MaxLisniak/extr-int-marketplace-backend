@@ -5,7 +5,7 @@ export const characteristicNameSchema = yup.object().shape({
     .string()
     .min(1)
     .max(32),
-  for_subcategory_id: yup
+  category_id: yup
     .number()
     .integer()
     .positive()

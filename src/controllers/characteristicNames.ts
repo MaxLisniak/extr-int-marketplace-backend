@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import Product from "../models/Product";
 import CharacteristicName from "../models/CharacteristicName";
-import Characteristic from "../models/Characteristic";
+import Characteristic from "../models/CharacteristicValue";
 import { characteristicNameSchema } from "../validationSchemas/characteristicName";
 
 
@@ -12,47 +12,47 @@ export async function getAllCharacteristicNames
   res.send({ data: { characteristicNames } });
 }
 
-export async function getCharacteristicNamesParametrized
-  (req: Request, res: Response): Promise<void> {
-  const { selectedSubcategoryName, selectedCategoryName } = req.query;
-  if (!selectedCategoryName) {
-    res.status(400)
-      .send({
-        error: {
-          name: "requestError",
-          messages: ["No categories"]
-        }
-      })
-    return
-  }
-  const characteristicNames = await CharacteristicName
-    .query()
-    .innerJoin(
-      'subcategories',
-      'subcategories.id',
-      'characteristic_names.for_subcategory_id')
-    .innerJoin(
-      'categories',
-      'categories.id',
-      'subcategories.category_id')
-    .withGraphFetched('characteristics(onlyUniqueValues, defaultSelects)')
-    .skipUndefined()
-    .where("categories.name", String(selectedCategoryName))
-    .skipUndefined()
-    .where("subcategories.name", String(selectedSubcategoryName))
-    .withGraphFetched('characteristics(onlyUniqueValues, defaultSelects)')
+// export async function getCharacteristicNamesParametrized
+//   (req: Request, res: Response): Promise<void> {
+//   const { selectedSubcategoryName, selectedCategoryName } = req.query;
+//   if (!selectedCategoryName) {
+//     res.status(400)
+//       .send({
+//         error: {
+//           name: "requestError",
+//           messages: ["No categories"]
+//         }
+//       })
+//     return
+//   }
+//   const characteristicNames = await CharacteristicName
+//     .query()
+//     .innerJoin(
+//       'subcategories',
+//       'subcategories.id',
+//       'characteristic_names.for_subcategory_id')
+//     .innerJoin(
+//       'categories',
+//       'categories.id',
+//       'subcategories.category_id')
+//     .withGraphFetched('characteristics(onlyUniqueValues, defaultSelects)')
+//     .skipUndefined()
+//     .where("categories.name", String(selectedCategoryName))
+//     .skipUndefined()
+//     .where("subcategories.name", String(selectedSubcategoryName))
+//     .withGraphFetched('characteristics(onlyUniqueValues, defaultSelects)')
 
-  res.send({ data: { characteristicNames } });
-}
+//   res.send({ data: { characteristicNames } });
+// }
 
-export async function getCharacteristicNamesBySubcategoryId
+export async function getCharacteristicsByCategoryId
   (req: Request, res: Response): Promise<void> {
   const id = req.params.id;
-  const characteristicNames = await CharacteristicName
+  const characteristics = await CharacteristicName
     .query()
-    .where('for_subcategory_id', id)
+    .where('category_id', id)
     .withGraphFetched('characteristics(onlyUniqueValues, defaultSelects)')
-  res.send({ data: { characteristicNames } });
+  res.send({ data: { characteristics } });
 }
 
 export async function getCharacteristicNameById
@@ -71,14 +71,14 @@ export async function postCharacteristicName
     .query()
     .insertAndFetch(req.body)
   if (characteristicName) {
-    const subcategory_id = characteristicName.for_subcategory_id;
+    const category_id = characteristicName.category_id;
     const products = await Product
       .query()
-      .where("subcategory_id", subcategory_id)
+      .where("category_id", category_id)
       .orderBy("id", "DESC")
 
     if (products) {
-      const characteristics = products
+      const characteristicValues = products
         .map((product) => {
           return {
             characteristic_name_id: characteristicName.id,
@@ -88,7 +88,7 @@ export async function postCharacteristicName
         })
       await Characteristic
         .query()
-        .insertGraph(characteristics as [])
+        .insertGraph(characteristicValues as [])
       res.send({ data: { characteristicName } });
     }
   }

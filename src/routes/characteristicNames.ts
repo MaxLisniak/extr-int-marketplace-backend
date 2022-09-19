@@ -3,8 +3,8 @@ import {
   deleteCharacteristicName,
   getAllCharacteristicNames,
   getCharacteristicNameById,
-  getCharacteristicNamesBySubcategoryId,
   getCharacteristicNamesParametrized,
+  getCharacteristicsByCategoryId,
   patchCharacteristicName,
   postCharacteristicName
 } from '../controllers/characteristicNames';
@@ -14,7 +14,7 @@ const router = Router();
 
 router.get('/', getAllCharacteristicNames)
 router.get('/parameterized/', getCharacteristicNamesParametrized);
-router.get('/by-subcategory-id/:id', getCharacteristicNamesBySubcategoryId);
+router.get('/category-id/:id', getCharacteristicsByCategoryId);
 router.get('/:id', getCharacteristicNameById);
 router.post('/', postCharacteristicName);
 router.patch('/:id', patchCharacteristicName);

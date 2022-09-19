@@ -9,7 +9,7 @@ import pricesRouter from './prices';
 import favoritesRouter from './favorites';
 import keywordsRouter from './keywords';
 import characteristicNamesRouter from './characteristicNames';
-import characteristicsRouter from './characteristics';
+import characteristicValuesRouter from './characteristicValues';
 
 import Router from "express-promise-router";
 const rootRouter = Router();
@@ -24,6 +24,6 @@ rootRouter.use('/prices', pricesRouter);
 rootRouter.use('/favorites', favoritesRouter);
 rootRouter.use('/keywords', keywordsRouter);
 rootRouter.use('/characteristic_names', characteristicNamesRouter);
-rootRouter.use('/characteristics', characteristicsRouter);
+rootRouter.use('/characteristic_values', characteristicValuesRouter);
 
 export default rootRouter;

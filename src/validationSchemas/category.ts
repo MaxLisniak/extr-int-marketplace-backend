@@ -5,4 +5,8 @@ export const categorySchema = yup.object().shape({
     .string()
     .min(1)
     .max(32),
+  parent_id: yup
+    .number()
+    .integer()
+    .positive()
 });

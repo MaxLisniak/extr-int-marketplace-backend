@@ -3,6 +3,9 @@ import path from 'path';
 // const Subcategory = require("./Subcategory");
 
 class Category extends Model {
+  id: number
+  name: string
+  parent_id: number
 
   static get tableName() {
     return "categories"

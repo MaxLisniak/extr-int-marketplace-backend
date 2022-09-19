@@ -12,7 +12,11 @@ export const productSchema = yup.object().shape({
   image_url: yup
     .string()
     .min(1),
-  subcategory_id: yup
+  category_id: yup
+    .number()
+    .integer()
+    .positive(),
+  price: yup
     .number()
     .integer()
     .positive(),

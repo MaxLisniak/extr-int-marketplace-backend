@@ -3,6 +3,11 @@ import User from "./User";
 
 
 class Comment extends Model {
+  id: number
+  text: string
+  created: string
+  user_id: number
+  product_id: number
 
   static get tableName() {
     return "comments"

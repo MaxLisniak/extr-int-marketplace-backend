@@ -1,10 +1,14 @@
 import Model from "./BaseModel";
 import CharacteristicName from "./CharacteristicName";
 
-class Characteristic extends Model {
+class CharacteristicValue extends Model {
+  id: number
+  name: string
+  product_id: number
+  characteristic_name_id: number
 
   static get tableName() {
-    return "characteristics"
+    return "characteristic_values"
   }
 
   static relationMappings = {
@@ -13,7 +17,7 @@ class Characteristic extends Model {
       modelClass: CharacteristicName,
       join: {
         from: 'characteristic_names.id',
-        to: 'characteristics.characteristic_name_id'
+        to: 'characteristic_values.characteristic_name_id'
       }
     },
   }
@@ -31,4 +35,4 @@ class Characteristic extends Model {
 
 }
 
-export default Characteristic;
+export default CharacteristicValue;

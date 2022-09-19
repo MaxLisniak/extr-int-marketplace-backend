@@ -1,5 +1,5 @@
 import Model from "./BaseModel";
-import Characteristic from "./Characteristic";
+import Characteristic from "./CharacteristicValue";
 import Comment from "./Comment";
 import Favorite from "./Favorite";
 import Keyword from "./Keyword";
@@ -11,9 +11,9 @@ class Product extends Model {
   name: string
   description: string
   image_url: string
-  subcategory_id: number
-  number_of_favorites: number
-  latest_price: number
+  category_id: number
+  // number_of_favorites: number
+  price: number
 
   static get tableName() {
     return "products"
