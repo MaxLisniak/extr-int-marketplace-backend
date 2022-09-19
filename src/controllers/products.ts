@@ -9,7 +9,7 @@ export const getAllProducts: RequestHandler =
     const products = await Product
       .query()
       .orderBy('id', "DESC")
-      .catch(error => next(error))
+
     return res.send(products);
   }
 
@@ -19,7 +19,7 @@ export const getProductsByQuery: RequestHandler =
     const products = await Product
       .query()
       .where('name', 'like', `%${q}%`)
-      .catch(error => next(error))
+
     return res.send(products);
   }
 
@@ -63,7 +63,7 @@ export const getProductsParametrized: RequestHandler =
         )
         .where("categories.name", String(selectedCategoryName))
         .where("subcategories.name", String(selectedSubcategoryName))
-        .catch(error => next(error))
+
     return res.send(allProducts);
   }
 
@@ -85,7 +85,7 @@ export const getProductById: RequestHandler =
       )
       .withGraphFetched(
         "[subcategory.[category], comments.[user], prices, characteristics.[characteristic_name]]")
-      .catch(error => next(error))
+
     return res.send(product);
   }
 
@@ -96,14 +96,14 @@ export const postProduct: RequestHandler =
     const product = await Product
       .query()
       .insertAndFetch(req.body)
-      .catch(error => next(error))
+
     if (product) {
       const subcategory_id = product.subcategory_id;
       const characteristic_names = await CharacteristicName
         .query()
         .where("for_subcategory_id", subcategory_id)
         .orderBy("id", "DESC")
-        .catch(error => next(error))
+
       if (characteristic_names) {
         const characteristics = characteristic_names
           .map((characteristic_name) => {
@@ -116,7 +116,7 @@ export const postProduct: RequestHandler =
         await Characteristic
           .query()
           .insertGraph(characteristics as [])
-          .catch(error => next(error))
+
         return res.send(product);
       } else res.sendStatus(400)
     }
@@ -131,7 +131,7 @@ export const patchProduct: RequestHandler =
     const product = await Product
       .query()
       .patchAndFetchById(id, req.body)
-      .catch(error => next(error))
+
     return res.send(product)
   }
 
@@ -141,6 +141,6 @@ export const deleteProduct: RequestHandler =
     const queryResult = await Product
       .query()
       .deleteById(id)
-      .catch(error => next(error))
+
     return res.sendStatus(200);
   }

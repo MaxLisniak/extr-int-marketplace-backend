@@ -1,5 +1,5 @@
 
-import express from 'express';
+
 import {
   deleteCategory,
   getAllCategories,
@@ -9,7 +9,8 @@ import {
   postCategoty
 } from '../controllers/categories';
 
-const router = express.Router();
+import Router from "express-promise-router";
+const router = Router();
 
 router.get('/', getAllCategories);
 router.get('/extended/', getAllCategoriesExtended);

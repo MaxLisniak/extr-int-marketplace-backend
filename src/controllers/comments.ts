@@ -7,7 +7,7 @@ export const getAllComments: RequestHandler =
     const comments = await Comment
       .query()
       .withGraphFetched("user")
-      .catch(error => next(error))
+
     return res.send(comments);
   }
 
@@ -18,7 +18,7 @@ export const getCommentsForProductId: RequestHandler =
       .where("product_id", id)
       .orderBy("created", 'DESC')
       .withGraphFetched("user")
-      .catch(error => next(error))
+
     return res.send(comments);
   }
 
@@ -28,7 +28,7 @@ export const getCommentById: RequestHandler =
       .query()
       .findById(req.params.id)
       .withGraphFetched("user")
-      .catch(error => next(error))
+
     return res.send(comment);
   }
 
@@ -39,7 +39,7 @@ export const postComment: RequestHandler =
     const comment = await Comment
       .query()
       .insertAndFetch(req.body)
-      .catch(error => next(error))
+
     return res.send(comment)
   }
 
@@ -51,7 +51,7 @@ export const patchComment: RequestHandler =
     const comment = await Comment
       .query()
       .patchAndFetchById(id, req.body)
-      .catch(error => next(error))
+
     return res.send(comment)
   }
 
@@ -61,6 +61,6 @@ export const deleteComment: RequestHandler =
     const queryResult = await Comment
       .query()
       .deleteById(id)
-      .catch(error => next(error))
+
     return res.sendStatus(200);
   }

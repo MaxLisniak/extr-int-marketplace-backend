@@ -9,7 +9,7 @@ export const getAllCharacteristicNames: RequestHandler =
   async (req, res, next) => {
     const characteristic_names = await CharacteristicName
       .query()
-      .catch(error => next(error))
+
     return res.send(characteristic_names);
   }
 
@@ -33,7 +33,7 @@ export const getCharacteristicNamesParametrized: RequestHandler =
       .skipUndefined()
       .where("subcategories.name", String(selectedSubcategoryName))
       .withGraphFetched('characteristics(onlyUniqueValues, defaultSelects)')
-      .catch(error => next(error))
+
     return res.send(characteristic_names);
   }
 
@@ -44,7 +44,7 @@ export const getCharacteristicNamesBySubcategoryId: RequestHandler =
       .query()
       .where('for_subcategory_id', id)
       .withGraphFetched('characteristics(onlyUniqueValues, defaultSelects)')
-      .catch(error => next(error))
+
     return res.send(characteristic_names);
   }
 
@@ -53,7 +53,7 @@ export const getCharacteristicNameById: RequestHandler =
     const characteristic_name = await CharacteristicName
       .query()
       .findById(req.params.id)
-      .catch(error => next(error))
+
     return res.send(characteristic_name);
   }
 
@@ -64,14 +64,14 @@ export const postCharacteristicName: RequestHandler =
     const characteristic_name = await CharacteristicName
       .query()
       .insertAndFetch(req.body)
-      .catch(error => next(error))
+
     if (characteristic_name) {
       const subcategory_id = characteristic_name.for_subcategory_id;
       const products = await Product
         .query()
         .where("subcategory_id", subcategory_id)
         .orderBy("id", "DESC")
-        .catch(error => next(error))
+
       if (products) {
         const characteristics = products
           .map((product) => {
@@ -84,7 +84,7 @@ export const postCharacteristicName: RequestHandler =
         await Characteristic
           .query()
           .insertGraph(characteristics as [])
-          .catch(error => next(error))
+
         return res.send(characteristic_name);
       }
     }
@@ -98,7 +98,7 @@ export const patchCharacteristicName: RequestHandler =
     const characteristicName = await CharacteristicName
       .query()
       .patchAndFetchById(id, req.body)
-      .catch(error => next(error))
+
     return res.send(characteristicName);
   }
 
@@ -108,6 +108,6 @@ export const deleteCharacteristicName: RequestHandler =
     const queryResult = await CharacteristicName
       .query()
       .deleteById(id)
-      .catch(error => next(error))
+
     return res.sendStatus(200);
   }

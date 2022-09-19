@@ -1,4 +1,4 @@
-import express from 'express';
+
 import {
   deletePrice,
   getAllPrices,
@@ -7,7 +7,8 @@ import {
   postPrice
 } from '../controllers/prices';
 
-const router = express.Router();
+import Router from "express-promise-router";
+const router = Router();
 
 router.get('/', getAllPrices);
 router.get('/:id', getPriceById);

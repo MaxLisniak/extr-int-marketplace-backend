@@ -1,4 +1,3 @@
-import { Router } from 'express';
 
 import indexRouter from './index';
 import usersRouter from './users';
@@ -12,6 +11,7 @@ import keywordsRouter from './keywords';
 import characteristicNamesRouter from './characteristicNames';
 import characteristicsRouter from './characteristics';
 
+import Router from "express-promise-router";
 const rootRouter = Router();
 
 rootRouter.use('/', indexRouter);

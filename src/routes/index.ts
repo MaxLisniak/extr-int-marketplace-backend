@@ -1,7 +1,7 @@
 import { RequestHandler } from "express";
 
-import express from 'express';
-const router = express.Router();
+import Router from "express-promise-router";
+const router = Router();
 
 /* GET home page. */
 const indexFunction: RequestHandler =

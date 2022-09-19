@@ -1,4 +1,4 @@
-import express from 'express';
+
 import {
   deleteCharacteristic,
   getAllCharacteristics,
@@ -7,7 +7,8 @@ import {
   postCharacteristic
 } from "../controllers/characteristics";
 
-const router = express.Router();
+import Router from "express-promise-router";
+const router = Router();
 
 router.get('/', getAllCharacteristics);
 router.get('/:id', getCharacteristicById);

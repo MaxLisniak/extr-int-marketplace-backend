@@ -1,4 +1,4 @@
-import express from 'express';
+
 import {
   deleteProduct,
   getAllProducts,
@@ -9,7 +9,8 @@ import {
   postProduct
 } from '../controllers/products';
 
-const router = express.Router();
+import Router from "express-promise-router";
+const router = Router();
 
 router.get('/', getAllProducts);
 router.get('/search', getProductsByQuery);

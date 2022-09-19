@@ -1,4 +1,4 @@
-import express from 'express';
+
 import {
   signin,
   signup,
@@ -11,7 +11,8 @@ import {
   deleteUser
 } from "../controllers/user";
 
-const router = express.Router();
+import Router from "express-promise-router";
+const router = Router();
 
 router.get('/', getAllUsers);
 router.get('/refresh', handleRefreshToken);

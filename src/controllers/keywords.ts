@@ -6,7 +6,7 @@ export const getAllKeywords: RequestHandler =
   async (req, res, next) => {
     const keywords = await Keyword
       .query()
-      .catch(error => next(error))
+
     return res.send(keywords);
   }
 
@@ -17,7 +17,7 @@ export const getKeywordsByQuery: RequestHandler =
       .query()
       .where('keyword', 'like', `%${q}%`)
       .withGraphFetched("product")
-      .catch(error => next(error))
+
     return res.send(keywords);
   }
 
@@ -26,7 +26,7 @@ export const getKeywordById: RequestHandler =
     const keyword = await Keyword
       .query()
       .findById(req.params.id)
-      .catch(error => next(error))
+
     return res.send(keyword);
   }
 
@@ -37,7 +37,7 @@ export const postKeyword: RequestHandler =
     const keyword = await Keyword
       .query()
       .insertAndFetch(req.body)
-      .catch(error => next(error))
+
     return res.send(keyword)
   }
 
@@ -49,7 +49,7 @@ export const patchKeyword: RequestHandler =
     const keyword = await Keyword
       .query()
       .patchAndFetchById(id, req.body)
-      .catch(error => next(error))
+
     return res.send(keyword)
   }
 
@@ -59,7 +59,7 @@ export const deleteKeyword: RequestHandler =
     const queryResult = await Keyword
       .query()
       .deleteById(id)
-      .catch(error => next(error))
+
     return res.sendStatus(200);
   }
 

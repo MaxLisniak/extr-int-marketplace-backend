@@ -9,7 +9,7 @@ export const getAllUsers: RequestHandler =
 	async (req, res, next) => {
 		const users = await User
 			.query()
-			.catch(error => next(error))
+
 		return res.send(users);
 	}
 
@@ -18,7 +18,7 @@ export const getUserById: RequestHandler =
 		const users = await User
 			.query()
 			.findById(req.params.id)
-			.catch(error => next(error))
+
 		return res.send(users);
 	}
 
@@ -29,7 +29,7 @@ export const postUser: RequestHandler =
 		const user = await User
 			.query()
 			.insertAndFetch(req.body)
-			.catch(error => next(error))
+
 		return res.send(user)
 	}
 
@@ -41,7 +41,7 @@ export const patchUser: RequestHandler =
 		const user = await User
 			.query()
 			.patchAndFetchById(id, req.body)
-			.catch(error => next(error))
+
 		return res.send(user)
 	}
 
@@ -51,7 +51,7 @@ export const deleteUser: RequestHandler =
 		const queryResult = await User
 			.query()
 			.deleteById(id)
-			.catch(error => next(error))
+
 		return res.sendStatus(200);
 	}
 
@@ -72,7 +72,7 @@ export const signup: RequestHandler =
 		const user = await User
 			.query()
 			.findOne({ email })
-			.catch(error => next(error))
+
 		if (user) {
 			logger.error(`A user couldn't sign up since ${email} already exists`)
 			return res.status(409).json("User with such email already exists");
@@ -89,7 +89,7 @@ export const signup: RequestHandler =
 		const registeredUser = await User
 			.query()
 			.insertAndFetch(newUser)
-			.catch(error => next(error))
+
 		logger.info(`A user signed up as ${first_name} ${last_name} ${email}`)
 		return res.send(registeredUser);
 	}
@@ -101,7 +101,7 @@ export const signin: RequestHandler =
 		const user = await User
 			.query()
 			.findOne({ email: req.body.email })
-			.catch(error => next(error))
+
 
 		// check is user exists
 		if (!user) {
@@ -139,7 +139,7 @@ export const signin: RequestHandler =
 		const signedInUser = await User
 			.query()
 			.patchAndFetchById(userId, { refresh_token: refreshToken })
-			.catch(error => next(error))
+
 
 		// add the refresh token to the response as a cookie
 		res.cookie('refreshToken', refreshToken, {
@@ -164,7 +164,7 @@ export const signout: RequestHandler =
 		const user = await User
 			.query()
 			.findOne({ refresh_token: refreshToken })
-			.catch(error => next(error))
+
 
 		if (!user) {
 			logger.error("An error occured while trying to sign out: User with provided refresh token is not signed in")
@@ -176,7 +176,7 @@ export const signout: RequestHandler =
 			.query()
 			.where("refresh_token", refreshToken)
 			.patch({ refresh_token: null })
-			.catch(error => next(error))
+
 
 		// remove the refresh token cookie from the user
 		res.clearCookie('refreshToken');
@@ -198,7 +198,7 @@ export const handleRefreshToken: RequestHandler =
 		const foundUser = await User
 			.query()
 			.findOne("refresh_token", refreshToken)
-			.catch(error => next(error))
+
 
 		if (!foundUser) {
 			logger.error("A token cannot be refreshed, as the user hasn't been validly authenticated")

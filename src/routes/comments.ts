@@ -1,4 +1,4 @@
-import express from 'express';
+
 import {
   deleteComment,
   getAllComments,
@@ -9,7 +9,8 @@ import {
 } from '../controllers/comments';
 import verifyToken from '../middleware/verifyToken';
 
-const router = express.Router();
+import Router from "express-promise-router";
+const router = Router();
 
 router.get('/', getAllComments);
 router.get('/for-product/:id', getCommentsForProductId);

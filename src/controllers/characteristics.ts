@@ -8,7 +8,7 @@ export const getAllCharacteristics: RequestHandler =
       .query()
       .withGraphFetched('characteristic_name')
       .orderBy("characteristic_name_id", "ASC")
-      .catch(error => next(error))
+
     return res.send(characteristics);
   }
 
@@ -18,7 +18,7 @@ export const getCharacteristicById: RequestHandler =
       .query()
       .findById(req.params.id)
       .withGraphFetched('characteristic_name')
-      .catch(error => next(error))
+
     return res.send(characteristic);
   }
 
@@ -29,7 +29,7 @@ export const postCharacteristic: RequestHandler =
     const characteristic = await Characteristic
       .query()
       .insertAndFetch(req.body)
-      .catch(error => next(error))
+
     return res.send(characteristic);
   }
 
@@ -41,7 +41,7 @@ export const patchCharacteristic: RequestHandler =
     const characteristic = await Characteristic
       .query()
       .patchAndFetchById(id, req.body)
-      .catch(error => next(error))
+
     return res.send(characteristic);
   }
 
@@ -51,6 +51,6 @@ export const deleteCharacteristic: RequestHandler =
     const queryResult = await Characteristic
       .query()
       .deleteById(id)
-      .catch(error => next(error))
+
     return res.sendStatus(200);
   }

@@ -1,4 +1,4 @@
-import express from 'express';
+
 import {
   deleteKeyword,
   getAllKeywords,
@@ -8,7 +8,8 @@ import {
   postKeyword
 } from '../controllers/keywords';
 
-const router = express.Router();
+import Router from "express-promise-router";
+const router = Router();
 
 router.get('/', getAllKeywords);
 router.get('/search', getKeywordsByQuery);

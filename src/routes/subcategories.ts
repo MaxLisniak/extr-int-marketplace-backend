@@ -1,4 +1,4 @@
-import express from 'express';
+
 import {
   deleteSubcategory,
   getAllSubcategories,
@@ -8,7 +8,8 @@ import {
   postSubcategory,
 } from '../controllers/subcategories';
 
-const router = express.Router();
+import Router from "express-promise-router";
+const router = Router();
 
 router.get('/', getAllSubcategories);
 router.get('/:id', getSubcategoryById);

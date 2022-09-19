@@ -7,7 +7,7 @@ export const getAllSubcategories: RequestHandler =
   async (req, res, next) => {
     const subcategories = await Subcategory
       .query()
-      .catch(error => next(error))
+
     return res.send(subcategories);
   }
 
@@ -17,7 +17,7 @@ export const getSubcategoryById: RequestHandler =
       .query()
       .findById(req.params.id)
       .withGraphFetched("category")
-      .catch(error => next(error))
+
     return res.send(subcategory);
   }
 
@@ -27,7 +27,7 @@ export const getSubcategoryByCategoryId: RequestHandler =
     const subcategories = await Category
       .relatedQuery('subcategories')
       .for(id)
-      .catch(error => next(error))
+
     return res.send(subcategories);
   }
 
@@ -38,7 +38,7 @@ export const postSubcategory: RequestHandler =
     const subcategory = await Subcategory
       .query()
       .insertAndFetch(req.body)
-      .catch(error => next(error))
+
     return res.send(subcategory)
   }
 
@@ -50,7 +50,7 @@ export const patchSubcategory: RequestHandler =
     const subcategory = await Subcategory
       .query()
       .patchAndFetchById(id, req.body)
-      .catch(error => next(error))
+
     return res.send(subcategory)
   }
 
@@ -60,6 +60,6 @@ export const deleteSubcategory: RequestHandler =
     const queryResult = await Subcategory
       .query()
       .deleteById(id)
-      .catch(error => next(error))
+
     return res.sendStatus(200);
   }

@@ -1,4 +1,4 @@
-import express from 'express';
+
 import {
   deleteFavorite,
   getAllFavorites,
@@ -10,7 +10,8 @@ import {
 } from '../controllers/favorites';
 import verifyToken from '../middleware/verifyToken';
 
-const router = express.Router();
+import Router from "express-promise-router";
+const router = Router();
 
 router.get('/', getAllFavorites);
 router.post('/toggle', [verifyToken, toggleFavorite])

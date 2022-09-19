@@ -6,7 +6,6 @@ export const getAllCategories: RequestHandler =
   async (req, res, next) => {
     const categories = await Category.query()
       .orderBy('id', 'DESC')
-      .catch(error => next(error));
     return res.send(categories);
   }
 
@@ -14,7 +13,6 @@ export const getAllCategoriesExtended: RequestHandler =
   async (req, res, next) => {
     const categories = await Category.query()
       .withGraphFetched('subcategories')
-      .catch(error => next(error))
     return res.send(categories);
   }
 
@@ -24,7 +22,6 @@ export const getCategoryById: RequestHandler =
       .query()
       .findById(req.params.id)
       .withGraphFetched('subcategories')
-      .catch(error => next(error))
     return res.send(category);
   }
 
@@ -34,7 +31,6 @@ export const postCategoty: RequestHandler =
       .catch(err => next(err))
     const category = await Category.query()
       .insertAndFetch(req.body)
-      .catch(error => next(error));
     return res.send(category);
   }
 
@@ -45,7 +41,7 @@ export const patchCategory: RequestHandler =
     const id = req.params.id
     const category = await Category.query()
       .patchAndFetchById(id, req.body)
-      .catch(error => next(error))
+
     return res.send(category);
   }
 
@@ -54,6 +50,6 @@ export const deleteCategory: RequestHandler =
     const id = req.params.id
     const queryResult = await Category.query()
       .deleteById(id)
-      .catch(error => next(error))
+
     return res.sendStatus(200);
   }
