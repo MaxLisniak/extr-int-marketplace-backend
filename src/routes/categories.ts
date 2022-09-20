@@ -3,7 +3,7 @@
 import {
   deleteCategory,
   getAllCategories,
-  getAllCategoriesExtended,
+  // getAllCategoriesRecursively,
   getCategoryById,
   patchCategory,
   postCategory
@@ -13,7 +13,7 @@ import Router from "express-promise-router";
 const router = Router();
 
 router.get('/', getAllCategories);
-router.get('/extended/', getAllCategoriesExtended);
+// router.get('/recursively/', getAllCategoriesRecursively);
 router.get('/:id', getCategoryById);
 router.post('/', postCategory);
 router.patch('/:id', patchCategory);

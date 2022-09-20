@@ -7,8 +7,22 @@ import { characteristicNameSchema } from "../validationSchemas/characteristicNam
 
 export async function getAllCharacteristicNames
   (req: Request, res: Response): Promise<void> {
-  const characteristicNames = await CharacteristicName
+  const { category_id, include_characteristic_values } = req.query;
+  let query
+
+  query = CharacteristicName
     .query()
+
+  if (category_id) {
+    query = query
+      .where('category_id', Number(category_id))
+  }
+  if (include_characteristic_values === "true") {
+    query = query
+      .withGraphFetched('characteristic_values(onlyUniqueValues, defaultSelects)')
+  }
+
+  const characteristicNames = await query
   res.send({ data: { characteristicNames } });
 }
 
@@ -45,21 +59,31 @@ export async function getAllCharacteristicNames
 //   res.send({ data: { characteristicNames } });
 // }
 
-export async function getCharacteristicsByCategoryId
-  (req: Request, res: Response): Promise<void> {
-  const id = req.params.id;
-  const characteristics = await CharacteristicName
-    .query()
-    .where('category_id', id)
-    .withGraphFetched('characteristics(onlyUniqueValues, defaultSelects)')
-  res.send({ data: { characteristics } });
-}
+// export async function getCharacteristicsByCategoryId
+//   (req: Request, res: Response): Promise<void> {
+//   const id = req.params.id;
+//   const characteristics = await CharacteristicName
+//     .query()
+//     .where('category_id', id)
+//     .withGraphFetched('characteristics(onlyUniqueValues, defaultSelects)')
+//   res.send({ data: { characteristics } });
+// }
 
 export async function getCharacteristicNameById
   (req: Request, res: Response): Promise<void> {
-  const characteristicName = await CharacteristicName
+  const { include_characteristic_values } = req.query;
+  let query
+
+  query = CharacteristicName
     .query()
     .findById(req.params.id)
+
+  if (include_characteristic_values === "true") {
+    query = query
+      .withGraphFetched('characteristic_values(onlyUniqueValues, defaultSelects)')
+  }
+
+  const characteristicName = await query
   res.send({ data: { characteristicName } });
 }
 

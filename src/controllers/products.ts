@@ -1,91 +1,124 @@
 import { Request, Response, NextFunction } from "express";
 import Product from "../models/Product";
 import CharacteristicName from "../models/CharacteristicName";
-import Characteristic from "../models/Characteristic";
+import CharacteristicValue from "../models/CharacteristicValue";
 import { productSchema } from "../validationSchemas/product";
 
 export async function getAllProducts
   (req: Request, res: Response): Promise<void> {
-  const products = await Product
-    .query()
-    .orderBy('id', "DESC")
-
-  res.send({ data: { products } });
-}
-
-export async function getProductsByQuery
-  (req: Request, res: Response): Promise<void> {
-  const { q } = req.query;
-  const products = await Product
-    .query()
-    .where('name', 'like', `%${q}%`)
-
-  res.send({ data: { products } });
-}
-
-export async function getProductsParametrized
-  (req: Request, res: Response): Promise<void> {
   const {
-    selectedCategoryName,
-    selectedSubcategoryName,
+    category_id,
+    search_query,
+    include_comments,
+    include_characteristics
   } = req.query;
 
-  if (!selectedCategoryName || !selectedSubcategoryName) {
-    res.sendStatus(400);
+  let query = Product
+    .query()
+
+  if (category_id) {
+    query = query
+      .where('category_id', Number(category_id))
   }
 
-  const products = await
-    Product
-      .query()
-      .select(
-        ['products.id', 'products.name', 'products.image_url'],
-        Product.relatedQuery('favorites')
-          .count()
-          .as("number_of_favorites"),
-        Product.relatedQuery('prices')
-          .select('price')
-          .orderBy('date', 'desc')
-          .limit(1)
-          .as('latest_price'),
-      )
-      .withGraphFetched(
-        "[characteristics(defaultSelects).[characteristic_name], subcategory]"
-      )
-      .innerJoin(
-        'subcategories',
-        'products.subcategory_id',
-        'subcategories.id'
-      )
-      .innerJoin(
-        'categories',
-        'subcategories.category_id',
-        'categories.id'
-      )
-      .where("categories.name", String(selectedCategoryName))
-      .where("subcategories.name", String(selectedSubcategoryName))
+  if (search_query) {
+    query = query
+      .where('name', 'like', `%${search_query}%`)
+  }
 
+  if (include_comments === "true") {
+    query = query
+      .withGraphFetched("comments.[user]")
+  }
+
+  if (include_characteristics === "true") {
+    query = query
+      .withGraphFetched("characteristic_values.[characteristic_name]")
+  }
+
+  query = query
+    .orderBy('id', "DESC")
+
+  const products = await query
   res.send({ data: { products } });
 }
+
+// export async function getProductsByQuery
+//   (req: Request, res: Response): Promise<void> {
+//   const { q } = req.query;
+//   const products = await Product
+//     .query()
+//     .where('name', 'like', `%${q}%`)
+
+//   res.send({ data: { products } });
+// }
+
+// export async function getProductsParametrized
+//   (req: Request, res: Response): Promise<void> {
+//   const {
+//     selectedCategoryName,
+//     selectedSubcategoryName,
+//   } = req.query;
+
+//   if (!selectedCategoryName || !selectedSubcategoryName) {
+//     res.sendStatus(400);
+//   }
+
+//   const products = await
+//     Product
+//       .query()
+//       .select(
+//         ['products.id', 'products.name', 'products.image_url'],
+//         Product.relatedQuery('favorites')
+//           .count()
+//           .as("number_of_favorites"),
+//         Product.relatedQuery('prices')
+//           .select('price')
+//           .orderBy('date', 'desc')
+//           .limit(1)
+//           .as('latest_price'),
+//       )
+//       .withGraphFetched(
+//         "[characteristics(defaultSelects).[characteristic_name], subcategory]"
+//       )
+//       .innerJoin(
+//         'subcategories',
+//         'products.subcategory_id',
+//         'subcategories.id'
+//       )
+//       .innerJoin(
+//         'categories',
+//         'subcategories.category_id',
+//         'categories.id'
+//       )
+//       .where("categories.name", String(selectedCategoryName))
+//       .where("subcategories.name", String(selectedSubcategoryName))
+
+//   res.send({ data: { products } });
+// }
 
 export async function getProductById
   (req: Request, res: Response): Promise<void> {
-  const product = await Product
+  const {
+    include_comments,
+    include_characteristics
+  } = req.query;
+
+  let query = Product
     .query()
     .findById(req.params.id)
-    .select(
-      'products.*',
-      Product.relatedQuery('favorites')
-        .count()
-        .as("number_of_favorites"),
-      Product.relatedQuery('prices')
-        .select('price')
-        .orderBy('date', 'desc')
-        .limit(1)
-        .as('latest_price'),
-    )
-    .withGraphFetched(
-      "[subcategory.[category], comments.[user], prices, characteristics.[characteristic_name]]")
 
+  if (include_comments === "true") {
+    query = query
+      .withGraphFetched("comments.[user]")
+  }
+
+  if (include_characteristics === "true") {
+    query = query
+      .withGraphFetched("characteristic_values.[characteristic_name]")
+  }
+
+  const product = await query
   res.send({ data: { product } });
 }
 
@@ -98,14 +131,14 @@ export async function postProduct
     .insertAndFetch(req.body)
 
   if (product) {
-    const subcategoryId = product.subcategory_id;
+    const categoryId = product.category_id;
     const characteristicNames = await CharacteristicName
       .query()
-      .where("for_subcategory_id", subcategoryId)
+      .where("category_id", categoryId)
       .orderBy("id", "DESC")
 
     if (characteristicNames) {
-      const characteristics = characteristicNames
+      const characteristicValues = characteristicNames
         .map((characteristicName) => {
           return {
             characteristic_name_id: characteristicName.id,
@@ -113,9 +146,9 @@ export async function postProduct
             value: ""
           }
         })
-      await Characteristic
+      await CharacteristicValue
         .query()
-        .insertGraph(characteristics as [])
+        .insertGraph(characteristicValues as [])
 
       res.send({ data: { product } });
     } else res.sendStatus(400)

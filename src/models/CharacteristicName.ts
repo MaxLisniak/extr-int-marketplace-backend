@@ -11,12 +11,12 @@ class CharacteristicName extends Model {
   }
 
   static relationMappings = {
-    characteristics: {
+    characteristic_values: {
       relation: Model.HasManyRelation,
-      modelClass: path.join(__dirname, "Characteristic"),
+      modelClass: path.join(__dirname, "CharacteristicValue"),
       join: {
         from: "characteristic_names.id",
-        to: "characteristics.characteristic_name_id"
+        to: "characteristic_values.characteristic_name_id"
       }
     },
   }

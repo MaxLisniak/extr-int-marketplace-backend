@@ -1,4 +1,5 @@
 import Model from "./BaseModel";
+import CharacteristicValue from "./CharacteristicValue";
 import Characteristic from "./CharacteristicValue";
 import Comment from "./Comment";
 import Favorite from "./Favorite";
@@ -60,12 +61,12 @@ class Product extends Model {
         to: "keywords.product_id"
       }
     },
-    characteristics: {
+    characteristic_values: {
       relation: Model.HasManyRelation,
-      modelClass: Characteristic,
+      modelClass: CharacteristicValue,
       join: {
         from: "products.id",
-        to: "characteristics.product_id"
+        to: "characteristic_values.product_id"
       }
     }
 

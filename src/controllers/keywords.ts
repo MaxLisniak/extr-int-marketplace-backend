@@ -4,29 +4,48 @@ import Keyword from "../models/Keyword";
 
 export async function getAllKeywords
   (req: Request, res: Response): Promise<void> {
-  const keywords = await Keyword
+  const { search_query, include_product } = req.query;
+  let query
+
+  query = Keyword
     .query()
 
+  if (search_query) {
+    query = query
+      .where('keyword', 'like', `%${search_query}%`)
+  }
+  if (include_product === "true") {
+    query = query
+      .withGraphFetched('product')
+  }
+  const keywords = await query;
   res.send({ data: { keywords } });
 }
 
-export async function getKeywordsByQuery
-  (req: Request, res: Response): Promise<void> {
-  const { q } = req.query;
-  const keywords = await Keyword
-    .query()
-    .where('keyword', 'like', `%${q}%`)
-    .withGraphFetched("product")
-
-  res.send({ data: { keywords } });
-}
+// export async function getKeywordsByQuery
+//   (req: Request, res: Response): Promise<void> {
+//   const { q } = req.query;
+//   const keywords = await Keyword
+//     .query()
+//     .where('keyword', 'like', `%${q}%`)
+//     .withGraphFetched("product")
+//   res.send({ data: { keywords } });
+// }
 
 export async function getKeywordById
   (req: Request, res: Response): Promise<void> {
-  const keyword = await Keyword
+  const { include_product } = req.query;
+  let query
+
+  query = Keyword
     .query()
     .findById(req.params.id)
 
+  if (include_product === "true") {
+    query = query
+      .withGraphFetched('product')
+  }
+  const keyword = await query;
   res.send({ data: { keyword } });
 }
 

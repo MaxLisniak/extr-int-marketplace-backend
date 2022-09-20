@@ -6,24 +6,47 @@ import { categorySchema } from "../validationSchemas/category";
 
 export async function getAllCategories
   (req: Request, res: Response): Promise<void> {
-  const categories = await Category.query()
+  const { nested } = req.query;
+  let query
+
+  query = Category
+    .query()
+
+  if (nested === "true") {
+    query = query
+      .whereNull("parent_id")
+      .withGraphFetched('subcategories.^')
+  }
+
+  query = query
     .orderBy('id', 'DESC')
+
+  const categories = await query
   res.send({ data: { categories } });
 }
 
-export async function getAllCategoriesExtended
-  (req: Request, res: Response): Promise<void> {
-  const categories = await Category.query()
-    .withGraphFetched('subcategories')
-  res.send({ data: { categories } });
-}
+// export async function getAllCategoriesRecursively
+//   (req: Request, res: Response): Promise<void> {
+//   const categories = await Category.query()
+//     .withGraphFetched('subcategories')
+//   res.send({ data: { categories } });
+// }
 
 export async function getCategoryById
   (req: Request, res: Response): Promise<void> {
-  const category = await Category
+  const { nested } = req.query;
+  let query
+
+  query = Category
     .query()
     .findById(req.params.id)
-    .withGraphFetched('subcategories')
+
+  if (nested) {
+    query = query
+      .withGraphFetched('subcategories.^')
+  }
+
+  const category = await query
   res.send({ data: { category } });
 }
 

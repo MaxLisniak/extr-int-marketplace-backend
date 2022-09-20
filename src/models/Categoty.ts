@@ -14,10 +14,10 @@ class Category extends Model {
   static relationMappings = {
     subcategories: {
       relation: Model.HasManyRelation,
-      modelClass: path.join(__dirname, 'Subcategory'),
+      modelClass: Category,
       join: {
         from: "categories.id",
-        to: "subcategories.category_id"
+        to: "categories.parent_id"
       }
     }
   }

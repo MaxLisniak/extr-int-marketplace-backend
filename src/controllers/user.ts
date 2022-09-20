@@ -9,7 +9,6 @@ export async function getAllUsers
 	(req: Request, res: Response): Promise<void> {
 	const users = await User
 		.query()
-
 	res.send({ data: { users } });
 }
 
@@ -18,7 +17,6 @@ export async function getUserById
 	const users = await User
 		.query()
 		.findById(req.params.id)
-
 	res.send({ data: { users } });
 }
 
@@ -29,7 +27,6 @@ export async function postUser
 	const user = await User
 		.query()
 		.insertAndFetch(req.body)
-
 	res.send({ data: { user } })
 }
 
@@ -41,7 +38,6 @@ export async function patchUser
 	const user = await User
 		.query()
 		.patchAndFetchById(id, req.body)
-
 	res.send({ data: { user } })
 }
 
@@ -51,7 +47,6 @@ export async function deleteUser
 	const queryResult = await User
 		.query()
 		.deleteById(id)
-
 	res.sendStatus(200);
 }
 

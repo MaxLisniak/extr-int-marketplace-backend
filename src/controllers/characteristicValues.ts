@@ -8,7 +8,6 @@ export async function getAllCharacteristicValues
     .query()
     .withGraphFetched('characteristic_name')
     .orderBy("characteristic_name_id", "ASC")
-
   res.send({ data: { characteristicValues } });
 }
 

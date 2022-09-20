@@ -4,31 +4,51 @@ import Comment from "../models/Comment";
 
 export async function getAllComments
   (req: Request, res: Response): Promise<void> {
-  const comments = await Comment
+  const { include_user, product_id } = req.query
+
+  let query = Comment
     .query()
-    .withGraphFetched("user")
 
-  res.send({ data: { comments } });
-}
-
-export async function getCommentsForProductId
-  (req: Request, res: Response): Promise<void> {
-  const { id } = req.params;
-  const comments = await Comment.query()
-    .where("product_id", id)
+  if (product_id) {
+    query = query
+      .where("product_id", Number(product_id))
+  }
+  if (include_user === "true") {
+    query = query
+      .withGraphFetched("user")
+  }
+  query = query
     .orderBy("created", 'DESC')
-    .withGraphFetched("user")
 
+  const comments = await query;
   res.send({ data: { comments } });
 }
+
+// export async function getCommentsForProductId
+//   (req: Request, res: Response): Promise<void> {
+//   const { id } = req.params;
+//   const comments = await Comment.query()
+//     .where("product_id", id)
+//     .orderBy("created", 'DESC')
+//     .withGraphFetched("user")
+
+//   res.send({ data: { comments } });
+// }
 
 export async function getCommentById
   (req: Request, res: Response): Promise<void> {
-  const comment = await Comment
+  const { include_user } = req.query
+
+  let query = Comment
     .query()
     .findById(req.params.id)
-    .withGraphFetched("user")
 
+  if (include_user === "true") {
+    query = query
+      .withGraphFetched("user")
+  }
+
+  const comment = await query
   res.send({ data: { comment } });
 }
 
@@ -39,7 +59,6 @@ export async function postComment
   const comment = await Comment
     .query()
     .insertAndFetch(req.body)
-
   res.send({ data: { comment } })
 }
 
@@ -51,7 +70,6 @@ export async function patchComment
   const comment = await Comment
     .query()
     .patchAndFetchById(id, req.body)
-
   res.send({ data: { comment } })
 }
 
@@ -61,6 +79,5 @@ export async function deleteComment
   const queryResult = await Comment
     .query()
     .deleteById(id)
-
   res.sendStatus(200);
 }

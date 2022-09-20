@@ -3,7 +3,7 @@ import {
   deleteFavorite,
   getAllFavorites,
   getFavoriteById,
-  getFavoritesForUser,
+  // getFavoritesForUser,
   patchFavorite,
   postFavorite,
   toggleFavorite,
@@ -15,7 +15,7 @@ const router = Router();
 
 router.get('/', getAllFavorites);
 router.post('/toggle', [verifyToken, toggleFavorite])
-router.get('/for-user', [verifyToken, getFavoritesForUser])
+// router.get('/for-user', [verifyToken, getFavoritesForUser])
 router.get('/:id', getFavoriteById);
 router.post('/', postFavorite);
 router.patch('/:id', patchFavorite);
