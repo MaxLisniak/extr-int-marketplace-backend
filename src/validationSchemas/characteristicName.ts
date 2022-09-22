@@ -1,6 +1,10 @@
 import * as yup from 'yup';
 
 export const characteristicNameSchema = yup.object().shape({
+  id: yup
+    .number()
+    .integer()
+    .positive(),
   name: yup
     .string()
     .min(1)
@@ -10,3 +14,5 @@ export const characteristicNameSchema = yup.object().shape({
     .integer()
     .positive()
 });
+
+export type characteristicNameType = yup.InferType<typeof characteristicNameSchema>

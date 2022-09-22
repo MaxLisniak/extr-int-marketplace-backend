@@ -1,6 +1,10 @@
 import * as yup from 'yup';
 
 export const characteristicValueSchema = yup.object().shape({
+  id: yup
+    .number()
+    .integer()
+    .positive(),
   value: yup
     .string()
     .min(0)
@@ -14,3 +18,5 @@ export const characteristicValueSchema = yup.object().shape({
     .integer()
     .positive(),
 })
+
+export type characteristicValueType = yup.InferType<typeof characteristicValueSchema>

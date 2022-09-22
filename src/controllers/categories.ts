@@ -1,80 +1,48 @@
-// import { RequestHandler } from "express";
 import { Request, Response, NextFunction } from 'express';
-
-import Category from "../models/Categoty";
+import { deleteCategory, getCategories, getSingleCategory, patchCategory, postCategory } from '../services/categories';
 import { categorySchema } from "../validationSchemas/category";
 
-export async function getAllCategories
-  (req: Request, res: Response): Promise<void> {
+export async function getCategoriesController(req: Request, res: Response): Promise<void> {
   const { nested } = req.query;
-  let query
-
-  query = Category
-    .query()
-
-  if (nested === "true") {
-    query = query
-      .whereNull("parent_id")
-      .withGraphFetched('subcategories.^')
-  }
-
-  query = query
-    .orderBy('id', 'DESC')
-
-  const categories = await query
-  res.send({ data: { categories } });
+  const categories = await getCategories(
+    nested === "true"
+  )
+  res.json({ data: categories });
 }
 
-// export async function getAllCategoriesRecursively
-//   (req: Request, res: Response): Promise<void> {
-//   const categories = await Category.query()
-//     .withGraphFetched('subcategories')
-//   res.send({ data: { categories } });
-// }
-
-export async function getCategoryById
-  (req: Request, res: Response): Promise<void> {
+export async function getCategoryByIdController(req: Request, res: Response): Promise<void> {
+  const paramsPayload = categorySchema
+    .validateSync(req.params);
   const { nested } = req.query;
-  let query
-
-  query = Category
-    .query()
-    .findById(req.params.id)
-
-  if (nested) {
-    query = query
-      .withGraphFetched('subcategories.^')
-  }
-
-  const category = await query
-  res.send({ data: { category } });
+  const category = await getSingleCategory(
+    paramsPayload.id,
+    nested === "true"
+  )
+  res.json({ data: category });
 }
 
-export async function postCategory
-  (req: Request, res: Response, next: NextFunction): Promise<void> {
-  categorySchema.validate(req.body)
-    .catch(err => next(err))
-  const category = await Category
-    .query()
-    .insertAndFetch(req.body)
-  res.send({ data: { category } });
+export async function postCategoryController(req: Request, res: Response): Promise<void> {
+  const bodyPayload = categorySchema
+    .validateSync(req.body)
+  const category = await postCategory(bodyPayload)
+  res.json({ data: category });
 }
 
-export async function patchCategory
-  (req: Request, res: Response, next: NextFunction): Promise<void> {
-  categorySchema.validate(req.body)
-    .catch(err => next(err))
-  const id = req.params.id
-  const category = await Category
-    .query()
-    .patchAndFetchById(id, req.body)
-  res.send({ data: { category } });
+export async function patchCategoryController(req: Request, res: Response): Promise<void> {
+  const bodyPayload = categorySchema
+    .validateSync(req.body)
+  const paramsPayload = categorySchema
+    .validateSync(req.params)
+  const category = await patchCategory(
+    paramsPayload.id,
+    bodyPayload
+  )
+  res.json({ data: category });
 }
 
-export async function deleteCategory
-  (req: Request, res: Response): Promise<void> {
-  const id = req.params.id
-  const queryResult = await Category.query()
-    .deleteById(id)
+export async function deleteCategoryController(req: Request, res: Response): Promise<void> {
+  const paramsPayload = categorySchema
+    .validateSync(req.params)
+  await deleteCategory(paramsPayload.id)
   res.sendStatus(200);
 }
