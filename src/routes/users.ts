@@ -1,27 +1,25 @@
 
 import {
-  signin,
-  signup,
-  signout,
-  handleRefreshToken,
-  getAllUsers,
-  getUserById,
-  postUser,
-  patchUser,
-  deleteUser
-} from "../controllers/user";
+  signInController,
+  signUpController,
+  signOutController,
+  handleRefreshTokenController,
+  getUsersController,
+  getUserByIdController,
+  patchUserController,
+  deleteUserController
+} from "../controllers/users";
 
 import Router from "express-promise-router";
 const router = Router();
 
-router.get('/', getAllUsers);
-router.get('/refresh', handleRefreshToken);
-router.get('/:id', getUserById);
-router.post('/', postUser);
-router.patch('/:id', patchUser);
-router.delete('/:id', deleteUser);
-router.post('/sign-in', signin);
-router.post('/sign-out', signout);
-router.post('/sign-up', signup);
+router.get('/', getUsersController);
+router.get('/refresh', handleRefreshTokenController);
+router.get('/:id', getUserByIdController);
+router.patch('/:id', patchUserController);
+router.delete('/:id', deleteUserController);
+router.post('/sign-in', signInController);
+router.post('/sign-out', signOutController);
+router.post('/sign-up', signUpController);
 
 export default router;

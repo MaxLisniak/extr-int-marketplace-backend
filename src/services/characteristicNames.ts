@@ -53,7 +53,7 @@ export async function postCharacteristicName(payload: characteristicNameType) {
   await CharacteristicValue
     .query()
     .insertGraph(characteristicValues)
-  return query
+  return characteristicName
 }
 
 export function patchCharacteristicName(id: number, payload: characteristicNameType) {

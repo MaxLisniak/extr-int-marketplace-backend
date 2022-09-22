@@ -7,6 +7,7 @@ const errorHandler = (err: any, req: Request, res: Response, next: NextFunction)
 
   console.log("An error occured")
   console.log(err.name)
+  console.log(err)
 
   if (err.name === 'ValidationError')
     return res

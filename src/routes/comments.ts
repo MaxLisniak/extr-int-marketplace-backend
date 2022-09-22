@@ -1,22 +1,20 @@
 
 import {
-  deleteComment,
-  getAllComments,
-  getCommentById,
-  // getCommentsForProductId,
-  patchComment,
-  postComment
+  deleteCommentController,
+  getCommentsController,
+  getCommentByIdController,
+  patchCommentController,
+  postCommentController
 } from '../controllers/comments';
 import verifyToken from '../middleware/verifyToken';
 
 import Router from "express-promise-router";
 const router = Router();
 
-router.get('/', getAllComments);
-// router.get('/for-product/:id', getCommentsForProductId);
-router.get('/:id', getCommentById);
-router.post('/', [verifyToken, postComment]);
-router.patch('/:id', patchComment);
-router.delete('/:id', deleteComment);
+router.get('/', getCommentsController);
+router.get('/:id', getCommentByIdController);
+router.post('/', [verifyToken, postCommentController]);
+router.patch('/:id', patchCommentController);
+router.delete('/:id', deleteCommentController);
 
 export default router;

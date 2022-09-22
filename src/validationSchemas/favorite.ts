@@ -1,6 +1,10 @@
 import * as yup from 'yup';
 
 export const favoriteSchema = yup.object().shape({
+  id: yup
+    .number()
+    .integer()
+    .positive(),
   user_id: yup
     .number()
     .integer()
@@ -10,3 +14,5 @@ export const favoriteSchema = yup.object().shape({
     .integer()
     .positive()
 });
+
+export type favoriteType = yup.InferType<typeof favoriteSchema>

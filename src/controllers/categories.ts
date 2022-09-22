@@ -11,8 +11,7 @@ export async function getCategoriesController(req: Request, res: Response): Prom
 }
 
 export async function getCategoryByIdController(req: Request, res: Response): Promise<void> {
-  const paramsPayload = categorySchema
-    .validateSync(req.params);
+  const paramsPayload = categorySchema.validateSync(req.params);
   const { nested } = req.query;
   const category = await getSingleCategory(
     paramsPayload.id,
@@ -22,17 +21,14 @@ export async function getCategoryByIdController(req: Request, res: Response): Pr
 }
 
 export async function postCategoryController(req: Request, res: Response): Promise<void> {
-  const bodyPayload = categorySchema
-    .validateSync(req.body)
+  const bodyPayload = categorySchema.validateSync(req.body)
   const category = await postCategory(bodyPayload)
   res.json({ data: category });
 }
 
 export async function patchCategoryController(req: Request, res: Response): Promise<void> {
-  const bodyPayload = categorySchema
-    .validateSync(req.body)
-  const paramsPayload = categorySchema
-    .validateSync(req.params)
+  const bodyPayload = categorySchema.validateSync(req.body)
+  const paramsPayload = categorySchema.validateSync(req.params)
   const category = await patchCategory(
     paramsPayload.id,
     bodyPayload
@@ -41,8 +37,7 @@ export async function patchCategoryController(req: Request, res: Response): Prom
 }
 
 export async function deleteCategoryController(req: Request, res: Response): Promise<void> {
-  const paramsPayload = categorySchema
-    .validateSync(req.params)
+  const paramsPayload = categorySchema.validateSync(req.params)
   await deleteCategory(paramsPayload.id)
   res.sendStatus(200);
 }

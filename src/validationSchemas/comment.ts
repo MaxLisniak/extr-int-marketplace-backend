@@ -1,6 +1,10 @@
 import * as yup from 'yup';
 
 export const commentSchema = yup.object().shape({
+  id: yup
+    .number()
+    .integer()
+    .positive(),
   text: yup
     .string()
     .min(1)
@@ -14,5 +18,7 @@ export const commentSchema = yup.object().shape({
     .integer()
     .positive(),
   created: yup
-    .date(),
+    .string(),
 });
+
+export type commentType = yup.InferType<typeof commentSchema>

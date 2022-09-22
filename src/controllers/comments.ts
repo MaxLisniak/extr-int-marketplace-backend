@@ -1,83 +1,44 @@
 import { Request, Response, NextFunction } from "express";
 import { commentSchema } from "../validationSchemas/comment";
-import Comment from "../models/Comment";
+import { deleteComment, getCommentById, getComments, patchComment, postComment } from "../services/comments";
 
-export async function getAllComments
-  (req: Request, res: Response): Promise<void> {
+export async function getCommentsController(req: Request, res: Response): Promise<void> {
   const { include_user, product_id } = req.query
-
-  let query = Comment
-    .query()
-
-  if (product_id) {
-    query = query
-      .where("product_id", Number(product_id))
-  }
-  if (include_user === "true") {
-    query = query
-      .withGraphFetched("user")
-  }
-  query = query
-    .orderBy("created", 'DESC')
-
-  const comments = await query;
-  res.send({ data: { comments } });
+  const comments = await getComments(
+    Number(product_id),
+    include_user === "true"
+  )
+  res.json({ data: comments });
 }
 
-// export async function getCommentsForProductId
-//   (req: Request, res: Response): Promise<void> {
-//   const { id } = req.params;
-//   const comments = await Comment.query()
-//     .where("product_id", id)
-//     .orderBy("created", 'DESC')
-//     .withGraphFetched("user")
-
-//   res.send({ data: { comments } });
-// }
-
-export async function getCommentById
-  (req: Request, res: Response): Promise<void> {
+export async function getCommentByIdController(req: Request, res: Response): Promise<void> {
   const { include_user } = req.query
-
-  let query = Comment
-    .query()
-    .findById(req.params.id)
-
-  if (include_user === "true") {
-    query = query
-      .withGraphFetched("user")
-  }
-
-  const comment = await query
-  res.send({ data: { comment } });
+  const paramsPayload = commentSchema.validateSync(req.params)
+  const comment = await getCommentById(
+    paramsPayload.id,
+    include_user === "true"
+  )
+  res.json({ data: comment });
 }
 
-export async function postComment
-  (req: Request, res: Response, next: NextFunction): Promise<void> {
-  commentSchema.validate(req.body)
-    .catch(err => next(err))
-  const comment = await Comment
-    .query()
-    .insertAndFetch(req.body)
-  res.send({ data: { comment } })
+export async function postCommentController(req: Request, res: Response, next: NextFunction): Promise<void> {
+  const bodyPayload = commentSchema.validateSync(req.body)
+  const comment = await postComment(bodyPayload)
+  res.json({ data: comment })
 }
 
-export async function patchComment
-  (req: Request, res: Response, next: NextFunction): Promise<void> {
-  commentSchema.validate(req.body)
-    .catch(err => next(err))
-  const id = req.params.id
-  const comment = await Comment
-    .query()
-    .patchAndFetchById(id, req.body)
-  res.send({ data: { comment } })
+export async function patchCommentController(req: Request, res: Response, next: NextFunction): Promise<void> {
+  const bodyPayload = commentSchema.validateSync(req.body)
+  const paramsPayload = commentSchema.validateSync(req.params)
+  const comment = await patchComment(
+    paramsPayload.id,
+    bodyPayload
+  )
+  res.json({ data: comment })
 }
 
-export async function deleteComment
-  (req: Request, res: Response): Promise<void> {
-  const id = req.params.id
-  const queryResult = await Comment
-    .query()
-    .deleteById(id)
+export async function deleteCommentController(req: Request, res: Response): Promise<void> {
+  const paramsPayload = commentSchema.validateSync(req.params)
+  await deleteComment(paramsPayload.id)
   res.sendStatus(200);
 }

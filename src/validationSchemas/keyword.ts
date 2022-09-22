@@ -1,6 +1,10 @@
 import * as yup from 'yup';
 
 export const keywordSchema = yup.object().shape({
+  id: yup
+    .number()
+    .integer()
+    .positive(),
   keyword: yup
     .string()
     .min(1)
@@ -10,3 +14,5 @@ export const keywordSchema = yup.object().shape({
     .integer()
     .positive(),
 })
+
+export type keywordType = yup.InferType<typeof keywordSchema>

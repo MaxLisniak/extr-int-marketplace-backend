@@ -1,6 +1,10 @@
 import * as yup from 'yup';
 
 export const productSchema = yup.object().shape({
+  id: yup
+    .number()
+    .integer()
+    .positive(),
   name: yup
     .string()
     .min(1)
@@ -21,3 +25,5 @@ export const productSchema = yup.object().shape({
     .integer()
     .positive(),
 });
+
+export type productType = yup.InferType<typeof productSchema>
