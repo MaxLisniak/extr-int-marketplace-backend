@@ -7,7 +7,9 @@ import {
   getUsersController,
   getUserByIdController,
   patchUserController,
-  deleteUserController
+  deleteUserController,
+  addFavoriteProductController,
+  removeFavoriteProductController
 } from "../controllers/users";
 
 import Router from "express-promise-router";
@@ -21,5 +23,7 @@ router.delete('/:id', deleteUserController);
 router.post('/sign-in', signInController);
 router.post('/sign-out', signOutController);
 router.post('/sign-up', signUpController);
+router.post('/add-favorite', addFavoriteProductController)
+router.post('/remove-favorite', removeFavoriteProductController)
 
 export default router;

@@ -1,4 +1,5 @@
 import Model from "./BaseModel";
+import Product from "./Product";
 
 class User extends Model {
   id: number
@@ -19,6 +20,21 @@ class User extends Model {
       },
     };
   }
+  static relationMappings = {
+    favoriteProducts: {
+      relation: Model.ManyToManyRelation,
+      modelClass: Product,
+      join: {
+        from: 'users.id',
+        through: {
+          from: 'favorites.user_id',
+          to: 'favorites.product_id'
+        },
+        to: 'products.id'
+      }
+    }
+  };
+
 
 }
 

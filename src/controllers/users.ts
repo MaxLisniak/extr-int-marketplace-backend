@@ -3,7 +3,8 @@ import bcrypt from "bcrypt";
 import jwt, { JsonWebTokenError, JwtPayload } from "jsonwebtoken";
 import logger from "../logger";
 import { userSchema, userType } from "../validationSchemas/user";
-import { deleteUser, generatePasswordHash, getSingleUserByEmail, getSingleUserByRefreshToken, getUserById, getUsers, patchUser, postUser, removeRefreshToken } from "../services/users";
+import { addFavoriteProduct, deleteUser, generatePasswordHash, getSingleUserByEmail, getSingleUserByRefreshToken, getUserById, getUsers, handleRefreshToken, patchUser, postUser, removeFavoriteProduct, removeRefreshToken, signIn, signOut, signUp } from "../services/users";
+import { favoriteSchema } from "../validationSchemas/favorite";
 
 export async function getUsersController(req: Request, res: Response): Promise<void> {
 	const users = await getUsers()
@@ -11,8 +12,12 @@ export async function getUsersController(req: Request, res: Response): Promise<v
 }
 
 export async function getUserByIdController(req: Request, res: Response): Promise<void> {
+	const { include_favorite_products } = req.query;
 	const paramsPayload = userSchema.validateSync(req.params)
-	const user = await getUserById(paramsPayload.id)
+	const user = await getUserById(
+		paramsPayload.id,
+		include_favorite_products === "true"
+	)
 	res.json({ data: user });
 }
 
@@ -32,6 +37,18 @@ export async function deleteUserController(req: Request, res: Response): Promise
 	res.sendStatus(200);
 }
 
+export async function addFavoriteProductController(req: Request, res: Response): Promise<void> {
+	const bodyPayload = favoriteSchema.validateSync(req.body);
+	await addFavoriteProduct(bodyPayload.user_id, bodyPayload.product_id)
+	res.sendStatus(200)
+}
+
+export async function removeFavoriteProductController(req: Request, res: Response): Promise<void> {
+	const bodyPayload = favoriteSchema.validateSync(req.body);
+	await removeFavoriteProduct(bodyPayload.user_id, bodyPayload.product_id)
+	res.sendStatus(200)
+}
+
 export async function signUpController(req: Request, res: Response): Promise<void> {
 	logger.info("A user is trying to sign up")
 	const bodyPayload = userSchema.validateSync(req.body)
@@ -42,27 +59,7 @@ export async function signUpController(req: Request, res: Response): Promise<voi
 		res.status(400).json({ errors: [{ msg: "Password and Password confirmation do not match" }] })
 		return
 	}
-
-	// generate hashed password
-	const hashedPassword = await generatePasswordHash(bodyPayload.password)
-
-	// find user 
-	const foundUser = await getSingleUserByEmail(bodyPayload.email)
-
-	if (foundUser) {
-		logger.error(`A user couldn't sign up since ${bodyPayload.email} already exists`)
-		res.status(409).json({ errors: [{ msg: "User with such email already exists" }] })
-		return
-	}
-	const newUserPayload = {
-		first_name: bodyPayload.first_name,
-		last_name: bodyPayload.last_name,
-		email: bodyPayload.email,
-		password_hash: hashedPassword,
-		is_admin: false,
-	};
-	const registeredUser = await postUser(newUserPayload)
-	logger.info(`A user signed up as ${registeredUser.first_name} ${registeredUser.last_name} ${registeredUser.email}`)
+	const registeredUser = await signUp(bodyPayload)
 	res.json({ data: registeredUser });
 }
 
@@ -70,52 +67,13 @@ export async function signInController(req: Request, res: Response): Promise<voi
 	logger.info("A user is trying to sign in")
 	const bodyPayload = userSchema.validateSync(req.body)
 
-	// find user
-	const foundUser = await getSingleUserByEmail(bodyPayload.email)
-
-	if (!foundUser) {
-		logger.error(`An error occured while trying to sign is, user with the email ${bodyPayload.email} doesn't exist`)
-		res.status(404).json({ errors: [{ msg: "User not found" }] });
-		return
-	}
-
-	// check password
-	const match = await bcrypt.compare(bodyPayload.password, foundUser.password_hash);
-
-	// send an error message is password is incorrect
-	if (!match) {
-		logger.error("An error occured while trying to sign in: Wrong password is provided")
-		res.status(400).json({ errors: [{ msg: "Wrong Password" }] })
-	}
-
-	const { id, email } = foundUser;
-	const userId = id;
-
-	// generate access and refresh tokens
-	const accessToken = jwt.sign(
-		{ userId, email },
-		process.env.ACCESS_TOKEN_SECRET,
-		{ expiresIn: '15s' }
-	);
-
-	const refreshToken = jwt.sign(
-		{ userId, email },
-		process.env.REFRESH_TOKEN_SECRET,
-		{ expiresIn: '7d' }
-	);
-
-	// add refresh token to a user in database
-	const signedInUser = await patchUser(
-		userId,
-		{ refresh_token: refreshToken } as userType
-	)
+	const { signedInUser, accessToken, refreshToken } = await signIn(bodyPayload)
 
 	// add the refresh token to the response as a cookie
 	res.cookie('refreshToken', refreshToken, {
 		httpOnly: true,
 		maxAge: 7 * 24 * 60 * 60 * 1000,
 	});
-	logger.info(`A user is logged in as: ${email}`)
 	res.json({ data: { accessToken, signedInUser } });
 }
 
@@ -129,21 +87,10 @@ export async function signOutController(req: Request, res: Response): Promise<vo
 		return
 	}
 
-	// query a user by refresh token and check if it exists
-	const foundUser = await getSingleUserByRefreshToken(refreshToken)
-
-	if (!foundUser) {
-		logger.error("An error occured while trying to sign out: User with provided refresh token is not signed in")
-		res.sendStatus(204)
-		return
-	}
-
-	// remove the refresh token from the user in database
-	await removeRefreshToken(refreshToken)
+	await signOut(refreshToken)
 
 	// remove the refresh token cookie from the user
 	res.clearCookie('refreshToken');
-	logger.info(`User with the username ${foundUser.email} is signed out`)
 	res.sendStatus(200);
 }
 
@@ -158,33 +105,6 @@ export async function handleRefreshTokenController(req: Request, res: Response):
 		return
 	}
 	const refreshToken = cookies.refreshToken;
-
-	const foundUser = await getSingleUserByRefreshToken(refreshToken)
-
-	if (!foundUser) {
-		logger.error("A token cannot be refreshed, as the user hasn't been validly authenticated")
-		res.sendStatus(403);
-		return
-	} //Forbidden 
-
-	// evaluate jwt 
-	jwt.verify(
-		refreshToken,
-		process.env.REFRESH_TOKEN_SECRET,
-		(err: JsonWebTokenError, decoded: JwtPayload) => {
-			if (err || foundUser.email !== decoded.email) {
-				logger.error("An error occured while verifying the privided refresh token")
-				res.sendStatus(403)
-				return
-			}
-			// new access token
-			const accessToken = jwt.sign(
-				{ userId: decoded.userId, email: decoded.email },
-				process.env.ACCESS_TOKEN_SECRET,
-				{ expiresIn: '15s' },
-			);
-			logger.info(`The access token is refreshed`)
-			res.json({ accessToken })
-		}
-	);
+	const accessToken = await handleRefreshToken(refreshToken)
+	res.json({ accessToken })
 }
