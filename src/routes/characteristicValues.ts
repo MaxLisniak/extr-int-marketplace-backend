@@ -1,19 +1,19 @@
 
 import {
+  findCharacteristicValuesController,
+  findCharacteristicValueByIdController,
+  createCharacteristicValueController,
+  updateCharacteristicValueController,
   deleteCharacteristicValueController,
-  getCharacteristicValuesController,
-  getCharacteristicValueByIdController,
-  patchCharacteristicValueController,
-  postCharacteristicValueController
 } from "../controllers/characteristicValues";
 
 import Router from "express-promise-router";
 const router = Router();
 
-router.get('/', getCharacteristicValuesController);
-router.post('/', postCharacteristicValueController);
-router.get('/:id', getCharacteristicValueByIdController);
-router.patch('/:id', patchCharacteristicValueController);
+router.get('/', findCharacteristicValuesController);
+router.post('/', createCharacteristicValueController);
+router.get('/:id', findCharacteristicValueByIdController);
+router.patch('/:id', updateCharacteristicValueController);
 router.delete('/:id', deleteCharacteristicValueController);
 
 export default router;

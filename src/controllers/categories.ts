@@ -1,35 +1,41 @@
-import { Request, Response, NextFunction } from 'express';
-import { deleteCategory, getCategories, getSingleCategory, patchCategory, postCategory } from '../services/categories';
+import { Request, Response } from 'express';
 import { categorySchema } from "../validationSchemas/category";
+import {
+  findCategories,
+  findCategoryById,
+  createCategory,
+  updateCategory,
+  deleteCategory,
+} from '../services/categories';
 
-export async function getCategoriesController(req: Request, res: Response): Promise<void> {
+export async function findCategoriesController(req: Request, res: Response): Promise<void> {
   const { nested } = req.query;
-  const categories = await getCategories(
+  const categories = await findCategories(
     nested === "true"
   )
   res.json({ data: categories });
 }
 
-export async function getCategoryByIdController(req: Request, res: Response): Promise<void> {
+export async function findCategoryByIdController(req: Request, res: Response): Promise<void> {
   const paramsPayload = categorySchema.validateSync(req.params);
   const { nested } = req.query;
-  const category = await getSingleCategory(
+  const category = await findCategoryById(
     paramsPayload.id,
     nested === "true"
   )
   res.json({ data: category });
 }
 
-export async function postCategoryController(req: Request, res: Response): Promise<void> {
+export async function createCategoryController(req: Request, res: Response): Promise<void> {
   const bodyPayload = categorySchema.validateSync(req.body)
-  const category = await postCategory(bodyPayload)
+  const category = await createCategory(bodyPayload)
   res.json({ data: category });
 }
 
-export async function patchCategoryController(req: Request, res: Response): Promise<void> {
+export async function updateCategoryController(req: Request, res: Response): Promise<void> {
   const bodyPayload = categorySchema.validateSync(req.body)
   const paramsPayload = categorySchema.validateSync(req.params)
-  const category = await patchCategory(
+  const category = await updateCategory(
     paramsPayload.id,
     bodyPayload
   )

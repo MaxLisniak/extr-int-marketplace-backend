@@ -1,30 +1,39 @@
-import { Request, Response, NextFunction } from "express";
-import bcrypt from "bcrypt";
-import jwt, { JsonWebTokenError, JwtPayload } from "jsonwebtoken";
+import { Request, Response } from "express";
 import logger from "../logger";
-import { userSchema, userType } from "../validationSchemas/user";
-import { addFavoriteProduct, deleteUser, generatePasswordHash, getSingleUserByEmail, getSingleUserByRefreshToken, getUserById, getUsers, handleRefreshToken, patchUser, postUser, removeFavoriteProduct, removeRefreshToken, signIn, signOut, signUp } from "../services/users";
+import { userSchema } from "../validationSchemas/user";
 import { favoriteSchema } from "../validationSchemas/favorite";
+import {
+	findUsers,
+	findUserById,
+	updateUser,
+	deleteUser,
+	signIn,
+	signOut,
+	signUp,
+	handleRefreshToken,
+	addFavoriteProduct,
+	removeFavoriteProduct,
+} from "../services/users";
 
-export async function getUsersController(req: Request, res: Response): Promise<void> {
-	const users = await getUsers()
+export async function findUsersController(req: Request, res: Response): Promise<void> {
+	const users = await findUsers()
 	res.json({ data: users });
 }
 
-export async function getUserByIdController(req: Request, res: Response): Promise<void> {
+export async function findUserByIdController(req: Request, res: Response): Promise<void> {
 	const { include_favorite_products } = req.query;
 	const paramsPayload = userSchema.validateSync(req.params)
-	const user = await getUserById(
+	const user = await findUserById(
 		paramsPayload.id,
 		include_favorite_products === "true"
 	)
 	res.json({ data: user });
 }
 
-export async function patchUserController(req: Request, res: Response, next: NextFunction): Promise<void> {
+export async function updateUserController(req: Request, res: Response): Promise<void> {
 	const bodyPayload = userSchema.validateSync(req.body)
 	const paramsPayload = userSchema.validateSync(req.params)
-	const user = await patchUser(
+	const user = await updateUser(
 		paramsPayload.id,
 		bodyPayload
 	)

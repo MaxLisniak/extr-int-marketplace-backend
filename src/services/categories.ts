@@ -1,7 +1,7 @@
 import { categoryType } from "../validationSchemas/category"
 import Category from "../models/Categoty"
 
-export function getCategories(nested?: Boolean) {
+export function findCategories(nested?: Boolean) {
   const query = Category.query()
   if (nested) {
     query
@@ -12,7 +12,7 @@ export function getCategories(nested?: Boolean) {
   return query
 }
 
-export function getSingleCategory(id: number, nested?: Boolean) {
+export function findCategoryById(id: number, nested?: Boolean) {
   const query = Category
     .query()
     .findById(id)
@@ -22,14 +22,14 @@ export function getSingleCategory(id: number, nested?: Boolean) {
   return query
 }
 
-export function postCategory(payload: categoryType) {
+export function createCategory(payload: categoryType) {
   const query = Category
     .query()
     .insertAndFetch(payload)
   return query
 }
 
-export function patchCategory(id: number, payload: categoryType) {
+export function updateCategory(id: number, payload: categoryType) {
   const query = Category
     .query()
     .patchAndFetchById(id, payload)

@@ -3,7 +3,7 @@ import { productType } from "../validationSchemas/product"
 import Product from "../models/Product"
 import CharacteristicValue from "../models/CharacteristicValue"
 
-export function getProducts(
+export function findProducts(
   category_id?: number,
   search_query?: string,
   include_comments?: Boolean,
@@ -26,7 +26,7 @@ export function getProducts(
   return query
 }
 
-export function getProductById(
+export function findProductById(
   id: number,
   include_comments?: Boolean,
   include_characteristics?: Boolean
@@ -43,7 +43,7 @@ export function getProductById(
   return query
 }
 
-export async function postProduct(payload: productType) {
+export async function createProduct(payload: productType) {
   const query = Product
     .query()
     .insertAndFetch(payload)
@@ -70,7 +70,7 @@ export async function postProduct(payload: productType) {
   return product
 }
 
-export function patchProduct(
+export function updateProduct(
   id: number,
   payload: productType
 ) {

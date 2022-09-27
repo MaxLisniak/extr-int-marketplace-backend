@@ -1,37 +1,43 @@
-import { Request, Response, NextFunction } from "express";
+import { Request, Response } from "express";
 import { characteristicNameSchema } from "../validationSchemas/characteristicName";
-import { deleteCharacteristicName, getCharacteristicNames, getSingleCharacteristicName, patchCharacteristicName, postCharacteristicName } from "../services/characteristicNames";
+import {
+  findCharacteristicNames,
+  findCharacteristicNameById,
+  createCharacteristicName,
+  updateCharacteristicName,
+  deleteCharacteristicName,
+} from "../services/characteristicNames";
 
 
-export async function getCharacteristicNamesController(req: Request, res: Response): Promise<void> {
+export async function findCharacteristicNamesController(req: Request, res: Response): Promise<void> {
   const { category_id, include_characteristic_values } = req.query;
-  const characteristicNames = await getCharacteristicNames(
+  const characteristicNames = await findCharacteristicNames(
     Number(category_id),
     include_characteristic_values === "true"
   )
   res.json({ data: characteristicNames });
 }
 
-export async function getCharacteristicNameByIdController(req: Request, res: Response): Promise<void> {
+export async function findCharacteristicNameByIdController(req: Request, res: Response): Promise<void> {
   const { include_characteristic_values } = req.query;
   const paramsPayload = characteristicNameSchema.validateSync(req.params)
-  const characteristicName = await getSingleCharacteristicName(
+  const characteristicName = await findCharacteristicNameById(
     paramsPayload.id,
     include_characteristic_values === "true"
   )
   res.json({ data: characteristicName });
 }
 
-export async function postCharacteristicNameController(req: Request, res: Response, next: NextFunction): Promise<void> {
+export async function createCharacteristicNameController(req: Request, res: Response): Promise<void> {
   const payload = characteristicNameSchema.validateSync(req.body)
-  const characteristicName = await postCharacteristicName(payload)
+  const characteristicName = await createCharacteristicName(payload)
   res.json({ data: characteristicName });
 }
 
-export async function patchCharacteristicNameController(req: Request, res: Response, next: NextFunction): Promise<void> {
+export async function updateCharacteristicNameController(req: Request, res: Response): Promise<void> {
   const bodyPayload = characteristicNameSchema.validateSync(req.body)
   const paramsPayload = characteristicNameSchema.validateSync(req.params)
-  const characteristicName = await patchCharacteristicName(
+  const characteristicName = await updateCharacteristicName(
     paramsPayload.id,
     bodyPayload
   )

@@ -3,7 +3,7 @@ import { characteristicNameType } from "../validationSchemas/characteristicName"
 import CharacteristicName from "../models/CharacteristicName"
 import CharacteristicValue from "../models/CharacteristicValue"
 
-export function getCharacteristicNames(
+export function findCharacteristicNames(
   category_id?: number,
   include_characteristic_values?: Boolean
 ) {
@@ -17,7 +17,7 @@ export function getCharacteristicNames(
   return query
 }
 
-export function getSingleCharacteristicName(
+export function findCharacteristicNameById(
   id: number,
   include_characteristic_values?: Boolean
 ) {
@@ -30,7 +30,7 @@ export function getSingleCharacteristicName(
   return query
 }
 
-export async function postCharacteristicName(payload: characteristicNameType) {
+export async function createCharacteristicName(payload: characteristicNameType) {
   const query = CharacteristicName
     .query()
     .insertAndFetch(payload)
@@ -56,7 +56,7 @@ export async function postCharacteristicName(payload: characteristicNameType) {
   return characteristicName
 }
 
-export function patchCharacteristicName(id: number, payload: characteristicNameType) {
+export function updateCharacteristicName(id: number, payload: characteristicNameType) {
   const query = CharacteristicName
     .query()
     .patchAndFetchById(id, payload)

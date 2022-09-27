@@ -1,7 +1,7 @@
 import { commentType } from "../validationSchemas/comment"
 import Comment from "../models/Comment"
 
-export function getComments(
+export function findComments(
   product_id?: number,
   include_user?: Boolean
 ) {
@@ -18,7 +18,7 @@ export function getComments(
   return query;
 }
 
-export function getCommentById(
+export function findCommentById(
   id: number,
   include_user?: Boolean
 ) {
@@ -32,14 +32,14 @@ export function getCommentById(
   return query
 }
 
-export function postComment(payload: commentType) {
+export function createComment(payload: commentType) {
   const query = Comment
     .query()
     .insertAndFetch(payload)
   return query
 }
 
-export function patchComment(id: number, payload: commentType) {
+export function updateComment(id: number, payload: commentType) {
   const query = Comment
     .query()
     .patchAndFetchById(id, payload)

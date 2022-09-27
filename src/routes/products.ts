@@ -1,19 +1,18 @@
-
+import Router from "express-promise-router";
 import {
+  findProductsController,
+  findProductByIdController,
+  createProductController,
+  updateProductController,
   deleteProductController,
-  getProductsController,
-  getProductByIdController,
-  patchProductController,
-  postProductController
 } from '../controllers/products';
 
-import Router from "express-promise-router";
 const router = Router();
 
-router.get('/', getProductsController);
-router.post('/', postProductController);
-router.get('/:id', getProductByIdController);
-router.patch('/:id', patchProductController);
+router.get('/', findProductsController);
+router.post('/', createProductController);
+router.get('/:id', findProductByIdController);
+router.patch('/:id', updateProductController);
 router.delete('/:id', deleteProductController);
 
 export default router;

@@ -1,7 +1,7 @@
 import { characteristicValueType } from "../validationSchemas/characteristicValue";
 import CharacteristicValue from "../models/CharacteristicValue";
 
-export function getCharacteristicValues() {
+export function findCharacteristicValues() {
   const query = CharacteristicValue
     .query()
     .withGraphFetched('characteristic_name')
@@ -9,7 +9,7 @@ export function getCharacteristicValues() {
   return query
 }
 
-export function getCharacteristicValueById(id: number) {
+export function findCharacteristicValueById(id: number) {
   const query = CharacteristicValue
     .query()
     .findById(id)
@@ -17,14 +17,14 @@ export function getCharacteristicValueById(id: number) {
   return query
 }
 
-export function postCharacteristicValue(payload: characteristicValueType) {
+export function createCharacteristicValue(payload: characteristicValueType) {
   const query = CharacteristicValue
     .query()
     .insertAndFetch(payload)
   return query
 }
 
-export function patchCharacteristicValue(id: number, payload: characteristicValueType) {
+export function updateCharacteristicValue(id: number, payload: characteristicValueType) {
   const query = CharacteristicValue
     .query()
     .patchAndFetchById(id, payload)

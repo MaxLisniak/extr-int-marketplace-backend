@@ -1,7 +1,7 @@
 import { keywordType } from "../validationSchemas/keyword"
 import Keyword from "../models/Keyword"
 
-export function getKeywords(
+export function findKeywords(
   search_query?: string | undefined,
   include_product?: Boolean
 ) {
@@ -15,7 +15,7 @@ export function getKeywords(
   return query
 }
 
-export function getKeywordById(
+export function findKeywordById(
   id: number,
   include_product: Boolean
 ) {
@@ -28,7 +28,7 @@ export function getKeywordById(
   return query
 }
 
-export function postKeyword(
+export function createKeyword(
   payload: keywordType
 ) {
   const query = Keyword
@@ -37,7 +37,7 @@ export function postKeyword(
   return query
 }
 
-export function patchKeyword(
+export function updateKeyword(
   id: number,
   payload: keywordType
 ) {

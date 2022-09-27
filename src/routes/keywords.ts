@@ -1,19 +1,18 @@
-
+import Router from "express-promise-router";
 import {
+  findKeywordsController,
+  findKeywordByIdController,
+  createKeywordController,
+  updateKeywordController,
   deleteKeywordController,
-  getKeywordsController,
-  getKeywordByIdController,
-  patchKeywordController,
-  postKeywordController
 } from '../controllers/keywords';
 
-import Router from "express-promise-router";
 const router = Router();
 
-router.get('/', getKeywordsController);
-router.post('/', postKeywordController);
-router.get('/:id', getKeywordByIdController);
-router.patch('/:id', patchKeywordController);
+router.get('/', findKeywordsController);
+router.post('/', createKeywordController);
+router.get('/:id', findKeywordByIdController);
+router.patch('/:id', updateKeywordController);
 router.delete('/:id', deleteKeywordController);
 
 export default router;

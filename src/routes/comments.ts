@@ -1,20 +1,19 @@
-
-import {
-  deleteCommentController,
-  getCommentsController,
-  getCommentByIdController,
-  patchCommentController,
-  postCommentController
-} from '../controllers/comments';
-import verifyToken from '../middleware/verifyToken';
-
 import Router from "express-promise-router";
+import verifyToken from '../middleware/verifyToken';
+import {
+  findCommentsController,
+  findCommentByIdController,
+  createCommentController,
+  updateCommentController,
+  deleteCommentController,
+} from '../controllers/comments';
+
 const router = Router();
 
-router.get('/', getCommentsController);
-router.post('/', [verifyToken, postCommentController]);
-router.get('/:id', getCommentByIdController);
-router.patch('/:id', patchCommentController);
+router.get('/', findCommentsController);
+router.post('/', [verifyToken, createCommentController]);
+router.get('/:id', findCommentByIdController);
+router.patch('/:id', updateCommentController);
 router.delete('/:id', deleteCommentController);
 
 export default router;

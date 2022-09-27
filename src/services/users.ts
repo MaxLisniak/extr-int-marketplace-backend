@@ -1,17 +1,17 @@
+import jwt, { JsonWebTokenError, JwtPayload } from "jsonwebtoken";
+import bcrypt from "bcrypt";
 import { userType } from "../validationSchemas/user";
 import User from "../models/User";
-import bcrypt from "bcrypt";
-import jwt, { JsonWebTokenError, JwtPayload } from "jsonwebtoken";
 import Favorite from "../models/Favorite";
 import logger from "../logger";
 
 
-export function getUsers() {
+export function findUsers() {
   const query = User.query()
   return query
 }
 
-export function getUserById(
+export function findUserById(
   id: number,
   include_favorite_products?: Boolean
 ) {
@@ -26,7 +26,7 @@ export function getUserById(
   return query
 }
 
-export function patchUser(
+export function updateUser(
   id: number,
   paylaod: userType
 ) {
@@ -50,21 +50,21 @@ export async function generatePasswordHash(password: string) {
   return hashedPassword
 }
 
-export function getSingleUserByEmail(email: string) {
+export function findUserByEmail(email: string) {
   const query = User
     .query()
     .findOne({ email })
   return query
 }
 
-export function getSingleUserByRefreshToken(refresh_token: string) {
+export function findUserByRefreshToken(refresh_token: string) {
   const query = User
     .query()
     .findOne({ refresh_token })
   return query
 }
 
-export function postUser(payload: {
+export function createUser(payload: {
   first_name: string,
   last_name: string,
   email: string,
@@ -98,7 +98,7 @@ export function removeRefreshToken(refresh_token: string) {
 }
 
 export async function handleRefreshToken(refresh_token: string) {
-  const foundUser = await getSingleUserByRefreshToken(refresh_token)
+  const foundUser = await findUserByRefreshToken(refresh_token)
 
   if (!foundUser) {
     throw new Error("A token cannot be refreshed, as the user hasn't been validly authenticated")
@@ -156,7 +156,7 @@ export async function removeFavoriteProduct(
 
 export async function signOut(refresh_token: string) {
   // query a user by refresh token and check if it exists
-  const foundUser = await getSingleUserByRefreshToken(refresh_token)
+  const foundUser = await findUserByRefreshToken(refresh_token)
 
   if (!foundUser) {
     throw new Error("An error occured while trying to sign out: User with provided refresh token is not signed in")
@@ -169,7 +169,7 @@ export async function signOut(refresh_token: string) {
 
 export async function signIn(payload: userType) {
   // find user
-  const foundUser = await getSingleUserByEmail(payload.email)
+  const foundUser = await findUserByEmail(payload.email)
 
   if (!foundUser) {
     throw new Error(`An error occured while trying to sign is, user with the email ${payload.email} doesn't exist`)
@@ -200,7 +200,7 @@ export async function signIn(payload: userType) {
   );
 
   // add refresh token to a user in database
-  const signedInUser = await patchUser(
+  const signedInUser = await updateUser(
     userId,
     { refresh_token: refreshToken } as userType
   )
@@ -214,7 +214,7 @@ export async function signUp(payload: userType) {
   const hashedPassword = await generatePasswordHash(payload.password)
 
   // find user 
-  const foundUser = await getSingleUserByEmail(payload.email)
+  const foundUser = await findUserByEmail(payload.email)
 
   if (foundUser) {
     throw new Error(`A user couldn't sign up since ${payload.email} already exists`)
@@ -226,7 +226,7 @@ export async function signUp(payload: userType) {
     password_hash: hashedPassword,
     is_admin: false,
   };
-  const registeredUser = await postUser(newUserPayload)
+  const registeredUser = await createUser(newUserPayload)
   logger.info(`A user signed up as ${registeredUser.first_name} ${registeredUser.last_name} ${registeredUser.email}`)
   return registeredUser
 }

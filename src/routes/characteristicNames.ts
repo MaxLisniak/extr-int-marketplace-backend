@@ -1,19 +1,18 @@
-
+import Router from "express-promise-router";
 import {
+  findCharacteristicNamesController,
+  findCharacteristicNameByIdController,
+  createCharacteristicNameController,
+  updateCharacteristicNameController,
   deleteCharacteristicNameController,
-  getCharacteristicNamesController,
-  getCharacteristicNameByIdController,
-  patchCharacteristicNameController,
-  postCharacteristicNameController
 } from '../controllers/characteristicNames';
 
-import Router from "express-promise-router";
 const router = Router();
 
-router.get('/', getCharacteristicNamesController)
-router.post('/', postCharacteristicNameController);
-router.get('/:id', getCharacteristicNameByIdController);
-router.patch('/:id', patchCharacteristicNameController);
+router.get('/', findCharacteristicNamesController)
+router.post('/', createCharacteristicNameController);
+router.get('/:id', findCharacteristicNameByIdController);
+router.patch('/:id', updateCharacteristicNameController);
 router.delete('/:id', deleteCharacteristicNameController);
 
 export default router;

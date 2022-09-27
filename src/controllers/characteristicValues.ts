@@ -1,28 +1,34 @@
-import { Request, Response, NextFunction } from "express";
+import { Request, Response } from "express";
 import { characteristicValueSchema } from "../validationSchemas/characteristicValue";
-import { deleteCharacteristicValue, getCharacteristicValueById, getCharacteristicValues, patchCharacteristicValue, postCharacteristicValue } from "../services/characteristicValues";
+import {
+  findCharacteristicValues,
+  findCharacteristicValueById,
+  createCharacteristicValue,
+  updateCharacteristicValue,
+  deleteCharacteristicValue,
+} from "../services/characteristicValues";
 
-export async function getCharacteristicValuesController(req: Request, res: Response): Promise<void> {
-  const characteristicValues = await getCharacteristicValues()
+export async function findCharacteristicValuesController(req: Request, res: Response): Promise<void> {
+  const characteristicValues = await findCharacteristicValues()
   res.json({ data: characteristicValues });
 }
 
-export async function getCharacteristicValueByIdController(req: Request, res: Response): Promise<void> {
+export async function findCharacteristicValueByIdController(req: Request, res: Response): Promise<void> {
   const paramsPayload = characteristicValueSchema.validateSync(req.params)
-  const characteristicValue = await getCharacteristicValueById(paramsPayload.id)
+  const characteristicValue = await findCharacteristicValueById(paramsPayload.id)
   res.json({ data: characteristicValue });
 }
 
-export async function postCharacteristicValueController(req: Request, res: Response, next: NextFunction) {
+export async function createCharacteristicValueController(req: Request, res: Response): Promise<void> {
   const bodyPayload = characteristicValueSchema.validateSync(req.body)
-  const characteristicValue = await postCharacteristicValue(bodyPayload)
+  const characteristicValue = await createCharacteristicValue(bodyPayload)
   res.json({ data: characteristicValue });
 }
 
-export async function patchCharacteristicValueController(req: Request, res: Response, next: NextFunction) {
+export async function updateCharacteristicValueController(req: Request, res: Response): Promise<void> {
   const bodyPayload = characteristicValueSchema.validateSync(req.body)
   const paramsPayload = characteristicValueSchema.validateSync(req.params)
-  const characteristicValue = await patchCharacteristicValue(
+  const characteristicValue = await updateCharacteristicValue(
     paramsPayload.id,
     bodyPayload
   )

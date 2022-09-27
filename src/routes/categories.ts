@@ -1,18 +1,18 @@
+import Router from "express-promise-router";
 import {
+  findCategoriesController,
+  findCategoryByIdController,
+  createCategoryController,
+  updateCategoryController,
   deleteCategoryController,
-  getCategoriesController,
-  getCategoryByIdController,
-  patchCategoryController,
-  postCategoryController
 } from '../controllers/categories';
 
-import Router from "express-promise-router";
 const router = Router();
 
-router.get('/', getCategoriesController);
-router.post('/', postCategoryController);
-router.get('/:id', getCategoryByIdController);
-router.patch('/:id', patchCategoryController);
+router.get('/', findCategoriesController);
+router.post('/', createCategoryController);
+router.get('/:id', findCategoryByIdController);
+router.patch('/:id', updateCategoryController);
 router.delete('/:id', deleteCategoryController);
 
 export default router;
