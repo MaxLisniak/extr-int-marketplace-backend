@@ -1,13 +1,11 @@
-import { RequestHandler } from "express";
+import { Request, Response } from "express";
 
 import Router from "express-promise-router";
 const router = Router();
 
-/* GET home page. */
-const indexFunction: RequestHandler =
-  (req, res) => {
-    res.render('index', { title: 'Express' });
-  }
+const indexFunction = (req: Request, res: Response) => {
+  res.render('index', { title: 'Express' });
+}
 router.get('/', indexFunction);
 
 export default router;
