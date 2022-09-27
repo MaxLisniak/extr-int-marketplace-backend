@@ -11,8 +11,8 @@ import Router from "express-promise-router";
 const router = Router();
 
 router.get('/', getKeywordsController);
-router.get('/:id', getKeywordByIdController);
 router.post('/', postKeywordController);
+router.get('/:id', getKeywordByIdController);
 router.patch('/:id', patchKeywordController);
 router.delete('/:id', deleteKeywordController);
 
