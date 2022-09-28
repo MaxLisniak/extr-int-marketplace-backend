@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import logger from "../logger";
 import {
 	userCreatePayloadSchema,
+	userFindOnePayloadSchema,
 	userSignInPayloadSchema,
 	userUpdatePayloadSchema,
 } from "../validationSchemas/user";
@@ -26,7 +27,7 @@ export async function findUsersController(req: Request, res: Response): Promise<
 }
 
 export async function findUserByIdController(req: Request, res: Response): Promise<void> {
-	const payload = userCreatePayloadSchema
+	const payload = userFindOnePayloadSchema
 		.validateSync({ ...req.query, ...req.params }, { stripUnknown: true })
 	const user = await findUserById(payload)
 	res.json({ data: user });
