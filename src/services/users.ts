@@ -17,7 +17,7 @@ export function findUsers() {
   return query
 }
 
-export function findUserById(payload: userSignInPayloadType) {
+export function findUserById(payload: userFindOnePayloadType) {
   const query = User
     .query()
     .findById(payload.id)
