@@ -21,7 +21,8 @@ export const userCreatePayloadSchema = yup.object().shape({
     .required(),
   confPassword: yup
     .string()
-    .required(),
+    .required()
+    .oneOf([yup.ref('password')], 'Passwords do not match.'),
   password_hash: yup
     .string(),
   is_admin: yup

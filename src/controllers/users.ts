@@ -62,13 +62,6 @@ export async function signUpController(req: Request, res: Response): Promise<voi
 	logger.info("A user is trying to sign up")
 	const payload = userCreatePayloadSchema
 		.validateSync(req.body, { stripUnknown: true })
-
-	// comapare passwords
-	if (payload.password !== payload.confPassword) {
-		logger.error("An error occured while trying to sign up: Password and Password confirmation do not match");
-		res.status(400).json({ errors: [{ msg: "Password and Password confirmation do not match" }] })
-		return
-	}
 	const registeredUser = await signUp(payload)
 	res.json({ data: registeredUser });
 }
