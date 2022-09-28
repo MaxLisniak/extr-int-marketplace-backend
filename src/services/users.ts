@@ -1,9 +1,15 @@
 import jwt, { JsonWebTokenError, JwtPayload } from "jsonwebtoken";
 import bcrypt from "bcrypt";
-import { userType } from "../validationSchemas/user";
+import {
+  userSignInPayloadType,
+  userCreatePayloadType,
+  userUpdatePayloadType,
+  userFindOnePayloadType
+} from "../validationSchemas/user";
 import User from "../models/User";
 import Favorite from "../models/Favorite";
 import logger from "../logger";
+import { favoriteType } from "../validationSchemas/favorite";
 
 
 export function findUsers() {
@@ -11,28 +17,23 @@ export function findUsers() {
   return query
 }
 
-export function findUserById(
-  id: number,
-  include_favorite_products?: Boolean
-) {
+export function findUserById(payload: userSignInPayloadType) {
   const query = User
     .query()
-    .findById(id)
+    .findById(payload.id)
 
-  if (include_favorite_products) {
+  if (payload.include_favorite_products) {
     query.withGraphFetched('favoriteProducts')
 
   }
   return query
 }
 
-export function updateUser(
-  id: number,
-  paylaod: userType
-) {
+export function updateUser(payload: userUpdatePayloadType) {
+  const { id, ...body } = payload
   const query = User
     .query()
-    .patchAndFetchById(id, paylaod)
+    .patchAndFetchById(id, body)
   return query
 }
 
@@ -64,13 +65,7 @@ export function findUserByRefreshToken(refresh_token: string) {
   return query
 }
 
-export function createUser(payload: {
-  first_name: string,
-  last_name: string,
-  email: string,
-  is_admin: boolean,
-  password_hash: string
-}) {
+export function createUser(payload: userCreatePayloadType) {
   const query = User
     .query()
     .insertAndFetch(payload)
@@ -99,11 +94,10 @@ export function removeRefreshToken(refresh_token: string) {
 
 export async function handleRefreshToken(refresh_token: string) {
   const foundUser = await findUserByRefreshToken(refresh_token)
-
   if (!foundUser) {
     throw new Error("A token cannot be refreshed, as the user hasn't been validly authenticated")
   }
-
+  let accessToken;
   // evaluate jwt 
   jwt.verify(
     refresh_token,
@@ -114,21 +108,19 @@ export async function handleRefreshToken(refresh_token: string) {
       }
 
       // new access token
-      const accessToken = jwt.sign(
+      accessToken = jwt.sign(
         { userId: decoded.userId, email: decoded.email },
         process.env.ACCESS_TOKEN_SECRET,
         { expiresIn: '15s' },
       );
       logger.info(`The access token is refreshed`)
-      return accessToken
     }
   );
+  return accessToken
 }
 
-export async function addFavoriteProduct(
-  user_id: number,
-  product_id: number,
-) {
+export async function addFavoriteProduct(payload: favoriteType) {
+  const { user_id, product_id } = payload
   const favorite = await Favorite
     .query()
     .findOne({ user_id, product_id })
@@ -139,10 +131,8 @@ export async function addFavoriteProduct(
   return query
 }
 
-export async function removeFavoriteProduct(
-  user_id: number,
-  product_id: number,
-) {
+export async function removeFavoriteProduct(payload: favoriteType) {
+  const { user_id, product_id } = payload
   const favorite = await Favorite
     .query()
     .findOne({ user_id, product_id })
@@ -167,7 +157,7 @@ export async function signOut(refresh_token: string) {
   logger.info(`User with the username ${foundUser.email} is signed out`)
 }
 
-export async function signIn(payload: userType) {
+export async function signIn(payload: userSignInPayloadType) {
   // find user
   const foundUser = await findUserByEmail(payload.email)
 
@@ -201,15 +191,14 @@ export async function signIn(payload: userType) {
 
   // add refresh token to a user in database
   const signedInUser = await updateUser(
-    userId,
-    { refresh_token: refreshToken } as userType
+    { id: userId, refresh_token: refreshToken } as userUpdatePayloadType
   )
   logger.info(`A user is logged in as: ${email}`)
 
   return { signedInUser, accessToken, refreshToken }
 }
 
-export async function signUp(payload: userType) {
+export async function signUp(payload: userCreatePayloadType) {
   // generate hashed password
   const hashedPassword = await generatePasswordHash(payload.password)
 
@@ -226,7 +215,7 @@ export async function signUp(payload: userType) {
     password_hash: hashedPassword,
     is_admin: false,
   };
-  const registeredUser = await createUser(newUserPayload)
+  const registeredUser = await createUser(newUserPayload as userCreatePayloadType)
   logger.info(`A user signed up as ${registeredUser.first_name} ${registeredUser.last_name} ${registeredUser.email}`)
   return registeredUser
 }

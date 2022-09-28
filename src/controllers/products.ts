@@ -1,5 +1,10 @@
 import { Request, Response } from "express";
-import { productSchema } from "../validationSchemas/product";
+import {
+  productCreatePayloadSchema,
+  productUpdatePayloadSchema,
+  productFindPayloadSchema,
+  productFindOnePayloadSchema,
+} from "../validationSchemas/product";
 import {
   findProducts,
   findProductById,
@@ -7,57 +12,38 @@ import {
   updateProduct,
   deleteProduct,
 } from "../services/products";
+import { idSchema } from "../validationSchemas/id";
 
 export async function findProductsController(req: Request, res: Response): Promise<void> {
-  const {
-    category_id,
-    search_query,
-    include_comments,
-    include_characteristics
-  } = req.query;
-
-  const products = await findProducts(
-    Number(category_id),
-    !search_query ? undefined : String(search_query),
-    include_comments === "true",
-    include_characteristics === "true"
-  )
+  const payload = productFindPayloadSchema
+    .validateSync(req.query, { stripUnknown: true })
+  const products = await findProducts(payload)
   res.json({ data: products });
 }
 
 export async function findProductByIdController(req: Request, res: Response): Promise<void> {
-  const {
-    include_comments,
-    include_characteristics
-  } = req.query;
-
-  const paramsPayload = productSchema.validateSync(req.params)
-  const product = await findProductById(
-    paramsPayload.id,
-    include_comments === "true",
-    include_characteristics === "true"
-  )
+  const payload = productFindOnePayloadSchema
+    .validateSync({ ...req.query, ...req.params }, { stripUnknown: true })
+  const product = await findProductById(payload)
   res.json({ data: product });
 }
 
 export async function createProductController(req: Request, res: Response): Promise<void> {
-  const bodyPayload = productSchema.validateSync(req.body)
-  const product = await createProduct(bodyPayload)
+  const payload = productCreatePayloadSchema
+    .validateSync({ ...req.body }, { stripUnknown: true })
+  const product = await createProduct(payload)
   res.json({ data: product });
 }
 
 export async function updateProductController(req: Request, res: Response): Promise<void> {
-  const bodyPayload = productSchema.validateSync(req.body)
-  const paramsPayload = productSchema.validateSync(req.params)
-  const product = await updateProduct(
-    paramsPayload.id,
-    bodyPayload
-  )
+  const payload = productUpdatePayloadSchema
+    .validateSync({ ...req.params, ...req.body }, { stripUnknown: true })
+  const product = await updateProduct(payload)
   res.json({ data: product })
 }
 
 export async function deleteProductController(req: Request, res: Response): Promise<void> {
-  const paramsPayload = productSchema.validateSync(req.params)
-  await deleteProduct(paramsPayload.id)
+  const payload = idSchema.validateSync(req.params, { stripUnknown: true })
+  await deleteProduct(payload.id)
   res.sendStatus(200);
 }

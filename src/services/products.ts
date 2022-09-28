@@ -1,49 +1,45 @@
 import CharacteristicName from "../models/CharacteristicName"
-import { productType } from "../validationSchemas/product"
+import {
+  productFindPayloadType,
+  productFindOnePayloadType,
+  productCreatePayloadType,
+  productUpdatePayloadType
+} from "../validationSchemas/product"
 import Product from "../models/Product"
 import CharacteristicValue from "../models/CharacteristicValue"
 
-export function findProducts(
-  category_id?: number,
-  search_query?: string,
-  include_comments?: Boolean,
-  include_characteristics?: Boolean
-) {
+export function findProducts(payload: productFindPayloadType) {
   const query = Product.query()
-  if (category_id) {
-    query.where('category_id', category_id)
+  if (payload.category_id) {
+    query.where('category_id', payload.category_id)
   }
-  if (search_query) {
-    query.where('name', 'like', `%${search_query}%`)
+  if (payload.search_query) {
+    query.where('name', 'like', `%${payload.search_query}%`)
   }
-  if (include_comments) {
+  if (payload.include_comments) {
     query.withGraphFetched("comments.[user]")
   }
-  if (include_characteristics) {
+  if (payload.include_characteristics) {
     query.withGraphFetched("characteristic_values.[characteristic_name]")
   }
   query.orderBy('id', "DESC")
   return query
 }
 
-export function findProductById(
-  id: number,
-  include_comments?: Boolean,
-  include_characteristics?: Boolean
-) {
+export function findProductById(payload: productFindOnePayloadType) {
   const query = Product
     .query()
-    .findById(id)
-  if (include_comments) {
+    .findById(payload.id)
+  if (payload.include_comments) {
     query.withGraphFetched("comments.[user]")
   }
-  if (include_characteristics) {
+  if (payload.include_characteristics) {
     query.withGraphFetched("characteristic_values.[characteristic_name]")
   }
   return query
 }
 
-export async function createProduct(payload: productType) {
+export async function createProduct(payload: productCreatePayloadType) {
   const query = Product
     .query()
     .insertAndFetch(payload)
@@ -70,13 +66,11 @@ export async function createProduct(payload: productType) {
   return product
 }
 
-export function updateProduct(
-  id: number,
-  payload: productType
-) {
+export function updateProduct(payload: productUpdatePayloadType) {
+  const { id, ...body } = payload
   const query = Product
     .query()
-    .patchAndFetchById(id, payload)
+    .patchAndFetchById(id, body)
   return query
 }
 

@@ -1,49 +1,44 @@
-import { keywordType } from "../validationSchemas/keyword"
+import {
+  keywordCreateType,
+  keywordFindOnePayloadType,
+  keywordFindPayloadType,
+  keywordUpdateType
+} from "../validationSchemas/keyword"
 import Keyword from "../models/Keyword"
 
-export function findKeywords(
-  search_query?: string | undefined,
-  include_product?: Boolean
-) {
+export function findKeywords(payload: keywordFindPayloadType) {
   const query = Keyword.query()
-  if (search_query) {
-    query.where('keyword', 'like', `%${search_query}%`)
+  if (payload.search_query) {
+    query.where('keyword', 'like', `%${payload.search_query}%`)
   }
-  if (include_product) {
+  if (payload.include_product) {
     query.withGraphFetched('product')
   }
   return query
 }
 
-export function findKeywordById(
-  id: number,
-  include_product: Boolean
-) {
+export function findKeywordById(payload: keywordFindOnePayloadType) {
   const query = Keyword
     .query()
-    .findById(id)
-  if (include_product) {
+    .findById(payload.id)
+  if (payload.include_product) {
     query.withGraphFetched('product')
   }
   return query
 }
 
-export function createKeyword(
-  payload: keywordType
-) {
+export function createKeyword(payload: keywordCreateType) {
   const query = Keyword
     .query()
     .insertAndFetch(payload)
   return query
 }
 
-export function updateKeyword(
-  id: number,
-  payload: keywordType
-) {
+export function updateKeyword(payload: keywordUpdateType) {
+  const { id, ...body } = payload
   const query = Keyword
     .query()
-    .patchAndFetchById(id, payload)
+    .patchAndFetchById(id, body)
   return query
 }
 

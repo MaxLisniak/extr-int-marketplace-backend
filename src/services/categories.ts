@@ -1,9 +1,14 @@
-import { categoryType } from "../validationSchemas/category"
+import {
+  categoryCreatePayloadType,
+  categoryFindPayloadType,
+  categoryFindOnePayloadType,
+  categoryUpdatePayloadType,
+} from "../validationSchemas/category"
 import Category from "../models/Categoty"
 
-export function findCategories(nested?: Boolean) {
+export function findCategories(payload: categoryFindPayloadType) {
   const query = Category.query()
-  if (nested) {
+  if (payload?.nested) {
     query
       .whereNull("parent_id")
       .withGraphFetched('subcategories.^')
@@ -12,27 +17,28 @@ export function findCategories(nested?: Boolean) {
   return query
 }
 
-export function findCategoryById(id: number, nested?: Boolean) {
+export function findCategoryById(payload: categoryFindOnePayloadType) {
   const query = Category
     .query()
-    .findById(id)
-  if (nested) {
+    .findById(payload.id)
+  if (payload.nested) {
     query.withGraphFetched('subcategories.^')
   }
   return query
 }
 
-export function createCategory(payload: categoryType) {
+export function createCategory(payload: categoryCreatePayloadType) {
   const query = Category
     .query()
     .insertAndFetch(payload)
   return query
 }
 
-export function updateCategory(id: number, payload: categoryType) {
+export function updateCategory(payload: categoryUpdatePayloadType) {
+  const { id, ...body } = payload
   const query = Category
     .query()
-    .patchAndFetchById(id, payload)
+    .patchAndFetchById(id, body)
   return query
 }
 

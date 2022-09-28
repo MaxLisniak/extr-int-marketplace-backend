@@ -25,7 +25,7 @@ class CharacteristicValue extends Model {
   static get modifiers() {
     return {
       defaultSelects(builder: any) {
-        builder.select('id', 'value', 'characteristic_name_id');
+        builder.select('id', 'value', 'characteristic_name_id', 'product_id');
       },
       onlyUniqueValues(builder: any) {
         builder.groupBy('value')

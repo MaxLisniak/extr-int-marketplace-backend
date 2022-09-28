@@ -1,6 +1,10 @@
 import { Request, Response } from "express";
 import logger from "../logger";
-import { userSchema } from "../validationSchemas/user";
+import {
+	userCreatePayloadSchema,
+	userSignInPayloadSchema,
+	userUpdatePayloadSchema,
+} from "../validationSchemas/user";
 import { favoriteSchema } from "../validationSchemas/favorite";
 import {
 	findUsers,
@@ -14,6 +18,7 @@ import {
 	addFavoriteProduct,
 	removeFavoriteProduct,
 } from "../services/users";
+import { idSchema } from "../validationSchemas/id";
 
 export async function findUsersController(req: Request, res: Response): Promise<void> {
 	const users = await findUsers()
@@ -21,62 +26,58 @@ export async function findUsersController(req: Request, res: Response): Promise<
 }
 
 export async function findUserByIdController(req: Request, res: Response): Promise<void> {
-	const { include_favorite_products } = req.query;
-	const paramsPayload = userSchema.validateSync(req.params)
-	const user = await findUserById(
-		paramsPayload.id,
-		include_favorite_products === "true"
-	)
+	const payload = userCreatePayloadSchema
+		.validateSync({ ...req.query, ...req.params }, { stripUnknown: true })
+	const user = await findUserById(payload)
 	res.json({ data: user });
 }
 
 export async function updateUserController(req: Request, res: Response): Promise<void> {
-	const bodyPayload = userSchema.validateSync(req.body)
-	const paramsPayload = userSchema.validateSync(req.params)
-	const user = await updateUser(
-		paramsPayload.id,
-		bodyPayload
-	)
+	const payload = userUpdatePayloadSchema
+		.validateSync({ ...req.body, ...req.params }, { stripUnknown: true })
+	const user = await updateUser(payload)
 	res.json({ data: user })
 }
 
 export async function deleteUserController(req: Request, res: Response): Promise<void> {
-	const paramsPayload = userSchema.validateSync(req.params)
+	const paramsPayload = idSchema.validateSync(req.params, { stripUnknown: true })
 	await deleteUser(paramsPayload.id)
 	res.sendStatus(200);
 }
 
 export async function addFavoriteProductController(req: Request, res: Response): Promise<void> {
-	const bodyPayload = favoriteSchema.validateSync(req.body);
-	await addFavoriteProduct(bodyPayload.user_id, bodyPayload.product_id)
+	const payload = favoriteSchema.validateSync(req.body, { stripUnknown: true });
+	await addFavoriteProduct(payload)
 	res.sendStatus(200)
 }
 
 export async function removeFavoriteProductController(req: Request, res: Response): Promise<void> {
-	const bodyPayload = favoriteSchema.validateSync(req.body);
-	await removeFavoriteProduct(bodyPayload.user_id, bodyPayload.product_id)
+	const payload = favoriteSchema.validateSync(req.body, { stripUnknown: true });
+	await removeFavoriteProduct(payload)
 	res.sendStatus(200)
 }
 
 export async function signUpController(req: Request, res: Response): Promise<void> {
 	logger.info("A user is trying to sign up")
-	const bodyPayload = userSchema.validateSync(req.body)
+	const payload = userCreatePayloadSchema
+		.validateSync(req.body, { stripUnknown: true })
 
 	// comapare passwords
-	if (bodyPayload.password !== bodyPayload.confPassword) {
+	if (payload.password !== payload.confPassword) {
 		logger.error("An error occured while trying to sign up: Password and Password confirmation do not match");
 		res.status(400).json({ errors: [{ msg: "Password and Password confirmation do not match" }] })
 		return
 	}
-	const registeredUser = await signUp(bodyPayload)
+	const registeredUser = await signUp(payload)
 	res.json({ data: registeredUser });
 }
 
 export async function signInController(req: Request, res: Response): Promise<void> {
 	logger.info("A user is trying to sign in")
-	const bodyPayload = userSchema.validateSync(req.body)
+	const payload = userSignInPayloadSchema
+		.validateSync(req.body, { stripUnknown: true })
 
-	const { signedInUser, accessToken, refreshToken } = await signIn(bodyPayload)
+	const { signedInUser, accessToken, refreshToken } = await signIn(payload)
 
 	// add the refresh token to the response as a cookie
 	res.cookie('refreshToken', refreshToken, {
@@ -106,7 +107,6 @@ export async function signOutController(req: Request, res: Response): Promise<vo
 export async function handleRefreshTokenController(req: Request, res: Response): Promise<void> {
 	logger.info("User is trying to refresh a token...");
 	const cookies = req.cookies;
-
 	// check if a refresh token was provided
 	if (!cookies?.refreshToken) {
 		logger.error("A token cannot be refreshed as no refresh token provided")
@@ -115,5 +115,6 @@ export async function handleRefreshTokenController(req: Request, res: Response):
 	}
 	const refreshToken = cookies.refreshToken;
 	const accessToken = await handleRefreshToken(refreshToken)
+	console.log(refreshToken)
 	res.json({ accessToken })
 }

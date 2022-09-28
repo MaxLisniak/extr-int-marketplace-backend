@@ -1,5 +1,10 @@
 import { Request, Response } from "express";
-import { characteristicValueSchema } from "../validationSchemas/characteristicValue";
+import {
+  characteristicValueCreatePayloadSchema,
+  characteristicValueFindOnePayloadSchema,
+  characteristicValueUpdatePayloadSchema
+} from "../validationSchemas/characteristicValue";
+import { idSchema } from "../validationSchemas/id";
 import {
   findCharacteristicValues,
   findCharacteristicValueById,
@@ -14,29 +19,28 @@ export async function findCharacteristicValuesController(req: Request, res: Resp
 }
 
 export async function findCharacteristicValueByIdController(req: Request, res: Response): Promise<void> {
-  const paramsPayload = characteristicValueSchema.validateSync(req.params)
-  const characteristicValue = await findCharacteristicValueById(paramsPayload.id)
+  const payload = characteristicValueFindOnePayloadSchema
+    .validateSync(req.params, { stripUnknown: true })
+  const characteristicValue = await findCharacteristicValueById(payload)
   res.json({ data: characteristicValue });
 }
 
 export async function createCharacteristicValueController(req: Request, res: Response): Promise<void> {
-  const bodyPayload = characteristicValueSchema.validateSync(req.body)
-  const characteristicValue = await createCharacteristicValue(bodyPayload)
+  const payload = characteristicValueCreatePayloadSchema
+    .validateSync(req.body, { stripUnknown: true })
+  const characteristicValue = await createCharacteristicValue(payload)
   res.json({ data: characteristicValue });
 }
 
 export async function updateCharacteristicValueController(req: Request, res: Response): Promise<void> {
-  const bodyPayload = characteristicValueSchema.validateSync(req.body)
-  const paramsPayload = characteristicValueSchema.validateSync(req.params)
-  const characteristicValue = await updateCharacteristicValue(
-    paramsPayload.id,
-    bodyPayload
-  )
+  const payload = characteristicValueUpdatePayloadSchema
+    .validateSync({ ...req.body, ...req.params }, { stripUnknown: true })
+  const characteristicValue = await updateCharacteristicValue(payload)
   res.json({ data: characteristicValue });
 }
 
 export async function deleteCharacteristicValueController(req: Request, res: Response): Promise<void> {
-  const paramsPayload = characteristicValueSchema.validateSync(req.params)
-  await deleteCharacteristicValue(paramsPayload.id)
+  const payload = idSchema.validateSync(req.params, { stripUnknown: true })
+  await deleteCharacteristicValue(payload.id)
   res.sendStatus(200);
 }

@@ -1,10 +1,29 @@
 import * as yup from 'yup';
 
-export const commentSchema = yup.object().shape({
+export const commentCreatePayloadSchema = yup.object().shape({
+  text: yup
+    .string()
+    .min(1)
+    .max(512)
+    .required(),
+  user_id: yup
+    .number()
+    .integer()
+    .positive()
+    .required(),
+  product_id: yup
+    .number()
+    .integer()
+    .positive()
+    .required(),
+});
+
+export const commentUpdatePayloadSchema = yup.object().shape({
   id: yup
     .number()
     .integer()
-    .positive(),
+    .positive()
+    .required(),
   text: yup
     .string()
     .min(1)
@@ -21,4 +40,25 @@ export const commentSchema = yup.object().shape({
     .string(),
 });
 
-export type commentType = yup.InferType<typeof commentSchema>
+export const commentFindPayloadSchema = yup.object().shape({
+  include_user: yup
+    .boolean(),
+  product_id: yup
+    .number()
+    .integer()
+    .positive()
+});
+export const commentFindOnePayloadSchema = yup.object().shape({
+  id: yup
+    .number()
+    .integer()
+    .positive()
+    .required(),
+  include_user: yup
+    .boolean(),
+});
+
+export type commentFindPayloadType = yup.InferType<typeof commentFindPayloadSchema>
+export type commentFindOnePayloadType = yup.InferType<typeof commentFindOnePayloadSchema>
+export type commentCreatePayloadType = yup.InferType<typeof commentCreatePayloadSchema>
+export type commentUpdatePayloadType = yup.InferType<typeof commentUpdatePayloadSchema>

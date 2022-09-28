@@ -1,36 +1,35 @@
 import Product from "../models/Product"
-import { characteristicNameType } from "../validationSchemas/characteristicName"
+import {
+  characteristicNameCreatePayloadType,
+  characteristicNameFindPayloadType,
+  characteristicNameFindOnePayloadType,
+  characteristicNameUpdatePayloadType,
+} from "../validationSchemas/characteristicName"
 import CharacteristicName from "../models/CharacteristicName"
 import CharacteristicValue from "../models/CharacteristicValue"
 
-export function findCharacteristicNames(
-  category_id?: number,
-  include_characteristic_values?: Boolean
-) {
+export function findCharacteristicNames(payload: characteristicNameFindPayloadType) {
   let query = CharacteristicName.query()
-  if (category_id) {
-    query.where('category_id', category_id)
+  if (payload.category_id) {
+    query.where('category_id', payload.category_id)
   }
-  if (include_characteristic_values) {
+  if (payload.include_characteristic_values) {
     query.withGraphFetched('characteristic_values(onlyUniqueValues, defaultSelects)')
   }
   return query
 }
 
-export function findCharacteristicNameById(
-  id: number,
-  include_characteristic_values?: Boolean
-) {
+export function findCharacteristicNameById(payload: characteristicNameFindOnePayloadType) {
   const query = CharacteristicName
     .query()
-    .findById(id)
-  if (include_characteristic_values) {
+    .findById(payload.id)
+  if (payload.include_characteristic_values) {
     query.withGraphFetched('characteristic_values(onlyUniqueValues, defaultSelects)')
   }
   return query
 }
 
-export async function createCharacteristicName(payload: characteristicNameType) {
+export async function createCharacteristicName(payload: characteristicNameCreatePayloadType) {
   const query = CharacteristicName
     .query()
     .insertAndFetch(payload)
@@ -56,10 +55,11 @@ export async function createCharacteristicName(payload: characteristicNameType) 
   return characteristicName
 }
 
-export function updateCharacteristicName(id: number, payload: characteristicNameType) {
+export function updateCharacteristicName(payload: characteristicNameUpdatePayloadType) {
+  const { id, ...body } = payload
   const query = CharacteristicName
     .query()
-    .patchAndFetchById(id, payload)
+    .patchAndFetchById(id, body)
   return query
 }
 

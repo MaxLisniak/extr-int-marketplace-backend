@@ -1,5 +1,10 @@
 import { Request, Response } from "express";
-import { commentSchema } from "../validationSchemas/comment";
+import {
+  commentFindPayloadSchema,
+  commentCreatePayloadSchema,
+  commentUpdatePayloadSchema,
+  commentFindOnePayloadSchema
+} from "../validationSchemas/comment";
 import {
   findComments,
   findCommentById,
@@ -7,44 +12,38 @@ import {
   updateComment,
   deleteComment,
 } from "../services/comments";
+import { idSchema } from "../validationSchemas/id";
 
 export async function findCommentsController(req: Request, res: Response): Promise<void> {
-  const { include_user, product_id } = req.query
-  const comments = await findComments(
-    Number(product_id),
-    include_user === "true"
-  )
+  const payload = commentFindPayloadSchema
+    .validateSync(req.query, { stripUnknown: true })
+  const comments = await findComments(payload)
   res.json({ data: comments });
 }
 
 export async function findCommentByIdController(req: Request, res: Response): Promise<void> {
-  const { include_user } = req.query
-  const paramsPayload = commentSchema.validateSync(req.params)
-  const comment = await findCommentById(
-    paramsPayload.id,
-    include_user === "true"
-  )
+  const payload = commentFindOnePayloadSchema
+    .validateSync({ ...req.query, ...req.params })
+  const comment = await findCommentById(payload)
   res.json({ data: comment });
 }
 
 export async function createCommentController(req: Request, res: Response): Promise<void> {
-  const bodyPayload = commentSchema.validateSync(req.body)
-  const comment = await createComment(bodyPayload)
+  const payload = commentCreatePayloadSchema
+    .validateSync(req.body, { stripUnknown: true })
+  const comment = await createComment(payload)
   res.json({ data: comment })
 }
 
 export async function updateCommentController(req: Request, res: Response): Promise<void> {
-  const bodyPayload = commentSchema.validateSync(req.body)
-  const paramsPayload = commentSchema.validateSync(req.params)
-  const comment = await updateComment(
-    paramsPayload.id,
-    bodyPayload
-  )
+  const payload = commentUpdatePayloadSchema
+    .validateSync({ ...req.body, ...req.params }, { stripUnknown: true })
+  const comment = await updateComment(payload)
   res.json({ data: comment })
 }
 
 export async function deleteCommentController(req: Request, res: Response): Promise<void> {
-  const paramsPayload = commentSchema.validateSync(req.params)
-  await deleteComment(paramsPayload.id)
+  const payload = idSchema.validateSync(req.params, { stripUnknown: true })
+  await deleteComment(payload.id)
   res.sendStatus(200);
 }

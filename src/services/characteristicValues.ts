@@ -1,4 +1,8 @@
-import { characteristicValueType } from "../validationSchemas/characteristicValue";
+import {
+  characteristicValueCreatePayloadType,
+  characteristicValueFindOnePayloadType,
+  characteristicValueUpdatePayloadType
+} from "../validationSchemas/characteristicValue";
 import CharacteristicValue from "../models/CharacteristicValue";
 
 export function findCharacteristicValues() {
@@ -9,25 +13,26 @@ export function findCharacteristicValues() {
   return query
 }
 
-export function findCharacteristicValueById(id: number) {
+export function findCharacteristicValueById(payload: characteristicValueFindOnePayloadType) {
   const query = CharacteristicValue
     .query()
-    .findById(id)
+    .findById(payload.id)
     .withGraphFetched('characteristic_name')
   return query
 }
 
-export function createCharacteristicValue(payload: characteristicValueType) {
+export function createCharacteristicValue(payload: characteristicValueCreatePayloadType) {
   const query = CharacteristicValue
     .query()
     .insertAndFetch(payload)
   return query
 }
 
-export function updateCharacteristicValue(id: number, payload: characteristicValueType) {
+export function updateCharacteristicValue(payload: characteristicValueUpdatePayloadType) {
+  const { id, ...body } = payload
   const query = CharacteristicValue
     .query()
-    .patchAndFetchById(id, payload)
+    .patchAndFetchById(id, body)
   return query
 }
 

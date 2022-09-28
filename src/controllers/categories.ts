@@ -1,5 +1,11 @@
 import { Request, Response } from 'express';
-import { categorySchema } from "../validationSchemas/category";
+import {
+  categoryCreatePayloadSchema,
+  categoryUpdatePayloadSchema,
+  categoryFindPayloadSchema,
+  categoryFindOnePayloadSchema,
+} from "../validationSchemas/category";
+import { idSchema } from '../validationSchemas/id';
 import {
   findCategories,
   findCategoryById,
@@ -9,41 +15,33 @@ import {
 } from '../services/categories';
 
 export async function findCategoriesController(req: Request, res: Response): Promise<void> {
-  const { nested } = req.query;
-  const categories = await findCategories(
-    nested === "true"
-  )
+  const payload = categoryFindPayloadSchema.validateSync(req.query, { stripUnknown: true })
+  const categories = await findCategories(payload)
   res.json({ data: categories });
 }
 
 export async function findCategoryByIdController(req: Request, res: Response): Promise<void> {
-  const paramsPayload = categorySchema.validateSync(req.params);
-  const { nested } = req.query;
-  const category = await findCategoryById(
-    paramsPayload.id,
-    nested === "true"
-  )
+  const payload = categoryFindOnePayloadSchema.validateSync({ ...req.params, ...req.query }, { stripUnknown: true });
+  const category = await findCategoryById(payload)
   res.json({ data: category });
 }
 
 export async function createCategoryController(req: Request, res: Response): Promise<void> {
-  const bodyPayload = categorySchema.validateSync(req.body)
-  const category = await createCategory(bodyPayload)
+  const payload = categoryCreatePayloadSchema
+    .validateSync(req.body, { stripUnknown: true })
+  const category = await createCategory(payload)
   res.json({ data: category });
 }
 
 export async function updateCategoryController(req: Request, res: Response): Promise<void> {
-  const bodyPayload = categorySchema.validateSync(req.body)
-  const paramsPayload = categorySchema.validateSync(req.params)
-  const category = await updateCategory(
-    paramsPayload.id,
-    bodyPayload
-  )
+  const payload = categoryUpdatePayloadSchema
+    .validateSync({ ...req.body, ...req.params }, { stripUnknown: true })
+  const category = await updateCategory(payload)
   res.json({ data: category });
 }
 
 export async function deleteCategoryController(req: Request, res: Response): Promise<void> {
-  const paramsPayload = categorySchema.validateSync(req.params)
-  await deleteCategory(paramsPayload.id)
+  const payload = idSchema.validateSync(req.params, { stripUnknown: true })
+  await deleteCategory(payload.id)
   res.sendStatus(200);
 }

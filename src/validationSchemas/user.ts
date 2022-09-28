@@ -1,10 +1,39 @@
 import * as yup from 'yup';
 
-export const userSchema = yup.object().shape({
+export const userCreatePayloadSchema = yup.object().shape({
+  email: yup
+    .string()
+    .email()
+    .min(0)
+    .max(64)
+    .required(),
+  first_name: yup
+    .string()
+    .min(0)
+    .max(64)
+    .required(),
+  last_name: yup
+    .string()
+    .min(0)
+    .max(64),
+  password: yup
+    .string()
+    .required(),
+  confPassword: yup
+    .string()
+    .required(),
+  password_hash: yup
+    .string(),
+  is_admin: yup
+    .boolean(),
+})
+
+export const userUpdatePayloadSchema = yup.object().shape({
   id: yup
     .number()
     .integer()
-    .positive(),
+    .positive()
+    .required(),
   email: yup
     .string()
     .email()
@@ -18,16 +47,38 @@ export const userSchema = yup.object().shape({
     .string()
     .min(0)
     .max(64),
-  password: yup
-    .string(),
   password_hash: yup
     .string(),
-  confPassword: yup
-    .string(),
   is_admin: yup
-    .bool(),
+    .boolean(),
   refresh_token: yup
     .string(),
 })
 
-export type userType = yup.InferType<typeof userSchema>
+export const userFindOnePayloadSchema = yup.object().shape({
+  id: yup
+    .number()
+    .integer()
+    .positive()
+    .required(),
+  include_favorite_products: yup
+    .boolean(),
+})
+
+export const userSignInPayloadSchema = yup.object().shape({
+  email: yup
+    .string()
+    .email()
+    .min(0)
+    .max(64),
+  password: yup
+    .string()
+    .required(),
+  password_hash: yup
+    .string(),
+})
+
+export type userCreatePayloadType = yup.InferType<typeof userCreatePayloadSchema>
+export type userUpdatePayloadType = yup.InferType<typeof userUpdatePayloadSchema>
+export type userFindOnePayloadType = yup.InferType<typeof userFindOnePayloadSchema>
+export type userSignInPayloadType = yup.InferType<typeof userSignInPayloadSchema>

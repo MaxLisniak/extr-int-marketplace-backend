@@ -1,10 +1,24 @@
 import * as yup from 'yup';
 
-export const characteristicNameSchema = yup.object().shape({
+export const characteristicNameCreatePayloadSchema = yup.object().shape({
+  name: yup
+    .string()
+    .min(1)
+    .max(32)
+    .required(),
+  category_id: yup
+    .number()
+    .integer()
+    .positive()
+    .required()
+});
+
+export const characteristicNameUpdatePayloadSchema = yup.object().shape({
   id: yup
     .number()
     .integer()
-    .positive(),
+    .positive()
+    .required(),
   name: yup
     .string()
     .min(1)
@@ -15,4 +29,26 @@ export const characteristicNameSchema = yup.object().shape({
     .positive()
 });
 
-export type characteristicNameType = yup.InferType<typeof characteristicNameSchema>
+export const characteristicNameFindPayloadSchema = yup.object().shape({
+  category_id: yup
+    .number()
+    .integer()
+    .positive(),
+  include_characteristic_values: yup
+    .boolean()
+})
+export const characteristicNameFindOnePayloadSchema = yup.object().shape({
+  id: yup
+    .number()
+    .integer()
+    .positive()
+    .required(),
+  include_characteristic_values: yup
+    .boolean()
+})
+
+
+export type characteristicNameCreatePayloadType = yup.InferType<typeof characteristicNameCreatePayloadSchema>
+export type characteristicNameUpdatePayloadType = yup.InferType<typeof characteristicNameUpdatePayloadSchema>
+export type characteristicNameFindPayloadType = yup.InferType<typeof characteristicNameFindPayloadSchema>
+export type characteristicNameFindOnePayloadType = yup.InferType<typeof characteristicNameFindOnePayloadSchema>

@@ -1,10 +1,23 @@
 import * as yup from 'yup';
 
-export const categorySchema = yup.object().shape({
+export const categoryCreatePayloadSchema = yup.object().shape({
+  name: yup
+    .string()
+    .min(1)
+    .max(32)
+    .required(),
+  parent_id: yup
+    .number()
+    .integer()
+    .positive()
+});
+
+export const categoryUpdatePayloadSchema = yup.object().shape({
   id: yup
     .number()
     .integer()
-    .positive(),
+    .positive()
+    .required(),
   name: yup
     .string()
     .min(1)
@@ -15,4 +28,20 @@ export const categorySchema = yup.object().shape({
     .positive()
 });
 
-export type categoryType = yup.InferType<typeof categorySchema>
+export const categoryFindPayloadSchema = yup.object().shape({
+  nested: yup
+    .boolean()
+})
+export const categoryFindOnePayloadSchema = yup.object().shape({
+  id: yup
+    .number()
+    .integer()
+    .positive()
+    .required(),
+  nested: yup
+    .boolean()
+})
+export type categoryFindPayloadType = yup.InferType<typeof categoryFindPayloadSchema>
+export type categoryFindOnePayloadType = yup.InferType<typeof categoryFindOnePayloadSchema>
+export type categoryCreatePayloadType = yup.InferType<typeof categoryCreatePayloadSchema>
+export type categoryUpdatePayloadType = yup.InferType<typeof categoryUpdatePayloadSchema>
