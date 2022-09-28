@@ -46,18 +46,6 @@ export async function deleteUserController(req: Request, res: Response): Promise
 	res.sendStatus(200);
 }
 
-export async function addFavoriteProductController(req: Request, res: Response): Promise<void> {
-	const payload = favoriteSchema.validateSync(req.body, { stripUnknown: true });
-	await addFavoriteProduct(payload)
-	res.sendStatus(200)
-}
-
-export async function removeFavoriteProductController(req: Request, res: Response): Promise<void> {
-	const payload = favoriteSchema.validateSync(req.body, { stripUnknown: true });
-	await removeFavoriteProduct(payload)
-	res.sendStatus(200)
-}
-
 export async function signUpController(req: Request, res: Response): Promise<void> {
 	logger.info("A user is trying to sign up")
 	const payload = userCreatePayloadSchema

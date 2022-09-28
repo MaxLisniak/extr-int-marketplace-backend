@@ -8,8 +8,6 @@ import {
   findUserByIdController,
   updateUserController,
   deleteUserController,
-  addFavoriteProductController,
-  removeFavoriteProductController
 } from "../controllers/users";
 
 const router = Router();
@@ -19,8 +17,6 @@ router.get('/refresh', handleRefreshTokenController);
 router.post('/sign-up', signUpController);
 router.post('/sign-in', signInController);
 router.post('/sign-out', signOutController);
-router.post('/add-favorite', addFavoriteProductController)
-router.post('/remove-favorite', removeFavoriteProductController)
 router.get('/:id', findUserByIdController);
 router.patch('/:id', updateUserController);
 router.delete('/:id', deleteUserController);
