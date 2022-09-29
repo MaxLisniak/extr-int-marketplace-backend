@@ -15,4 +15,12 @@ export const favoriteSchema = yup.object().shape({
     .positive()
 });
 
+export const favoriteFindPayloadSchema = yup.object().shape({
+  user_id: yup
+    .number()
+    .integer()
+    .positive(),
+});
+
 export type favoriteType = yup.InferType<typeof favoriteSchema>
+export type favoriteFindPayloadType = yup.InferType<typeof favoriteFindPayloadSchema>

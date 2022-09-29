@@ -1,7 +1,6 @@
 import CharacteristicName from "../models/CharacteristicName"
 import {
   productFindPayloadType,
-  productFindOnePayloadType,
   productCreatePayloadType,
   productUpdatePayloadType
 } from "../validationSchemas/product"
