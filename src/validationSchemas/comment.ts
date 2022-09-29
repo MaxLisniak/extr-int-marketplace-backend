@@ -44,7 +44,11 @@ export const commentFindPayloadSchema = yup.object().shape({
   product_id: yup
     .number()
     .integer()
-    .positive()
+    .positive(),
+  page: yup
+    .number()
+    .integer()
+    .positive(),
 });
 export const commentFindOnePayloadSchema = yup.object().shape({
   id: yup

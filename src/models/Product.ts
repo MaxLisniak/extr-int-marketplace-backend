@@ -17,6 +17,7 @@ class Product extends Model {
   }
 
   static relationMappings = {
+
     comments: {
       relation: Model.HasManyRelation,
       modelClass: Comment,

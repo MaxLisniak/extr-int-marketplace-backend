@@ -18,6 +18,7 @@ export async function findProductsController(req: Request, res: Response): Promi
   const payload = productFindPayloadSchema
     .validateSync(req.query, { stripUnknown: true })
   const products = await findProducts(payload)
+  if (products.length === 0) throw new Error("Nothing found")
   res.json({ data: products });
 }
 

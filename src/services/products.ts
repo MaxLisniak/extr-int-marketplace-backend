@@ -6,6 +6,7 @@ import {
 } from "../validationSchemas/product"
 import Product from "../models/Product"
 import CharacteristicValue from "../models/CharacteristicValue"
+const PRODUCTS_PER_PAGE = 1
 
 export function findProducts(params: productFindPayloadType) {
   const query = Product.query()
@@ -16,6 +17,11 @@ export function findProducts(params: productFindPayloadType) {
   // limit products to those which name is like specified
   if (params.search_query) {
     query.where('name', 'like', `%${params.search_query}%`)
+  }
+
+  query.limit(PRODUCTS_PER_PAGE)
+  if (params.page) {
+    query.offset((params.page - 1) * PRODUCTS_PER_PAGE)
   }
   query.orderBy('id', "DESC")
   return query

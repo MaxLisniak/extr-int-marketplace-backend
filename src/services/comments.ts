@@ -1,11 +1,12 @@
 import {
   commentCreatePayloadType,
-  commentFindOnePayloadType,
   commentFindPayloadType,
   commentUpdatePayloadType,
 
 } from "../validationSchemas/comment"
 import Comment from "../models/Comment"
+
+const COMMENTS_PER_PAGE = 1
 
 export function findComments(params: commentFindPayloadType) {
   const query = Comment
@@ -14,8 +15,13 @@ export function findComments(params: commentFindPayloadType) {
   if (params.product_id) {
     query.where("product_id", params.product_id)
   }
+
+  query.limit(COMMENTS_PER_PAGE)
+  if (params.page) {
+    query.offset((params.page - 1) * COMMENTS_PER_PAGE)
+  }
   query.withGraphFetched("user")
-    .orderBy("created", 'DESC')
+  query.orderBy("created", 'DESC')
   return query;
 }
 

@@ -62,6 +62,10 @@ export const productFindPayloadSchema = yup.object().shape({
     .boolean(),
   include_characteristics: yup
     .boolean(),
+  page: yup
+    .number()
+    .integer()
+    .positive()
 });
 
 export const productFindOnePayloadSchema = yup.object().shape({

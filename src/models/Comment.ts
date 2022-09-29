@@ -1,5 +1,6 @@
 import Model from "./BaseModel";
-import User from "./User";
+// import User from "./User";
+import path from "path";
 
 
 class Comment extends Model {
@@ -16,7 +17,7 @@ class Comment extends Model {
   static relationMappings = {
     user: {
       relation: Model.BelongsToOneRelation,
-      modelClass: User,
+      modelClass: path.join(__dirname, "User"),
       join: {
         from: 'users.id',
         to: 'comments.user_id'
