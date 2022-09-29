@@ -1,6 +1,5 @@
 import {
   categoryCreatePayloadType,
-  categoryFindOnePayloadType,
   categoryUpdatePayloadType,
 } from "../validationSchemas/category"
 import Category from "../models/Categoty"
@@ -14,9 +13,6 @@ export function findCategories() {
 export function findCategoriesNested() {
   const query = Category
     .query()
-    .whereNull("parent_id")
-    .withGraphFetched('subcategories.^')
-    .orderBy('id', 'DESC')
   return query
 }
 

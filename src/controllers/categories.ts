@@ -13,6 +13,7 @@ import {
   deleteCategory,
   findCategoriesNested,
 } from '../services/categories';
+import Category from '../models/Categoty';
 
 export async function findCategoriesController(req: Request, res: Response): Promise<void> {
   const categories = await findCategories()
@@ -21,7 +22,11 @@ export async function findCategoriesController(req: Request, res: Response): Pro
 
 export async function findCategoriesNestedController(req: Request, res: Response): Promise<void> {
   const categories = await findCategoriesNested()
-  res.json({ data: categories });
+  const nest = (items: Category[], id: number | null = null): {} =>
+    items
+      .filter(item => item.parent_id === id)
+      .map(item => ({ ...item, subcategories: nest(items, item.id) }));
+  res.json({ data: nest(categories) });
 }
 
 export async function findCategoryByIdController(req: Request, res: Response): Promise<void> {
