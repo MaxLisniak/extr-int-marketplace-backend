@@ -41,8 +41,6 @@ export const commentUpdatePayloadSchema = yup.object().shape({
 });
 
 export const commentFindPayloadSchema = yup.object().shape({
-  include_user: yup
-    .boolean(),
   product_id: yup
     .number()
     .integer()
@@ -54,8 +52,6 @@ export const commentFindOnePayloadSchema = yup.object().shape({
     .integer()
     .positive()
     .required(),
-  include_user: yup
-    .boolean(),
 });
 
 export type commentFindPayloadType = yup.InferType<typeof commentFindPayloadSchema>

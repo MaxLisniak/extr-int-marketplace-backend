@@ -23,8 +23,8 @@ export async function findProductsController(req: Request, res: Response): Promi
 
 export async function findProductByIdController(req: Request, res: Response): Promise<void> {
   const payload = productFindOnePayloadSchema
-    .validateSync({ ...req.query, ...req.params }, { stripUnknown: true })
-  const product = await findProductById(payload)
+    .validateSync(req.params, { stripUnknown: true })
+  const product = await findProductById(payload.id)
   res.json({ data: product });
 }
 
@@ -38,7 +38,7 @@ export async function createProductController(req: Request, res: Response): Prom
 export async function updateProductController(req: Request, res: Response): Promise<void> {
   const payload = productUpdatePayloadSchema
     .validateSync({ ...req.params, ...req.body }, { stripUnknown: true })
-  const product = await updateProduct(payload)
+  const product = await updateProduct(payload.id, payload)
   res.json({ data: product })
 }
 

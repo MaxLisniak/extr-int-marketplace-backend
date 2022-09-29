@@ -8,31 +8,27 @@ import {
 import CharacteristicName from "../models/CharacteristicName"
 import CharacteristicValue from "../models/CharacteristicValue"
 
-export function findCharacteristicNames(payload: characteristicNameFindPayloadType) {
+export function findCharacteristicNames(params: characteristicNameFindPayloadType) {
   let query = CharacteristicName.query()
-  if (payload.category_id) {
-    query.where('category_id', payload.category_id)
+  if (params.category_id) {
+    query.where('category_id', params.category_id)
   }
-  if (payload.include_characteristic_values) {
-    query.withGraphFetched('characteristic_values(onlyUniqueValues, defaultSelects)')
-  }
+  query.withGraphFetched('characteristic_values(onlyUniqueValues, defaultSelects)')
   return query
 }
 
-export function findCharacteristicNameById(payload: characteristicNameFindOnePayloadType) {
+export function findCharacteristicNameById(id: number) {
   const query = CharacteristicName
     .query()
-    .findById(payload.id)
-  if (payload.include_characteristic_values) {
-    query.withGraphFetched('characteristic_values(onlyUniqueValues, defaultSelects)')
-  }
+    .findById(id)
+  query.withGraphFetched('characteristic_values(onlyUniqueValues, defaultSelects)')
   return query
 }
 
-export async function createCharacteristicName(payload: characteristicNameCreatePayloadType) {
+export async function createCharacteristicName(object: characteristicNameCreatePayloadType) {
   const query = CharacteristicName
     .query()
-    .insertAndFetch(payload)
+    .insertAndFetch(object)
 
   const characteristicName = await query;
 
@@ -55,11 +51,10 @@ export async function createCharacteristicName(payload: characteristicNameCreate
   return characteristicName
 }
 
-export function updateCharacteristicName(payload: characteristicNameUpdatePayloadType) {
-  const { id, ...body } = payload
+export function updateCharacteristicName(id: number, object: characteristicNameUpdatePayloadType) {
   const query = CharacteristicName
     .query()
-    .patchAndFetchById(id, body)
+    .patchAndFetchById(id, object)
   return query
 }
 

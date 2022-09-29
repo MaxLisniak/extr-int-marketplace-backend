@@ -23,8 +23,8 @@ export async function findKeywordsController(req: Request, res: Response): Promi
 
 export async function findKeywordByIdController(req: Request, res: Response): Promise<void> {
   const payload = keywordFindOnePayloadSchema
-    .validateSync({ ...req.query, ...req.params }, { stripUnknown: true })
-  const keyword = await findKeywordById(payload)
+    .validateSync(req.params, { stripUnknown: true })
+  const keyword = await findKeywordById(payload.id)
   res.json({ data: keyword });
 }
 
@@ -38,7 +38,7 @@ export async function createKeywordController(req: Request, res: Response): Prom
 export async function updateKeywordController(req: Request, res: Response): Promise<void> {
   const payload = keywordUpdatePayloadSchema
     .validateSync({ ...req.body, ...req.params }, { stripUnknown: true })
-  const keyword = await updateKeyword(payload)
+  const keyword = await updateKeyword(payload.id, payload)
   res.json({ data: keyword })
 }
 

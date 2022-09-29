@@ -23,8 +23,8 @@ export async function findCharacteristicNamesController(req: Request, res: Respo
 
 export async function findCharacteristicNameByIdController(req: Request, res: Response): Promise<void> {
   const payload = characteristicNameFindOnePayloadSchema
-    .validateSync({ ...req.query, ...req.params }, { stripUnknown: true })
-  const characteristicName = await findCharacteristicNameById(payload)
+    .validateSync(req.params, { stripUnknown: true })
+  const characteristicName = await findCharacteristicNameById(payload.id)
   res.json({ data: characteristicName });
 }
 
@@ -38,7 +38,7 @@ export async function createCharacteristicNameController(req: Request, res: Resp
 export async function updateCharacteristicNameController(req: Request, res: Response): Promise<void> {
   const payload = characteristicNameUpdatePayloadSchema
     .validateSync({ ...req.params, ...req.body }, { stripUnknown: true })
-  const characteristicName = await updateCharacteristicName(payload)
+  const characteristicName = await updateCharacteristicName(payload.id, payload)
   res.json({ data: characteristicName });
 }
 

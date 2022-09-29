@@ -6,39 +6,34 @@ import {
 } from "../validationSchemas/keyword"
 import Keyword from "../models/Keyword"
 
-export function findKeywords(payload: keywordFindPayloadType) {
+export function findKeywords(params: keywordFindPayloadType) {
   const query = Keyword.query()
-  if (payload.search_query) {
-    query.where('keyword', 'like', `%${payload.search_query}%`)
+  if (params.search_query) {
+    query.where('keyword', 'like', `%${params.search_query}%`)
   }
-  if (payload.include_product) {
-    query.withGraphFetched('product')
-  }
+  query.withGraphFetched('product')
   return query
 }
 
-export function findKeywordById(payload: keywordFindOnePayloadType) {
+export function findKeywordById(id: number) {
   const query = Keyword
     .query()
-    .findById(payload.id)
-  if (payload.include_product) {
-    query.withGraphFetched('product')
-  }
+    .findById(id)
+  query.withGraphFetched('product')
   return query
 }
 
-export function createKeyword(payload: keywordCreateType) {
+export function createKeyword(object: keywordCreateType) {
   const query = Keyword
     .query()
-    .insertAndFetch(payload)
+    .insertAndFetch(object)
   return query
 }
 
-export function updateKeyword(payload: keywordUpdateType) {
-  const { id, ...body } = payload
+export function updateKeyword(id: number, object: keywordUpdateType) {
   const query = Keyword
     .query()
-    .patchAndFetchById(id, body)
+    .patchAndFetchById(id, object)
   return query
 }
 

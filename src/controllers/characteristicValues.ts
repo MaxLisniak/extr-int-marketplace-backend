@@ -35,7 +35,7 @@ export async function createCharacteristicValueController(req: Request, res: Res
 export async function updateCharacteristicValueController(req: Request, res: Response): Promise<void> {
   const payload = characteristicValueUpdatePayloadSchema
     .validateSync({ ...req.body, ...req.params }, { stripUnknown: true })
-  const characteristicValue = await updateCharacteristicValue(payload)
+  const characteristicValue = await updateCharacteristicValue(payload.id, payload)
   res.json({ data: characteristicValue });
 }
 

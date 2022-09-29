@@ -7,9 +7,7 @@ import {
   userFindOnePayloadType
 } from "../validationSchemas/user";
 import User from "../models/User";
-import Favorite from "../models/Favorite";
 import logger from "../logger";
-import { favoriteType } from "../validationSchemas/favorite";
 
 
 export function findUsers() {
@@ -17,23 +15,17 @@ export function findUsers() {
   return query
 }
 
-export function findUserById(payload: userFindOnePayloadType) {
+export function findUserById(id: number) {
   const query = User
     .query()
-    .findById(payload.id)
-
-  if (payload.include_favorite_products) {
-    query.withGraphFetched('favoriteProducts')
-
-  }
+    .findById(id)
   return query
 }
 
-export function updateUser(payload: userUpdatePayloadType) {
-  const { id, ...body } = payload
+export function updateUser(id: number, object: userUpdatePayloadType) {
   const query = User
     .query()
-    .patchAndFetchById(id, body)
+    .patchAndFetchById(id, object)
   return query
 }
 
@@ -45,7 +37,6 @@ export function deleteUser(id: number) {
 }
 
 export async function generatePasswordHash(password: string) {
-  // hash password
   const salt = await bcrypt.genSalt();
   const hashedPassword = await bcrypt.hash(password, salt);
   return hashedPassword
@@ -119,31 +110,6 @@ export async function handleRefreshToken(refresh_token: string) {
   return accessToken
 }
 
-export async function addFavoriteProduct(payload: favoriteType) {
-  const { user_id, product_id } = payload
-  const favorite = await Favorite
-    .query()
-    .findOne({ user_id, product_id })
-  if (favorite) throw new Error("Can't add to favorite")
-  const query = User.relatedQuery("favoriteProducts")
-    .for(user_id)
-    .relate(product_id)
-  return query
-}
-
-export async function removeFavoriteProduct(payload: favoriteType) {
-  const { user_id, product_id } = payload
-  const favorite = await Favorite
-    .query()
-    .findOne({ user_id, product_id })
-  if (!favorite) throw new Error("Can't remove from favorite")
-  const query = User.relatedQuery("favoriteProducts")
-    .for(user_id)
-    .unrelate()
-    .where('products.id', product_id)
-  return query
-}
-
 export async function signOut(refresh_token: string) {
   // query a user by refresh token and check if it exists
   const foundUser = await findUserByRefreshToken(refresh_token)
@@ -191,7 +157,7 @@ export async function signIn(payload: userSignInPayloadType) {
 
   // add refresh token to a user in database
   const signedInUser = await updateUser(
-    { id: userId, refresh_token: refreshToken } as userUpdatePayloadType
+    userId, { refresh_token: refreshToken } as userUpdatePayloadType
   )
   logger.info(`A user is logged in as: ${email}`)
 

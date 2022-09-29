@@ -21,18 +21,17 @@ export function findCharacteristicValueById(payload: characteristicValueFindOneP
   return query
 }
 
-export function createCharacteristicValue(payload: characteristicValueCreatePayloadType) {
+export function createCharacteristicValue(object: characteristicValueCreatePayloadType) {
   const query = CharacteristicValue
     .query()
-    .insertAndFetch(payload)
+    .insertAndFetch(object)
   return query
 }
 
-export function updateCharacteristicValue(payload: characteristicValueUpdatePayloadType) {
-  const { id, ...body } = payload
+export function updateCharacteristicValue(id: number, object: characteristicValueUpdatePayloadType) {
   const query = CharacteristicValue
     .query()
-    .patchAndFetchById(id, body)
+    .patchAndFetchById(id, object)
   return query
 }
 

@@ -8,41 +8,31 @@ import {
 import Product from "../models/Product"
 import CharacteristicValue from "../models/CharacteristicValue"
 
-export function findProducts(payload: productFindPayloadType) {
+export function findProducts(params: productFindPayloadType) {
   const query = Product.query()
-  if (payload.category_id) {
-    query.where('category_id', payload.category_id)
+  // fetch products that belong to a particular category
+  if (params.category_id) {
+    query.where('category_id', params.category_id)
   }
-  if (payload.search_query) {
-    query.where('name', 'like', `%${payload.search_query}%`)
-  }
-  if (payload.include_comments) {
-    query.withGraphFetched("comments.[user]")
-  }
-  if (payload.include_characteristics) {
-    query.withGraphFetched("characteristic_values.[characteristic_name]")
+  // limit products to those which name is like specified
+  if (params.search_query) {
+    query.where('name', 'like', `%${params.search_query}%`)
   }
   query.orderBy('id', "DESC")
   return query
 }
 
-export function findProductById(payload: productFindOnePayloadType) {
+export function findProductById(id: number) {
   const query = Product
     .query()
-    .findById(payload.id)
-  if (payload.include_comments) {
-    query.withGraphFetched("comments.[user]")
-  }
-  if (payload.include_characteristics) {
-    query.withGraphFetched("characteristic_values.[characteristic_name]")
-  }
+    .findById(id)
   return query
 }
 
-export async function createProduct(payload: productCreatePayloadType) {
+export async function createProduct(object: productCreatePayloadType) {
   const query = Product
     .query()
-    .insertAndFetch(payload)
+    .insertAndFetch(object)
 
   const product = await query
 
@@ -66,11 +56,10 @@ export async function createProduct(payload: productCreatePayloadType) {
   return product
 }
 
-export function updateProduct(payload: productUpdatePayloadType) {
-  const { id, ...body } = payload
+export function updateProduct(id: number, object: productUpdatePayloadType) {
   const query = Product
     .query()
-    .patchAndFetchById(id, body)
+    .patchAndFetchById(id, object)
   return query
 }
 

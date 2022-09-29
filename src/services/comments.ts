@@ -7,43 +7,37 @@ import {
 } from "../validationSchemas/comment"
 import Comment from "../models/Comment"
 
-export function findComments(payload: commentFindPayloadType) {
+export function findComments(params: commentFindPayloadType) {
   const query = Comment
     .query()
 
-  if (payload.product_id) {
-    query.where("product_id", payload.product_id)
+  if (params.product_id) {
+    query.where("product_id", params.product_id)
   }
-  if (payload.include_user) {
-    query.withGraphFetched("user")
-  }
-  query.orderBy("created", 'DESC')
+  query.withGraphFetched("user")
+    .orderBy("created", 'DESC')
   return query;
 }
 
-export function findCommentById(payload: commentFindOnePayloadType) {
+export function findCommentById(id: number) {
   const query = Comment
     .query()
-    .findById(payload.id)
-
-  if (payload.include_user) {
-    query.withGraphFetched("user")
-  }
+    .findById(id)
+    .withGraphFetched("user")
   return query
 }
 
-export function createComment(payload: commentCreatePayloadType) {
+export function createComment(object: commentCreatePayloadType) {
   const query = Comment
     .query()
-    .insertAndFetch(payload)
+    .insertAndFetch(object)
   return query
 }
 
-export function updateComment(payload: commentUpdatePayloadType) {
-  const { id, ...body } = payload
+export function updateComment(id: number, object: commentUpdatePayloadType) {
   const query = Comment
     .query()
-    .patchAndFetchById(id, body)
+    .patchAndFetchById(id, object)
   return query
 }
 

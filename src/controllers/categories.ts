@@ -2,7 +2,6 @@ import { Request, Response } from 'express';
 import {
   categoryCreatePayloadSchema,
   categoryUpdatePayloadSchema,
-  categoryFindPayloadSchema,
   categoryFindOnePayloadSchema,
 } from "../validationSchemas/category";
 import { idSchema } from '../validationSchemas/id';
@@ -12,17 +11,22 @@ import {
   createCategory,
   updateCategory,
   deleteCategory,
+  findCategoriesNested,
 } from '../services/categories';
 
 export async function findCategoriesController(req: Request, res: Response): Promise<void> {
-  const payload = categoryFindPayloadSchema.validateSync(req.query, { stripUnknown: true })
-  const categories = await findCategories(payload)
+  const categories = await findCategories()
+  res.json({ data: categories });
+}
+
+export async function findCategoriesNestedController(req: Request, res: Response): Promise<void> {
+  const categories = await findCategoriesNested()
   res.json({ data: categories });
 }
 
 export async function findCategoryByIdController(req: Request, res: Response): Promise<void> {
-  const payload = categoryFindOnePayloadSchema.validateSync({ ...req.params, ...req.query }, { stripUnknown: true });
-  const category = await findCategoryById(payload)
+  const payload = categoryFindOnePayloadSchema.validateSync(req.params, { stripUnknown: true });
+  const category = await findCategoryById(payload.id)
   res.json({ data: category });
 }
 
@@ -36,7 +40,7 @@ export async function createCategoryController(req: Request, res: Response): Pro
 export async function updateCategoryController(req: Request, res: Response): Promise<void> {
   const payload = categoryUpdatePayloadSchema
     .validateSync({ ...req.body, ...req.params }, { stripUnknown: true })
-  const category = await updateCategory(payload)
+  const category = await updateCategory(payload.id, payload)
   res.json({ data: category });
 }
 

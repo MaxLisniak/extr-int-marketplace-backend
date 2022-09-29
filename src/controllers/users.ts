@@ -6,7 +6,6 @@ import {
 	userSignInPayloadSchema,
 	userUpdatePayloadSchema,
 } from "../validationSchemas/user";
-import { favoriteSchema } from "../validationSchemas/favorite";
 import {
 	findUsers,
 	findUserById,
@@ -16,8 +15,6 @@ import {
 	signOut,
 	signUp,
 	handleRefreshToken,
-	addFavoriteProduct,
-	removeFavoriteProduct,
 } from "../services/users";
 import { idSchema } from "../validationSchemas/id";
 
@@ -28,15 +25,15 @@ export async function findUsersController(req: Request, res: Response): Promise<
 
 export async function findUserByIdController(req: Request, res: Response): Promise<void> {
 	const payload = userFindOnePayloadSchema
-		.validateSync({ ...req.query, ...req.params }, { stripUnknown: true })
-	const user = await findUserById(payload)
+		.validateSync(req.params, { stripUnknown: true })
+	const user = await findUserById(payload.id)
 	res.json({ data: user });
 }
 
 export async function updateUserController(req: Request, res: Response): Promise<void> {
 	const payload = userUpdatePayloadSchema
 		.validateSync({ ...req.body, ...req.params }, { stripUnknown: true })
-	const user = await updateUser(payload)
+	const user = await updateUser(payload.id, payload)
 	res.json({ data: user })
 }
 

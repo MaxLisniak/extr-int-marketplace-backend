@@ -1,44 +1,43 @@
 import {
   categoryCreatePayloadType,
-  categoryFindPayloadType,
   categoryFindOnePayloadType,
   categoryUpdatePayloadType,
 } from "../validationSchemas/category"
 import Category from "../models/Categoty"
 
-export function findCategories(payload: categoryFindPayloadType) {
-  const query = Category.query()
-  if (payload?.nested) {
-    query
-      .whereNull("parent_id")
-      .withGraphFetched('subcategories.^')
-  }
-  query.orderBy('id', 'DESC')
+export function findCategories() {
+  const query = Category
+    .query()
+    .orderBy('id', 'DESC')
+  return query
+}
+export function findCategoriesNested() {
+  const query = Category
+    .query()
+    .whereNull("parent_id")
+    .withGraphFetched('subcategories.^')
+    .orderBy('id', 'DESC')
   return query
 }
 
-export function findCategoryById(payload: categoryFindOnePayloadType) {
+export function findCategoryById(id: number) {
   const query = Category
     .query()
-    .findById(payload.id)
-  if (payload.nested) {
-    query.withGraphFetched('subcategories.^')
-  }
+    .findById(id)
   return query
 }
 
-export function createCategory(payload: categoryCreatePayloadType) {
+export function createCategory(object: categoryCreatePayloadType) {
   const query = Category
     .query()
-    .insertAndFetch(payload)
+    .insertAndFetch(object)
   return query
 }
 
-export function updateCategory(payload: categoryUpdatePayloadType) {
-  const { id, ...body } = payload
+export function updateCategory(id: number, object: categoryUpdatePayloadType) {
   const query = Category
     .query()
-    .patchAndFetchById(id, body)
+    .patchAndFetchById(id, object)
   return query
 }
 

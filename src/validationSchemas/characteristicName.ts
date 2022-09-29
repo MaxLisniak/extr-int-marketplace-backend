@@ -34,8 +34,6 @@ export const characteristicNameFindPayloadSchema = yup.object().shape({
     .number()
     .integer()
     .positive(),
-  include_characteristic_values: yup
-    .boolean()
 })
 export const characteristicNameFindOnePayloadSchema = yup.object().shape({
   id: yup
@@ -43,8 +41,6 @@ export const characteristicNameFindOnePayloadSchema = yup.object().shape({
     .integer()
     .positive()
     .required(),
-  include_characteristic_values: yup
-    .boolean()
 })
 
 

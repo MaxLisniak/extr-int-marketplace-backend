@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { addFavoriteProduct, removeFavoriteProduct } from "../services/users";
+import { addFavoriteProduct, removeFavoriteProduct } from "../services/favorites";
 import { favoriteSchema } from "../validationSchemas/favorite";
 
 export async function addFavoriteProductController(req: Request, res: Response): Promise<void> {

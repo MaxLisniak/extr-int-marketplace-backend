@@ -23,8 +23,8 @@ export async function findCommentsController(req: Request, res: Response): Promi
 
 export async function findCommentByIdController(req: Request, res: Response): Promise<void> {
   const payload = commentFindOnePayloadSchema
-    .validateSync({ ...req.query, ...req.params })
-  const comment = await findCommentById(payload)
+    .validateSync(req.params, { stripUnknown: true })
+  const comment = await findCommentById(payload.id)
   res.json({ data: comment });
 }
 
@@ -38,7 +38,7 @@ export async function createCommentController(req: Request, res: Response): Prom
 export async function updateCommentController(req: Request, res: Response): Promise<void> {
   const payload = commentUpdatePayloadSchema
     .validateSync({ ...req.body, ...req.params }, { stripUnknown: true })
-  const comment = await updateComment(payload)
+  const comment = await updateComment(payload.id, payload)
   res.json({ data: comment })
 }
 
