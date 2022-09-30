@@ -62,8 +62,6 @@ export const userFindOnePayloadSchema = yup.object().shape({
     .integer()
     .positive()
     .required(),
-  include_favorite_products: yup
-    .boolean(),
 })
 
 export const userSignInPayloadSchema = yup.object().shape({

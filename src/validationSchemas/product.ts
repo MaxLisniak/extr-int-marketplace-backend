@@ -58,10 +58,6 @@ export const productFindPayloadSchema = yup.object().shape({
     .positive(),
   search_query: yup
     .string(),
-  include_comments: yup
-    .boolean(),
-  include_characteristics: yup
-    .boolean(),
   page: yup
     .number()
     .integer()
@@ -74,10 +70,6 @@ export const productFindOnePayloadSchema = yup.object().shape({
     .integer()
     .positive()
     .required(),
-  include_comments: yup
-    .boolean(),
-  include_characteristics: yup
-    .boolean(),
 });
 
 export type productFindPayloadType = yup.InferType<typeof productFindPayloadSchema>

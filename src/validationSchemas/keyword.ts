@@ -32,8 +32,6 @@ export const keywordUpdatePayloadSchema = yup.object().shape({
 export const keywordFindPayloadSchema = yup.object().shape({
   search_query: yup
     .string(),
-  include_product: yup
-    .boolean(),
 })
 
 export const keywordFindOnePayloadSchema = yup.object().shape({
@@ -42,8 +40,6 @@ export const keywordFindOnePayloadSchema = yup.object().shape({
     .integer()
     .positive()
     .required(),
-  include_product: yup
-    .boolean(),
 })
 
 export type keywordFindPayloadType = yup.InferType<typeof keywordFindPayloadSchema>
