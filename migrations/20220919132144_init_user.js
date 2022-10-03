@@ -11,7 +11,7 @@ exports.up = function (knex) {
       table.string('password_hash').notNullable();
       table.string('email', 64).notNullable().unique();
       table.string('refresh_token');
-      table.boolean('is_admin');
+      table.boolean('is_admin').defaultTo(false);
     })
 }
 
