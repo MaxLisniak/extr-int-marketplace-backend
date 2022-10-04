@@ -1,10 +1,9 @@
 import Model from "./BaseModel";
 
 class Category extends Model {
-  id: number
-  name: string
   parent_id: number
-  subcategories: []
+  name: string
+  id: number
 
   static get tableName() {
     return "categories"

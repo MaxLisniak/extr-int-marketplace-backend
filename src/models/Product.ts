@@ -1,5 +1,5 @@
+import AttributeName from "./AttributeName";
 import Model from "./BaseModel";
-import CharacteristicValue from "./CharacteristicValue";
 import Comment from "./Comment";
 import Favorite from "./Favorite";
 import Keyword from "./Keyword";
@@ -42,17 +42,19 @@ class Product extends Model {
         to: "keywords.product_id"
       }
     },
-    characteristic_values: {
-      relation: Model.HasManyRelation,
-      modelClass: CharacteristicValue,
+    attribute_names: {
+      relation: Model.ManyToManyRelation,
+      modelClass: AttributeName,
       join: {
-        from: "products.id",
-        to: "characteristic_values.product_id"
+        from: 'products.id',
+        through: {
+          from: 'attribute_to_product_pairs.product_id',
+          to: 'attribute_to_product_pairs.attribute_name_id'
+        },
+        to: 'attribute_names.id'
       }
     }
-
   }
-
 }
 
 export default Product;

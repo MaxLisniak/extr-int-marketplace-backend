@@ -1,11 +1,11 @@
-import CharacteristicName from "../models/CharacteristicName"
+import AttributeName from "../models/AttributeName"
 import {
   productFindPayloadType,
   productCreatePayloadType,
   productUpdatePayloadType
 } from "../validationSchemas/product"
 import Product from "../models/Product"
-import CharacteristicValue from "../models/CharacteristicValue"
+import AttributeValue from "../models/AttributeValue"
 import Category from "../models/Categoty"
 const PRODUCTS_PER_PAGE = 1
 
@@ -31,6 +31,7 @@ export async function findProducts(params: productFindPayloadType) {
     query.offset((params.page - 1) * PRODUCTS_PER_PAGE)
   }
   query.orderBy('id', "DESC")
+    .withGraphFetched('attribute_names')
   return query
 }
 
@@ -46,26 +47,26 @@ export async function createProduct(object: productCreatePayloadType) {
     .query()
     .insertAndFetch(object)
 
-  const product = await query
+  // const product = await query
 
-  const categoryId = product.category_id;
-  const characteristicNames = await CharacteristicName
-    .query()
-    .where("category_id", categoryId)
-    .orderBy("id", "DESC")
+  // const categoryId = product.category_id;
+  // const attributeNames = await AttributeName
+  //   .query()
+  //   .where("category_id", categoryId)
+  //   .orderBy("id", "DESC")
 
-  const characteristicValues = characteristicNames
-    .map((characteristicName) => {
-      return {
-        characteristic_name_id: characteristicName.id,
-        product_id: product.id,
-        value: ""
-      }
-    })
-  await CharacteristicValue
-    .query()
-    .insertGraph(characteristicValues)
-  return product
+  // const attributeValues = attributeNames
+  //   .map((attributeName) => {
+  //     return {
+  //       characteristic_name_id: attributeName.id,
+  //       product_id: product.id,
+  //       value: ""
+  //     }
+  //   })
+  // await AttributeValue
+  //   .query()
+  //   .insertGraph(attributeValues)
+  return query
 }
 
 export function updateProduct(id: number, object: productUpdatePayloadType) {

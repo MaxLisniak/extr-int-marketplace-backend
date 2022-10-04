@@ -5,8 +5,8 @@ import categoriesRouter from './categories';
 import productsRouter from './products';
 import commentsRouter from './comments';
 import keywordsRouter from './keywords';
-import characteristicNamesRouter from './characteristicNames';
-import characteristicValuesRouter from './characteristicValues';
+import AttributeNamesRouter from './attributeNames';
+import AttributeValuesRouter from './attributeValues';
 import favoritesRouter from "./favorites"
 
 import Router from "express-promise-router";
@@ -18,8 +18,8 @@ rootRouter.use('/categories', categoriesRouter);
 rootRouter.use('/products', productsRouter);
 rootRouter.use('/comments', commentsRouter);
 rootRouter.use('/keywords', keywordsRouter);
-rootRouter.use('/characteristic_names', characteristicNamesRouter);
-rootRouter.use('/characteristic_values', characteristicValuesRouter);
+rootRouter.use('/attribute_names', AttributeNamesRouter);
+rootRouter.use('/attribute_values', AttributeValuesRouter);
 rootRouter.use('/favorites', favoritesRouter)
 
 export default rootRouter;
