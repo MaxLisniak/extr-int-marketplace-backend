@@ -1,3 +1,4 @@
+import AttributeName from "./AttributeName";
 import Model from "./BaseModel";
 // import AttributeName from "./AttributeName";
 
@@ -11,28 +12,20 @@ class AttributeValue extends Model {
     return "attribute_values"
   }
 
-  // static relationMappings = {
-  //   characteristic_name: {
-  //     relation: Model.BelongsToOneRelation,
-  //     modelClass: AttributeName,
-  //     join: {
-  //       from: 'characteristic_names.id',
-  //       to: 'attribute_values.characteristic_name_id'
-  //     }
-  //   },
-  // }
-
-  // static get modifiers() {
-  //   return {
-  //     defaultSelects(builder: any) {
-  //       builder.select('id', 'value', 'characteristic_name_id', 'product_id');
-  //     },
-  //     onlyUniqueValues(builder: any) {
-  //       builder.groupBy('value')
-  //     }
-  //   };
-  // }
-
+  static relationMappings = {
+    attribute_name: {
+      relation: Model.HasOneThroughRelation,
+      modelClass: AttributeName,
+      join: {
+        from: 'attribute_values.id',
+        through: {
+          from: 'attribute_pairs.attribute_value_id',
+          to: 'attribute_pairs.attribute_name_id'
+        },
+        to: 'attribute_names.id'
+      }
+    }
+  }
 }
 
 export default AttributeValue;

@@ -9,18 +9,6 @@ class AttributeName extends Model {
   static get tableName() {
     return "attribute_names"
   }
-
-  // static relationMappings = {
-  //   characteristic_values: {
-  //     relation: Model.HasManyRelation,
-  //     modelClass: path.join(__dirname, "CharacteristicValue"),
-  //     join: {
-  //       from: "attribute_names.id",
-  //       to: "characteristic_values.characteristic_name_id"
-  //     }
-  //   },
-  // }
-
 }
 
 export default AttributeName;

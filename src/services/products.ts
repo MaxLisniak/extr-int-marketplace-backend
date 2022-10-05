@@ -31,7 +31,7 @@ export async function findProducts(params: productFindPayloadType) {
     query.offset((params.page - 1) * PRODUCTS_PER_PAGE)
   }
   query.orderBy('id', "DESC")
-    .withGraphFetched('attribute_names')
+    .withGraphFetched('attribute_values.[attribute_name]')
   return query
 }
 

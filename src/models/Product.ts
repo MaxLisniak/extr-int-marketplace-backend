@@ -1,4 +1,4 @@
-import AttributeName from "./AttributeName";
+import AttributeValue from "./AttributeValue";
 import Model from "./BaseModel";
 import Comment from "./Comment";
 import Favorite from "./Favorite";
@@ -42,16 +42,16 @@ class Product extends Model {
         to: "keywords.product_id"
       }
     },
-    attribute_names: {
+    attribute_values: {
       relation: Model.ManyToManyRelation,
-      modelClass: AttributeName,
+      modelClass: AttributeValue,
       join: {
         from: 'products.id',
         through: {
-          from: 'attribute_to_product_pairs.product_id',
-          to: 'attribute_to_product_pairs.attribute_name_id'
+          from: 'attribute_pairs.product_id',
+          to: 'attribute_pairs.attribute_value_id'
         },
-        to: 'attribute_names.id'
+        to: 'attribute_values.id'
       }
     }
   }
