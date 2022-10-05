@@ -5,7 +5,7 @@ import {
 import AttributeName from "../models/AttributeName"
 
 export function findAttributeNames() {
-  let query = AttributeName.query()
+  const query = AttributeName.query()
   // if (params.category_id) {
   //   query.where('category_id', params.category_id)
   // }

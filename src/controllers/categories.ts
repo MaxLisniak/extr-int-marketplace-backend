@@ -14,6 +14,7 @@ import {
   findCategoriesNested,
 } from '../services/categories';
 import Category from '../models/Categoty';
+import { categorySchema } from '../validationSchemas/category';
 
 export async function findCategoriesController(req: Request, res: Response): Promise<void> {
   const categories = await findCategories()
@@ -22,7 +23,8 @@ export async function findCategoriesController(req: Request, res: Response): Pro
 
 export async function findCategoriesNestedController(req: Request, res: Response): Promise<void> {
   const categories = await findCategoriesNested()
-  const nest = (items: Category[], id: number | null = null): {} =>
+  console.log(categories)
+  const nest = (items: categorySchema[], id: number | null = null): categorySchema[] =>
     items
       .filter(item => item.parent_id === id)
       .map(item => ({ ...item, subcategories: nest(items, item.id) }));

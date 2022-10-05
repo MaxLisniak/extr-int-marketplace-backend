@@ -4,6 +4,7 @@ class Category extends Model {
   parent_id: number
   name: string
   id: number
+  subcategories: Category[]
 
   static get tableName() {
     return "categories"

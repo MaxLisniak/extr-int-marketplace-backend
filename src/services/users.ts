@@ -63,17 +63,6 @@ export function createUser(payload: userCreatePayloadType) {
   return query
 }
 
-export function generateAccessToken(
-  payload: {},
-  expiresIn: string
-) {
-  const accessToken = jwt.sign(
-    payload,
-    process.env.ACCESS_TOKEN_SECRET,
-    { expiresIn }
-  );
-  return accessToken
-}
 
 export function removeRefreshToken(refresh_token: string) {
   const query = User
