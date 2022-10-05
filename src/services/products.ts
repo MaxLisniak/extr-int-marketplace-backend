@@ -26,12 +26,51 @@ export async function findProducts(params: productFindPayloadType) {
     query.where('name', 'like', `%${params.search_query}%`)
   }
 
-  query.limit(PRODUCTS_PER_PAGE)
-  if (params.page) {
-    query.offset((params.page - 1) * PRODUCTS_PER_PAGE)
-  }
-  query.orderBy('id', "DESC")
+  // query.limit(PRODUCTS_PER_PAGE)
+  // if (params.page) {
+  //   query.offset((params.page - 1) * PRODUCTS_PER_PAGE)
+  // }
+  query
+    .orderBy('id', "DESC")
     .withGraphFetched('attribute_values.[attribute_name]')
+  console.log(await findProductsByFilters())
+  return query
+}
+
+export async function findProductsByFilters() {
+  const filters = {
+    "Color": ["Starlight", "PRODUCT(RED)"],
+    "Storage": ["128GB"],
+    "Display size": ["6in"],
+  }
+  let innerQuery;
+  let query;
+  let first = true
+  for (const filter of Object.entries(filters)) {
+    query = Product.query()
+      .select('products.id')
+      .innerJoin('attribute_pairs', 'attribute_pairs.product_id', 'products.id')
+      .innerJoin('attribute_names', 'attribute_pairs.attribute_name_id', 'attribute_names.id')
+      .innerJoin('attribute_values', 'attribute_pairs.attribute_value_id', 'attribute_values.id')
+      .where(
+        q => {
+          q.where('attribute_names.name', filter[0])
+            .andWhere(w => {
+              for (const value of filter[1]) {
+                w.orWhere('attribute_values.value', value)
+              }
+            })
+        }
+      )
+    if (first) {
+      first = false;
+      innerQuery = query
+      continue;
+    }
+    query = query.whereIn('products.id', innerQuery)
+    innerQuery = query
+  }
+  query.select('products.id', 'products.name')
   return query
 }
 
