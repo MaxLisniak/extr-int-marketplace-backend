@@ -10,7 +10,7 @@ const config = {
       port: 3306,
       user: 'root',
       password: process.env.MYSQL_PASSWORD || "password",
-      database: 'testmarketplace'
+      database: 'marketplace'
     }
   },
 
