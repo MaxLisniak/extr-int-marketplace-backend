@@ -5,8 +5,7 @@ import Model from "./BaseModel";
 class AttributeValue extends Model {
   id: number
   value: string
-  // product_id: number
-  // characteristic_name_id: number
+  attribute_name_id: number
 
   static get tableName() {
     return "attribute_values"
@@ -14,15 +13,11 @@ class AttributeValue extends Model {
 
   static relationMappings = {
     attribute_name: {
-      relation: Model.HasOneThroughRelation,
+      relation: Model.BelongsToOneRelation,
       modelClass: AttributeName,
       join: {
-        from: 'attribute_values.id',
-        through: {
-          from: 'attribute_pairs.attribute_value_id',
-          to: 'attribute_pairs.attribute_name_id'
-        },
-        to: 'attribute_names.id'
+        from: 'attribute_names.id',
+        to: 'attribute_values.attribute_name_id'
       }
     }
   }

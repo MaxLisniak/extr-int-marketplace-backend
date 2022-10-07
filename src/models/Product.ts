@@ -48,8 +48,8 @@ class Product extends Model {
       join: {
         from: 'products.id',
         through: {
-          from: 'attribute_pairs.product_id',
-          to: 'attribute_pairs.attribute_value_id'
+          from: 'product_to_attribute.product_id',
+          to: 'product_to_attribute.attribute_value_id'
         },
         to: 'attribute_values.id'
       }

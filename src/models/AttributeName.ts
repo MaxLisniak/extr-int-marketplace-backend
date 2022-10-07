@@ -4,7 +4,6 @@ import Model from "./BaseModel";
 class AttributeName extends Model {
   id: number
   name: string
-  // category_id: number
 
   static get tableName() {
     return "attribute_names"
