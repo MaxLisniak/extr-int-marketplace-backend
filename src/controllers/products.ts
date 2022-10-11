@@ -5,6 +5,7 @@ import {
   productFindPayloadSchema,
   productFindOnePayloadSchema,
   attributeToProductPayloadSchema,
+  filterPayloadSchema,
 } from "../validationSchemas/product";
 import {
   findProducts,
@@ -14,6 +15,7 @@ import {
   deleteProduct,
   addAttributeToProduct,
   removeAttributeToProduct,
+  findProductsByFilters,
 } from "../services/products";
 import { idSchema } from "../validationSchemas/id";
 
@@ -30,6 +32,17 @@ export async function findProductByIdController(req: Request, res: Response): Pr
     .validateSync(req.params, { stripUnknown: true })
   const product = await findProductById(payload.id)
   res.json({ data: product });
+}
+
+export async function findProductsByFiltersController(req: Request, res: Response): Promise<void> {
+  const payload = Object
+    .entries(req.body)
+    .map(entry => {
+      return filterPayloadSchema.validateSync(entry[1])
+    })
+  const paramsPayload = productFindPayloadSchema.validateSync(req.query)
+  const products = await findProductsByFilters(payload, paramsPayload);
+  res.json({ data: products[0] })
 }
 
 export async function createProductController(req: Request, res: Response): Promise<void> {

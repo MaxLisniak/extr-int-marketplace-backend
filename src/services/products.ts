@@ -2,12 +2,13 @@ import {
   productFindPayloadType,
   productCreatePayloadType,
   productUpdatePayloadType,
-  attributeToProductPayloadType
+  attributeToProductPayloadType,
+  filterPayloadType
 } from "../validationSchemas/product"
 import Product from "../models/Product"
 import Category from "../models/Categoty"
 import ProductToAttribute from "../models/ProductToAttribute"
-const PRODUCTS_PER_PAGE = 1
+const PRODUCTS_PER_PAGE = 2
 
 export async function findProducts(params: productFindPayloadType) {
   const query = Product.query()
@@ -33,44 +34,34 @@ export async function findProducts(params: productFindPayloadType) {
   query
     .orderBy('id', "DESC")
     .withGraphFetched('attribute_values.[attribute_name]')
-  console.log(await findProductsByFilters())
   return query
 }
 
-export async function findProductsByFilters() {
-  const filters = {
-    "Color": ["Starlight", "PRODUCT(RED)"],
-    "Storage": ["128GB"],
-    "Display size": ["6in"],
+export async function findProductsByFilters(filtersValues: filterPayloadType[], params: productFindPayloadType) {
+  const existsExpressions = filtersValues.map(filterValues => {
+    return `exists(select 1 from product_to_attribute where (${filterValues.map(value => 'attribute_value_id=??').join(' or ')}) and product_id = pa.product_id)\n`
+  })
+
+  let sql =
+    `
+    select * from products
+    where 
+      id in (
+        select distinct product_id from product_to_attribute as pa
+        where 
+        ${existsExpressions.join(' and ')}
+        )
+    limit ?
+    `
+  const knex = Product.knex();
+  let queryParams = [].concat.apply([], filtersValues)
+  queryParams.push(PRODUCTS_PER_PAGE)
+  if (params.page) {
+    sql += `offset ?`
+    queryParams.push((params.page - 1) * PRODUCTS_PER_PAGE)
   }
-  let innerQuery;
-  let query;
-  let first = true
-  for (const filter of Object.entries(filters)) {
-    query = Product.query()
-      .select('products.id')
-      .innerJoin('attribute_pairs', 'attribute_pairs.product_id', 'products.id')
-      .innerJoin('attribute_names', 'attribute_pairs.attribute_name_id', 'attribute_names.id')
-      .innerJoin('attribute_values', 'attribute_pairs.attribute_value_id', 'attribute_values.id')
-      .where(
-        q => {
-          q.where('attribute_names.name', filter[0])
-            .andWhere(w => {
-              for (const value of filter[1]) {
-                w.orWhere('attribute_values.value', value)
-              }
-            })
-        }
-      )
-    if (first) {
-      first = false;
-      innerQuery = query
-      continue;
-    }
-    query = query.whereIn('products.id', innerQuery)
-    innerQuery = query
-  }
-  query.select('products.id', 'products.name')
+
+  const query = knex.raw(sql, queryParams)
   return query
 }
 

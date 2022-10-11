@@ -85,8 +85,13 @@ export const attributeToProductPayloadSchema = yup.object().shape({
     .required(),
 })
 
+export const filterPayloadSchema = yup.array()
+  .of(yup.number().integer().positive())
+
+
 export type productFindPayloadType = yup.InferType<typeof productFindPayloadSchema>
 export type productFindOnePayloadType = yup.InferType<typeof productFindOnePayloadSchema>
 export type productUpdatePayloadType = yup.InferType<typeof productUpdatePayloadSchema>
 export type productCreatePayloadType = yup.InferType<typeof productCreatePayloadSchema>
 export type attributeToProductPayloadType = yup.InferType<typeof attributeToProductPayloadSchema>
+export type filterPayloadType = yup.InferType<typeof filterPayloadSchema>
