@@ -54,7 +54,7 @@ export async function findProductsByFilters(filtersValues: filterPayloadType[], 
     limit ?
     `
   const knex = Product.knex();
-  let queryParams = [].concat.apply([], filtersValues)
+  const queryParams = [].concat.apply([], filtersValues)
   queryParams.push(PRODUCTS_PER_PAGE)
   if (params.page) {
     sql += `offset ?`
