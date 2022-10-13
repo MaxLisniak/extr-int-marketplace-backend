@@ -6,8 +6,6 @@ import AttributeValue from "../models/AttributeValue";
 
 export function findAttributeValues() {
   const query = AttributeValue.query()
-  // .withGraphFetched('characteristic_name')
-  // .orderBy("characteristic_name_id", "ASC")
   return query
 }
 
@@ -15,7 +13,6 @@ export function findAttributeValueById(id: number) {
   const query = AttributeValue
     .query()
     .findById(id)
-  // .withGraphFetched('characteristic_name')
   return query
 }
 

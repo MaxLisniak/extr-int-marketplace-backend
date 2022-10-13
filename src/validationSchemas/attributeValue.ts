@@ -6,6 +6,11 @@ export const attributeValueCreatePayloadSchema = yup.object().shape({
     .min(0)
     .max(64)
     .required(),
+  attribute_name_id: yup
+    .number()
+    .integer()
+    .positive()
+    .required(),
 })
 
 export const attributeValueUpdatePayloadSchema = yup.object().shape({
@@ -18,6 +23,11 @@ export const attributeValueUpdatePayloadSchema = yup.object().shape({
     .string()
     .min(0)
     .max(64),
+  attribute_name_id: yup
+    .number()
+    .integer()
+    .positive()
+    .required(),
 })
 
 export const attributeValueFindOnePayloadSchema = yup.object().shape({
