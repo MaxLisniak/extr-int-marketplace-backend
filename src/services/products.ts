@@ -38,30 +38,26 @@ export async function findProducts(params: productFindPayloadType) {
 }
 
 export async function findProductsByFilters(filtersValues: filterPayloadType[], params: productFindPayloadType) {
-  const existsExpressions = filtersValues.map(filterValues => {
-    return `exists(select 1 from product_to_attribute where (${filterValues.map(value => 'attribute_value_id=??').join(' or ')}) and product_id = pa.product_id)\n`
-  })
+  const query = Product
+    .query()
+    .whereIn('id', ProductToAttribute
+      .query()
+      .distinct("product_id")
+      .alias('pa')
+      .whereRaw(
+        filtersValues.map(filterValues => {
+          return `exists(select 1 from product_to_attribute where (${filterValues.map(id => `attribute_value_id=${id}`)
+            .join(' or ')
+            }) and product_id = pa.product_id)`
+        }).join(' and ')
+      )
+    )
+    .limit(PRODUCTS_PER_PAGE)
 
-  let sql =
-    `
-    select * from products
-    where 
-      id in (
-        select distinct product_id from product_to_attribute as pa
-        where 
-        ${existsExpressions.join(' and ')}
-        )
-    limit ?
-    `
-  const knex = Product.knex();
-  const queryParams = [].concat.apply([], filtersValues)
-  queryParams.push(PRODUCTS_PER_PAGE)
   if (params.page) {
-    sql += `offset ?`
-    queryParams.push((params.page - 1) * PRODUCTS_PER_PAGE)
+    query.offset((params.page - 1) * PRODUCTS_PER_PAGE)
   }
-
-  const query = knex.raw(sql, queryParams)
+  console.log(query.toKnexQuery().toSQL())
   return query
 }
 
