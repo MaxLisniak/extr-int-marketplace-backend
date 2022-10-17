@@ -1,5 +1,4 @@
 import Model from "./BaseModel";
-// import path from "path";
 
 class AttributeName extends Model {
   id: number

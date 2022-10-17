@@ -1,6 +1,14 @@
 import { Response, Request } from "express";
-import { productToAttributeFindOnePayloadSchema, productToAttributePayloadSchema } from "../validationSchemas/productToAttribute";
-import { addAttributeToProduct, findProductToAttributeById, findProductToAttributes, removeAttributeFromProduct } from "../services/productToAttribute";
+import {
+  productToAttributeFindOnePayloadSchema,
+  productToAttributePayloadSchema
+} from "../validationSchemas/productToAttribute";
+import {
+  addAttributeToProduct,
+  findProductToAttributeById,
+  findProductToAttributes,
+  removeAttributeFromProduct
+} from "../services/productToAttribute";
 
 export async function addAttributeToProductController(req: Request, res: Response): Promise<void> {
   const payload = productToAttributePayloadSchema.validateSync(req.body, { stripUnknown: true })

@@ -5,23 +5,22 @@ import {
   filterPayloadType,
 } from "../validationSchemas/product"
 import Product from "../models/Product"
-import Category from "../models/Categoty"
 import ProductToAttribute from "../models/ProductToAttribute"
 
-const PRODUCTS_PER_PAGE = 2
+const PRODUCTS_PER_PAGE = 4
 
 export async function findProducts(params: productFindPayloadType) {
   const query = Product.query()
-  // fetch products that belong to a particular category if it's a tree leaf
-  if (params.category_id) {
-    const childrenCategories = await Category
-      .query()
-      .where('parent_id', params.category_id);
-    console.log(childrenCategories)
-    if (childrenCategories.length === 0) {
-      query.where('category_id', params.category_id)
-    } else throw new Error("The specified category cannot be used for selecting products")
-  }
+  // // fetch products that belong to a particular category if it's a tree leaf
+  // if (params.category_id) {
+  //   const childrenCategories = await Category
+  //     .query()
+  //     .where('parent_id', params.category_id);
+  //   console.log(childrenCategories)
+  //   if (childrenCategories.length === 0) {
+  //     query.where('category_id', params.category_id)
+  //   } else throw new Error("The specified category cannot be used for selecting products")
+  // }
   // limit products to those which name is like specified
   if (params.search_query) {
     query.where('name', 'like', `%${params.search_query}%`)

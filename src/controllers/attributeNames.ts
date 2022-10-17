@@ -14,8 +14,6 @@ import { idSchema } from '../validationSchemas/id'; import {
 
 
 export async function findAttributeNamesController(req: Request, res: Response): Promise<void> {
-  // const payload = attributeNameFindPayloadSchema
-  //   .validateSync(req.query, { stripUnknown: true })
   const attributeNames = await findAttributeNames()
   res.json({ data: attributeNames });
 }

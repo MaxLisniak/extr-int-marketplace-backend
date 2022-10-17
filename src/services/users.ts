@@ -4,7 +4,6 @@ import {
   userSignInPayloadType,
   userCreatePayloadType,
   userUpdatePayloadType,
-  userFindOnePayloadType
 } from "../validationSchemas/user";
 import User from "../models/User";
 import logger from "../logger";

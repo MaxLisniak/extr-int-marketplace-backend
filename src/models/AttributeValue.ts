@@ -1,6 +1,5 @@
 import AttributeName from "./AttributeName";
 import Model from "./BaseModel";
-// import AttributeName from "./AttributeName";
 
 class AttributeValue extends Model {
   id: number

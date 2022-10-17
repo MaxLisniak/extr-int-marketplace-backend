@@ -1,6 +1,14 @@
 import { Request, Response } from "express";
-import { productToCategoryFindOnePayloadSchema, productToCategoryPayloadSchema } from "../validationSchemas/productToCategory";
-import { addCategoryToProduct, findProductToCategories, findProductToCategoryById, removeCategoryFromProduct } from "../services/productToCategory";
+import {
+  productToCategoryFindOnePayloadSchema,
+  productToCategoryPayloadSchema
+} from "../validationSchemas/productToCategory";
+import {
+  addCategoryToProduct,
+  findProductToCategories,
+  findProductToCategoryById,
+  removeCategoryFromProduct
+} from "../services/productToCategory";
 
 export async function addCategoryToProductController(req: Request, res: Response): Promise<void> {
   const payload = productToCategoryPayloadSchema.validateSync(req.body, { stripUnknown: true })

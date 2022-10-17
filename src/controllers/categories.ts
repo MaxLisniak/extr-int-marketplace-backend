@@ -13,7 +13,6 @@ import {
   deleteCategory,
   findCategoriesNested,
 } from '../services/categories';
-import Category from '../models/Categoty';
 import { categorySchema } from '../validationSchemas/category';
 
 export async function findCategoriesController(req: Request, res: Response): Promise<void> {

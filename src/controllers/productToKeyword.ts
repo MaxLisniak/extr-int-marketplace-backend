@@ -1,5 +1,8 @@
 import { Request, Response } from "express";
-import { productToKeywordFindOnePayloadSchema, productToKeywordPayloadSchema } from "../validationSchemas/productToKeyword";
+import {
+  productToKeywordFindOnePayloadSchema,
+  productToKeywordPayloadSchema
+} from "../validationSchemas/productToKeyword";
 import {
   addKeywordToProduct,
   findProductToKeywords,
