@@ -4,19 +4,19 @@
  */
 exports.up = function (knex) {
   return knex.schema
-    .createTable('product_to_attribute', function (table) {
+    .createTable('product_to_category', function (table) {
       table.increments();
-      table.integer("attribute_value_id").unsigned();
+      table.integer("category_id").unsigned();
       table.integer("product_id").unsigned();
-      table.foreign("attribute_value_id")
+      table.foreign("category_id")
         .references("id")
-        .inTable("attribute_values")
+        .inTable("categories")
         .onDelete("CASCADE");
       table.foreign("product_id")
         .references("id")
         .inTable("products")
         .onDelete("CASCADE");
-      table.unique(['attribute_value_id', 'product_id'])
+      table.unique(['category_id', 'product_id'])
     })
 }
 
@@ -25,5 +25,5 @@ exports.up = function (knex) {
  * @returns { Promise<void> }
  */
 exports.down = function (knex) {
-  return knex.schema.dropTable("product_to_attribute")
+  return knex.schema.dropTable("product_to_category")
 };

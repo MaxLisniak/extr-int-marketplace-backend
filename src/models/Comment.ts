@@ -1,5 +1,4 @@
 import Model from "./BaseModel";
-// import User from "./User";
 import path from "path";
 
 
@@ -23,14 +22,6 @@ class Comment extends Model {
         to: 'comments.user_id'
       }
     },
-  }
-
-  static get modifiers() {
-    return {
-      defaultSelects(builder: any) {
-        builder.select('text', 'created');
-      },
-    };
   }
 
 }

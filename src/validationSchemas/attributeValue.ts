@@ -27,7 +27,6 @@ export const attributeValueUpdatePayloadSchema = yup.object().shape({
     .number()
     .integer()
     .positive()
-    .required(),
 })
 
 export const attributeValueFindOnePayloadSchema = yup.object().shape({

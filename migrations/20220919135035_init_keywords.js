@@ -7,11 +7,6 @@ exports.up = function (knex) {
     .createTable('keywords', function (table) {
       table.increments();
       table.string("keyword", 64).notNullable();
-      table.integer("product_id").unsigned();
-      table.foreign("product_id")
-        .references("id")
-        .inTable("products")
-        .onDelete("CASCADE");
     })
 }
 

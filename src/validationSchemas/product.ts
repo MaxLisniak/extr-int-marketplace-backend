@@ -13,7 +13,7 @@ export const productCreatePayloadSchema = yup.object().shape({
   image_url: yup
     .string()
     .min(1),
-  category_id: yup
+  brand_id: yup
     .number()
     .integer()
     .positive()
@@ -41,7 +41,7 @@ export const productUpdatePayloadSchema = yup.object().shape({
   image_url: yup
     .string()
     .min(1),
-  category_id: yup
+  brand_id: yup
     .number()
     .integer()
     .positive(),
@@ -72,26 +72,23 @@ export const productFindOnePayloadSchema = yup.object().shape({
     .required(),
 });
 
-export const attributeToProductPayloadSchema = yup.object().shape({
-  product_id: yup
-    .number()
-    .integer()
-    .positive()
-    .required(),
-  attribute_value_id: yup
-    .number()
-    .integer()
-    .positive()
-    .required(),
-})
 
-export const filterPayloadSchema = yup.array()
-  .of(yup.number().integer().positive())
+
+
+
+
+
+export const filterPayloadSchema = yup
+  .array()
+  .of(
+    yup.array().of(
+      yup.number().integer().positive()
+    )
+  )
 
 
 export type productFindPayloadType = yup.InferType<typeof productFindPayloadSchema>
 export type productFindOnePayloadType = yup.InferType<typeof productFindOnePayloadSchema>
 export type productUpdatePayloadType = yup.InferType<typeof productUpdatePayloadSchema>
 export type productCreatePayloadType = yup.InferType<typeof productCreatePayloadSchema>
-export type attributeToProductPayloadType = yup.InferType<typeof attributeToProductPayloadSchema>
 export type filterPayloadType = yup.InferType<typeof filterPayloadSchema>

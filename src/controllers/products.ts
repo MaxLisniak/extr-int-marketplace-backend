@@ -4,7 +4,6 @@ import {
   productUpdatePayloadSchema,
   productFindPayloadSchema,
   productFindOnePayloadSchema,
-  attributeToProductPayloadSchema,
   filterPayloadSchema,
 } from "../validationSchemas/product";
 import {
@@ -13,8 +12,6 @@ import {
   createProduct,
   updateProduct,
   deleteProduct,
-  addAttributeToProduct,
-  removeAttributeToProduct,
   findProductsByFilters,
 } from "../services/products";
 import { idSchema } from "../validationSchemas/id";
@@ -62,16 +59,5 @@ export async function updateProductController(req: Request, res: Response): Prom
 export async function deleteProductController(req: Request, res: Response): Promise<void> {
   const payload = idSchema.validateSync(req.params, { stripUnknown: true })
   await deleteProduct(payload.id)
-  res.sendStatus(200);
-}
-
-export async function addAttributeToProductController(req: Request, res: Response): Promise<void> {
-  const payload = attributeToProductPayloadSchema.validateSync(req.body, { stripUnknown: true })
-  await addAttributeToProduct(payload)
-  res.sendStatus(200);
-}
-export async function removeAttributeToProductController(req: Request, res: Response): Promise<void> {
-  const payload = attributeToProductPayloadSchema.validateSync(req.body, { stripUnknown: true })
-  await removeAttributeToProduct(payload)
   res.sendStatus(200);
 }

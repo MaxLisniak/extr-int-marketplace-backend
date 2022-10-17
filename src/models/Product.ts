@@ -1,5 +1,6 @@
 import AttributeValue from "./AttributeValue";
 import Model from "./BaseModel";
+import Category from "./Categoty";
 import Comment from "./Comment";
 import Favorite from "./Favorite";
 import Keyword from "./Keyword";
@@ -35,11 +36,15 @@ class Product extends Model {
       }
     },
     keywords: {
-      relation: Model.HasManyRelation,
+      relation: Model.ManyToManyRelation,
       modelClass: Keyword,
       join: {
-        from: "products.id",
-        to: "keywords.product_id"
+        from: 'products.id',
+        through: {
+          from: 'product_to_keyword.product_id',
+          to: 'product_to_keyword.keyword_id'
+        },
+        to: 'keywords.id'
       }
     },
     attribute_values: {
@@ -52,6 +57,18 @@ class Product extends Model {
           to: 'product_to_attribute.attribute_value_id'
         },
         to: 'attribute_values.id'
+      }
+    },
+    categories: {
+      relation: Model.ManyToManyRelation,
+      modelClass: Category,
+      join: {
+        from: 'products.id',
+        through: {
+          from: 'product_to_category.product_id',
+          to: 'product_to_category.category_id_id'
+        },
+        to: 'categories.id'
       }
     }
   }

@@ -21,14 +21,6 @@ class Category extends Model {
     }
   }
 
-  static get modifiers() {
-    return {
-      defaultSelects(builder: any) {
-        builder.select('name');
-      },
-    };
-  }
-
 }
 
 export default Category;

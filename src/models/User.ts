@@ -13,13 +13,6 @@ class User extends Model {
     return "users"
   }
 
-  static get modifiers() {
-    return {
-      defaultSelects(builder: any) {
-        builder.select('first_name', 'last_name');
-      },
-    };
-  }
   static relationMappings = {
     favoriteProducts: {
       relation: Model.ManyToManyRelation,

@@ -6,11 +6,6 @@ export const keywordCreatePayloadSchema = yup.object().shape({
     .min(1)
     .max(64)
     .required(),
-  product_id: yup
-    .number()
-    .integer()
-    .positive()
-    .required(),
 })
 
 export const keywordUpdatePayloadSchema = yup.object().shape({
@@ -23,10 +18,6 @@ export const keywordUpdatePayloadSchema = yup.object().shape({
     .string()
     .min(1)
     .max(64),
-  product_id: yup
-    .number()
-    .integer()
-    .positive(),
 })
 
 export const keywordFindPayloadSchema = yup.object().shape({
