@@ -5,34 +5,29 @@ import {
 import AttributeValue from "../models/AttributeValue";
 
 export function findAttributeValues() {
-  const query = AttributeValue.query()
-  return query
+  return AttributeValue.query()
 }
 
 export function findAttributeValueById(id: number) {
-  const query = AttributeValue
+  return AttributeValue
     .query()
     .findById(id)
-  return query
 }
 
 export function createAttributeValue(object: attributeValueCreatePayloadType) {
-  const query = AttributeValue
+  return AttributeValue
     .query()
     .insertAndFetch(object)
-  return query
 }
 
 export function updateAttributeValue(id: number, object: attributeValueUpdatePayloadType) {
-  const query = AttributeValue
+  return AttributeValue
     .query()
     .patchAndFetchById(id, object)
-  return query
 }
 
 export function deleteAttributeValue(id: number) {
-  const query = AttributeValue
+  return AttributeValue
     .query()
     .deleteById(id)
-  return query
 }

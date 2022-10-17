@@ -22,17 +22,21 @@ export async function findProducts(params: productFindPayloadType) {
   //   } else throw new Error("The specified category cannot be used for selecting products")
   // }
   // limit products to those which name is like specified
+
   if (params.search_query) {
     query.where('name', 'like', `%${params.search_query}%`)
   }
 
   query.limit(PRODUCTS_PER_PAGE)
+
   if (params.page) {
     query.offset((params.page - 1) * PRODUCTS_PER_PAGE)
   }
+
   query
     .orderBy('id', "DESC")
     .withGraphFetched('attribute_values.[attribute_name]')
+
   return query
 }
 
@@ -81,29 +85,25 @@ export async function findProductsByFilters(payload: filterPayloadType) {
 }
 
 export function findProductById(id: number) {
-  const query = Product
+  return Product
     .query()
     .findById(id)
-  return query
 }
 
 export async function createProduct(object: productCreatePayloadType) {
-  const query = Product
+  return Product
     .query()
     .insertAndFetch(object)
-  return query
 }
 
 export function updateProduct(id: number, object: productUpdatePayloadType) {
-  const query = Product
+  return Product
     .query()
     .patchAndFetchById(id, object)
-  return query
 }
 
 export function deleteProduct(id: number) {
-  const query = Product
+  return Product
     .query()
     .deleteById(id)
-  return query
 }

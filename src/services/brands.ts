@@ -5,34 +5,29 @@ import {
 import Brand from "../models/Brand";
 
 export function findBrands() {
-  const query = Brand.query()
-  return query
+  return Brand.query()
 }
 
 export function findBrandById(id: number) {
-  const query = Brand
+  return Brand
     .query()
     .findById(id)
-  return query
 }
 
 export function createBrand(object: brandCreatePayloadType) {
-  const query = Brand
+  return Brand
     .query()
     .insertAndFetch(object)
-  return query
 }
 
 export function updateBrand(id: number, object: brandUpdatePayloadType) {
-  const query = Brand
+  return Brand
     .query()
     .patchAndFetchById(id, object)
-  return query
 }
 
 export function deleteBrand(id: number) {
-  const query = Brand
+  return Brand
     .query()
     .deleteById(id)
-  return query
 }

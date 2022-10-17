@@ -17,39 +17,38 @@ export function findComments(params: commentFindPayloadType) {
   }
 
   query.limit(COMMENTS_PER_PAGE)
+
   if (params.page) {
     query.offset((params.page - 1) * COMMENTS_PER_PAGE)
   }
+
   query.withGraphFetched("user")
   query.orderBy("created", 'DESC')
+
   return query;
 }
 
 export function findCommentById(id: number) {
-  const query = Comment
+  return Comment
     .query()
     .findById(id)
     .withGraphFetched("user")
-  return query
 }
 
 export function createComment(object: commentCreatePayloadType) {
-  const query = Comment
+  return Comment
     .query()
     .insertAndFetch(object)
-  return query
 }
 
 export function updateComment(id: number, object: commentUpdatePayloadType) {
-  const query = Comment
+  return Comment
     .query()
     .patchAndFetchById(id, object)
-  return query
 }
 
 export function deleteComment(id: number) {
-  const query = Comment
+  return Comment
     .query()
     .deleteById(id)
-  return query
 }

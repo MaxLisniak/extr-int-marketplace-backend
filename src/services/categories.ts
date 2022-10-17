@@ -5,41 +5,35 @@ import {
 import Category from "../models/Categoty"
 
 export function findCategories() {
-  const query = Category
+  return Category
     .query()
     .orderBy('id', 'DESC')
-  return query
 }
 export function findCategoriesNested() {
-  const query = Category
+  return Category
     .query()
-  return query
 }
 
 export function findCategoryById(id: number) {
-  const query = Category
+  return Category
     .query()
     .findById(id)
-  return query
 }
 
 export function createCategory(object: categoryCreatePayloadType) {
-  const query = Category
+  return Category
     .query()
     .insertAndFetch(object)
-  return query
 }
 
 export function updateCategory(id: number, object: categoryUpdatePayloadType) {
-  const query = Category
+  return Category
     .query()
     .patchAndFetchById(id, object)
-  return query
 }
 
 export function deleteCategory(id: number) {
-  const query = Category
+  return Category
     .query()
     .deleteById(id)
-  return query
 }

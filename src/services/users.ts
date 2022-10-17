@@ -10,29 +10,25 @@ import logger from "../logger";
 
 
 export function findUsers() {
-  const query = User.query()
-  return query
+  return User.query()
 }
 
 export function findUserById(id: number) {
-  const query = User
+  return User
     .query()
     .findById(id)
-  return query
 }
 
 export function updateUser(id: number, object: userUpdatePayloadType) {
-  const query = User
+  return User
     .query()
     .patchAndFetchById(id, object)
-  return query
 }
 
 export function deleteUser(id: number) {
-  const query = User
+  return User
     .query()
     .deleteById(id)
-  return query
 }
 
 export async function generatePasswordHash(password: string) {
@@ -42,33 +38,29 @@ export async function generatePasswordHash(password: string) {
 }
 
 export function findUserByEmail(email: string) {
-  const query = User
+  return User
     .query()
     .findOne({ email })
-  return query
 }
 
 export function findUserByRefreshToken(refresh_token: string) {
-  const query = User
+  return User
     .query()
     .findOne({ refresh_token })
-  return query
 }
 
 export function createUser(payload: userCreatePayloadType) {
-  const query = User
+  return User
     .query()
     .insertAndFetch(payload)
-  return query
 }
 
 
 export function removeRefreshToken(refresh_token: string) {
-  const query = User
+  return User
     .query()
     .where("refresh_token", refresh_token)
     .patch({ refresh_token: null })
-  return query
 }
 
 export async function handleRefreshToken(refresh_token: string) {
