@@ -37,26 +37,46 @@ export async function findProducts(params: productFindPayloadType) {
   return query
 }
 
-export async function findProductsByFilters(filtersValues: filterPayloadType[], params: productFindPayloadType) {
-  const query = Product
-    .query()
-    .whereIn('id', ProductToAttribute
+export async function findProductsByFilters(payload: filterPayloadType) {
+
+  const { attribute_filters, page, category_id, brands, price } = payload;
+
+  const query = Product.query();
+
+  if (attribute_filters) {
+    query.whereIn('products.id', ProductToAttribute
       .query()
       .distinct("product_id")
       .alias('pa')
       .whereRaw(
-        filtersValues.map(filterValues => {
+        attribute_filters.map(filterValues => {
           return `exists(select 1 from product_to_attribute where (${filterValues.map(id => `attribute_value_id=${id}`)
             .join(' or ')
             }) and product_id = pa.product_id)`
         }).join(' and ')
       )
-    )
-    .limit(PRODUCTS_PER_PAGE)
-
-  if (params.page) {
-    query.offset((params.page - 1) * PRODUCTS_PER_PAGE)
+    );
   }
+
+  if (category_id) {
+    query.join("product_to_category", "products.id", "product_to_category.product_id")
+      .where("category_id", category_id)
+  }
+
+  if (brands) {
+    query.whereIn("brand_id", brands)
+  }
+
+  if (price.min && price.max) {
+    query.whereBetween("price", [price.min, price.max])
+  }
+
+  if (page) {
+    query.offset((page - 1) * PRODUCTS_PER_PAGE)
+  }
+
+  query.limit(PRODUCTS_PER_PAGE)
+
   console.log(query.toKnexQuery().toSQL())
   return query
 }

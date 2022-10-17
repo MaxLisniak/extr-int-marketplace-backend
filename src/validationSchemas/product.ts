@@ -72,19 +72,32 @@ export const productFindOnePayloadSchema = yup.object().shape({
     .required(),
 });
 
-
-
-
-
-
-
-export const filterPayloadSchema = yup
-  .array()
-  .of(
+export const filterPayloadSchema = yup.object().shape({
+  attribute_filters: yup.array().of(
     yup.array().of(
       yup.number().integer().positive()
     )
-  )
+  ),
+  category_id: yup
+    .number()
+    .integer()
+    .positive(),
+  brands: yup.array().of(
+    yup
+      .number()
+      .integer()
+      .positive(),
+  ),
+  price: yup.object().shape({
+    min: yup.number().integer().positive(),
+    max: yup.number().integer().positive()
+  }),
+  page: yup
+    .number()
+    .integer()
+    .positive()
+
+})
 
 
 export type productFindPayloadType = yup.InferType<typeof productFindPayloadSchema>

@@ -10,7 +10,7 @@ import {
 
 const router = Router();
 
-router.get('/find-by-filters', findProductsByFiltersController);
+router.get('/filter', findProductsByFiltersController);
 router.get('/:id', findProductByIdController);
 router.get('/', findProductsController);
 router.post('/', createProductController);

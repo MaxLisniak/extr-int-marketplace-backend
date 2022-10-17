@@ -10,7 +10,7 @@ class Product extends Model {
   name: string
   description: string
   image_url: string
-  category_id: number
+  brand_id: number
   price: number
 
   static get tableName() {
