@@ -6,7 +6,7 @@ import {
   createAttributeValueController,
   updateAttributeValueController,
   deleteAttributeValueController,
-} from "../controllers/AttributeValues";
+} from "../controllers/attributeValues";
 
 const router = Router();
 

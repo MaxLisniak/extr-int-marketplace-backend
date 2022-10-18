@@ -16,11 +16,11 @@ import {
 } from "../services/products";
 import { idSchema } from "../validationSchemas/id";
 
-export async function findProductsController(req: Request, res: Response): Promise<void> {
+export async function findProductsController(req: Request, res: Response): Promise<void> { // TODO: зачем тебе эта функция - у тебя есть findProductsByFiltersController
   const payload = productFindPayloadSchema
     .validateSync(req.query, { stripUnknown: true })
   const products = await findProducts(payload)
-  if (products.length === 0) throw new Error("Nothing found")
+  if (products.length === 0) throw new Error("Nothing found") // TODO: не выбрасывай ошибку, лучше верни пустой массив
   res.json({ data: products });
 }
 

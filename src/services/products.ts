@@ -74,14 +74,14 @@ export async function findProductsByFilters(payload: filterPayloadType) {
     query.whereBetween("price", [price.min, price.max])
   }
 
-  if (page) {
+  if (page) { // TODO: вместо страницы используй offset and limit - например, если на фронте будут страницы с разным количеством продуктов
     query.offset((page - 1) * PRODUCTS_PER_PAGE)
   }
 
   query.limit(PRODUCTS_PER_PAGE)
 
   console.log(query.toKnexQuery().toSQL())
-  return query
+  return query // TODO: верни еще и общее количество продуктов для паджинации
 }
 
 export function findProductById(id: number) {
