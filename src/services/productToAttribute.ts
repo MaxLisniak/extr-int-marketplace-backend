@@ -1,6 +1,7 @@
 import { productToAttributePayloadType } from "../validationSchemas/productToAttribute"
 import Product from "../models/Product"
 import ProductToAttribute from "../models/ProductToAttribute"
+import createHttpError from "http-errors"
 
 export async function addAttributeToProduct(payload: productToAttributePayloadType) {
 
@@ -10,7 +11,8 @@ export async function addAttributeToProduct(payload: productToAttributePayloadTy
     .query()
     .findOne({ attribute_value_id, product_id })
 
-  if (pair) throw new Error("Can't add attribute, it's already included")
+  // if (pair) throw new Error("Can't add attribute, it's already included")
+  if (pair) { throw createHttpError(400, "Can't add attribute, it's already included") }
 
   return Product
     .relatedQuery('attribute_values')
