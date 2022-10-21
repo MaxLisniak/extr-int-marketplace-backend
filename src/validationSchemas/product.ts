@@ -51,18 +51,6 @@ export const productUpdatePayloadSchema = yup.object().shape({
     .positive(),
 });
 
-export const productFindPayloadSchema = yup.object().shape({
-  category_id: yup
-    .number()
-    .integer()
-    .positive(),
-  search_query: yup
-    .string(),
-  page: yup
-    .number()
-    .integer()
-    .positive()
-});
 
 export const productFindOnePayloadSchema = yup.object().shape({
   id: yup
@@ -92,15 +80,17 @@ export const filterPayloadSchema = yup.object().shape({
     min: yup.number().integer().positive(),
     max: yup.number().integer().positive()
   }),
-  page: yup
+  offset: yup
+    .number()
+    .integer()
+    .positive(),
+  limit: yup
     .number()
     .integer()
     .positive()
-
 })
 
 
-export type productFindPayloadType = yup.InferType<typeof productFindPayloadSchema>
 export type productFindOnePayloadType = yup.InferType<typeof productFindOnePayloadSchema>
 export type productUpdatePayloadType = yup.InferType<typeof productUpdatePayloadSchema>
 export type productCreatePayloadType = yup.InferType<typeof productCreatePayloadSchema>

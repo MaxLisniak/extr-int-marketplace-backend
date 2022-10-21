@@ -2,12 +2,10 @@ import { Request, Response } from "express";
 import {
   productCreatePayloadSchema,
   productUpdatePayloadSchema,
-  productFindPayloadSchema,
   productFindOnePayloadSchema,
   filterPayloadSchema,
 } from "../validationSchemas/product";
 import {
-  findProducts,
   findProductById,
   createProduct,
   updateProduct,
@@ -16,13 +14,13 @@ import {
 } from "../services/products";
 import { idSchema } from "../validationSchemas/id";
 
-export async function findProductsController(req: Request, res: Response): Promise<void> { // TODO: зачем тебе эта функция - у тебя есть findProductsByFiltersController
-  const payload = productFindPayloadSchema
-    .validateSync(req.query, { stripUnknown: true })
-  const products = await findProducts(payload)
-  if (products.length === 0) throw new Error("Nothing found") // TODO: не выбрасывай ошибку, лучше верни пустой массив
-  res.json({ data: products });
-}
+// export async function findProductsController(req: Request, res: Response): Promise<void> { 
+//   const payload = productFindPayloadSchema
+//     .validateSync(req.query, { stripUnknown: true })
+//   const products = await findProducts(payload)
+//   if (products.length === 0) throw new Error("Nothing found") 
+//   res.json({ data: products });
+// }
 
 export async function findProductByIdController(req: Request, res: Response): Promise<void> {
   const payload = productFindOnePayloadSchema
@@ -33,8 +31,8 @@ export async function findProductByIdController(req: Request, res: Response): Pr
 
 export async function findProductsByFiltersController(req: Request, res: Response): Promise<void> {
   const payload = filterPayloadSchema.validateSync({ ...req.body, ...req.query })
-  const products = await findProductsByFilters(payload);
-  res.json({ data: products })
+  const { products, total } = await findProductsByFilters(payload);
+  res.json({ data: products, total: total[0] })
 }
 
 export async function createProductController(req: Request, res: Response): Promise<void> {

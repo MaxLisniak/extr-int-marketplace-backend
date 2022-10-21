@@ -1,5 +1,4 @@
 import {
-  productFindPayloadType,
   productCreatePayloadType,
   productUpdatePayloadType,
   filterPayloadType,
@@ -9,42 +8,42 @@ import ProductToAttribute from "../models/ProductToAttribute"
 
 const PRODUCTS_PER_PAGE = 4
 
-export async function findProducts(params: productFindPayloadType) {
-  const query = Product.query()
-  // // fetch products that belong to a particular category if it's a tree leaf
-  // if (params.category_id) {
-  //   const childrenCategories = await Category
-  //     .query()
-  //     .where('parent_id', params.category_id);
-  //   console.log(childrenCategories)
-  //   if (childrenCategories.length === 0) {
-  //     query.where('category_id', params.category_id)
-  //   } else throw new Error("The specified category cannot be used for selecting products")
-  // }
-  // limit products to those which name is like specified
+// export async function findProducts(params: productFindPayloadType) {
+//   const query = Product.query()
+//   // // fetch products that belong to a particular category if it's a tree leaf
+//   // if (params.category_id) {
+//   //   const childrenCategories = await Category
+//   //     .query()
+//   //     .where('parent_id', params.category_id);
+//   //   console.log(childrenCategories)
+//   //   if (childrenCategories.length === 0) {
+//   //     query.where('category_id', params.category_id)
+//   //   } else throw new Error("The specified category cannot be used for selecting products")
+//   // }
+//   // limit products to those which name is like specified
 
-  if (params.search_query) {
-    query.where('name', 'like', `%${params.search_query}%`)
-  }
+//   if (params.search_query) {
+//     query.where('name', 'like', `%${params.search_query}%`)
+//   }
 
-  query.limit(PRODUCTS_PER_PAGE)
+//   query.limit(PRODUCTS_PER_PAGE)
 
-  if (params.page) {
-    query.offset((params.page - 1) * PRODUCTS_PER_PAGE)
-  }
+//   if (params.page) {
+//     query.offset((params.page - 1) * PRODUCTS_PER_PAGE)
+//   }
 
-  query
-    .orderBy('id', "DESC")
-    .withGraphFetched('attribute_values.[attribute_name]')
+//   query
+//     .orderBy('id', "DESC")
+//     .withGraphFetched('attribute_values.[attribute_name]')
 
-  return query
-}
+//   return query
+// }
 
 export async function findProductsByFilters(payload: filterPayloadType) {
 
-  const { attribute_filters, page, category_id, brands, price } = payload;
+  const { attribute_filters, offset, limit, category_id, brands, price } = payload;
 
-  const query = Product.query();
+  const query = Product.query()
 
   if (attribute_filters) {
     query.whereIn('products.id', ProductToAttribute
@@ -73,15 +72,21 @@ export async function findProductsByFilters(payload: filterPayloadType) {
   if (price.min && price.max) {
     query.whereBetween("price", [price.min, price.max])
   }
+  const total = query
+    .clone()
+    .count("products.id as total")
 
-  if (page) { // TODO: вместо страницы используй offset and limit - например, если на фронте будут страницы с разным количеством продуктов
-    query.offset((page - 1) * PRODUCTS_PER_PAGE)
+  if (offset) {
+    query.offset(offset)
   }
 
-  query.limit(PRODUCTS_PER_PAGE)
+  if (limit) {
+    query.limit(limit)
+  } else {
+    query.limit(PRODUCTS_PER_PAGE)
+  }
 
-  console.log(query.toKnexQuery().toSQL())
-  return query // TODO: верни еще и общее количество продуктов для паджинации
+  return { products: await query, total: await total }
 }
 
 export function findProductById(id: number) {
