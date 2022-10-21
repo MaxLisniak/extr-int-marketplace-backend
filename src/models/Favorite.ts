@@ -1,12 +1,12 @@
 import path from "path";
-import { Product as ProductType } from "../types";
+import Product from "./Product";
 import Model from "./BaseModel";
 
 class Favorite extends Model {
   id: number
   product_id: number
   user_id: number
-  product: ProductType
+  product: Product
 
   static get tableName() {
     return "favorites"

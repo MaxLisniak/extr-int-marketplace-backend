@@ -2,8 +2,9 @@ import AttributeValue from "./AttributeValue";
 import Model from "./BaseModel";
 import Category from "./Categoty";
 import Comment from "./Comment";
-import Favorite from "./Favorite";
 import Keyword from "./Keyword";
+import path from "path";
+
 
 class Product extends Model {
   id: number
@@ -29,7 +30,7 @@ class Product extends Model {
     },
     favorites: {
       relation: Model.HasManyRelation,
-      modelClass: Favorite,
+      modelClass: path.join(__dirname, "Product"),
       join: {
         from: "products.id",
         to: "favorites.product_id"
