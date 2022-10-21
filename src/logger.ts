@@ -8,7 +8,8 @@ const myFormat = printf(({ level, message, timestamp }) => {
 // logger config
 const logger = createLogger({
   transports: [
-    new transports.File({ filename: 'combined.log' })
+    new transports.File({ filename: 'combined.log' }),
+    new transports.Console(),
   ],
   format: combine(
     timestamp({ format: "MM.DD.YY hh:mm:ss" }),

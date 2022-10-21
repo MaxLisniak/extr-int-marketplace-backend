@@ -1,7 +1,6 @@
-import Debug from "debug";
 import http from 'http';
-const debug = Debug('express:server');
 import app from './app';
+import logger from "./logger";
 
 const port = parseInt(process.env.PORT);
 app.set('port', port);
@@ -15,5 +14,5 @@ function onListening() {
   const bind = typeof addr === 'string'
     ? 'pipe ' + addr
     : 'port ' + addr.port;
-  debug('Listening on ' + bind);
+  logger.info('Listening on ' + bind);
 }
