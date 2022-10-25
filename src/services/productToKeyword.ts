@@ -10,7 +10,7 @@ export async function addKeywordToProduct(payload: productToKeywordPayloadType) 
     .query()
     .findOne({ keyword_id, product_id })
 
-  if (pair) throw new Error("Can't add keyword, it's already included")
+  if (pair) throw new Error("Can't add keyword, it's already included") // TODO: засунь это в валидатор
 
   return Product
     .relatedQuery('keywords')
@@ -26,7 +26,7 @@ export async function removeKeywordFromProduct(payload: productToKeywordPayloadT
     .query()
     .findOne({ keyword_id, product_id })
 
-  if (!pair) throw new Error("Can't remove keyword, it's not included")
+  if (!pair) throw new Error("Can't remove keyword, it's not included") // TODO: засунь это в валидатор
 
   return Product
     .relatedQuery('keywords')
@@ -36,7 +36,7 @@ export async function removeKeywordFromProduct(payload: productToKeywordPayloadT
 }
 
 export function findProductToKeywords() {
-  return ProductToKeyword.query()
+  return ProductToKeyword.query() // TODO: ты хочешь вытянуть всю таблицу?
 }
 
 export function findProductToKeywordById(id: number) {

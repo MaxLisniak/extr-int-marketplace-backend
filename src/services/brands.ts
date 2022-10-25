@@ -5,7 +5,7 @@ import {
 import Brand from "../models/Brand";
 
 export function findBrands() {
-  return Brand.query()
+  return Brand.query() // TODO: должна быть паджинация
 }
 
 export function findBrandById(id: number) {

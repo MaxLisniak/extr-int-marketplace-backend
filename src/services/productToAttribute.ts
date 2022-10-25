@@ -12,7 +12,7 @@ export async function addAttributeToProduct(payload: productToAttributePayloadTy
     .findOne({ attribute_value_id, product_id })
 
   // if (pair) throw new Error("Can't add attribute, it's already included")
-  if (pair) { throw createHttpError(400, "Can't add attribute, it's already included") }
+  if (pair) { throw createHttpError(400, "Can't add attribute, it's already included") } // TODO: засунь это в валидатор
 
   return Product
     .relatedQuery('attribute_values')
@@ -28,7 +28,7 @@ export async function removeAttributeFromProduct(payload: productToAttributePayl
     .query()
     .findOne({ attribute_value_id, product_id })
 
-  if (!pair) throw new Error("Can't remove attribute, it's not included")
+  if (!pair) throw new Error("Can't remove attribute, it's not included") // TODO: засунь это в валидатор
 
   return Product
     .relatedQuery('attribute_values')
@@ -38,7 +38,7 @@ export async function removeAttributeFromProduct(payload: productToAttributePayl
 }
 
 export function findProductToAttributes() {
-  return ProductToAttribute.query()
+  return ProductToAttribute.query() // TODO: ты хочешь вытянуть всю таблицу?
 }
 
 export function findProductToAttributeById(id: number) {

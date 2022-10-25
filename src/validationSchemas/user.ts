@@ -4,17 +4,17 @@ export const userCreatePayloadSchema = yup.object().shape({
   email: yup
     .string()
     .email()
-    .min(0)
+    .min(0) // TODO: если ты используешь email() то min() лишнее
     .max(64)
     .required(),
   first_name: yup
     .string()
-    .min(0)
+    .min(0) // TODO: инкогнито?
     .max(64)
     .required(),
   last_name: yup
     .string()
-    .min(0)
+    .min(0) // TODO: инкогнито?
     .max(64),
   password: yup
     .string()

@@ -5,7 +5,7 @@ import {
 import AttributeName from "../models/AttributeName"
 
 export function findAttributeNames() {
-  return AttributeName.query()
+  return AttributeName.query() // TODO: должна быть паджинация
 }
 
 export function findAttributeNameById(id: number) {

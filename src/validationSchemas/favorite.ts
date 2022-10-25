@@ -9,7 +9,7 @@ export const favoriteSchema = yup.object().shape({
     .number()
     .integer()
     .positive(),
-  product_id: yup
+  product_id: yup // TODO: там где ты используешь foreign ключи лучше проверить на существования продукта или пользователя, в этом случае ты будешь выдавать не фронт понятную ошибку
     .number()
     .integer()
     .positive()

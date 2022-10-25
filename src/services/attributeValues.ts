@@ -5,7 +5,7 @@ import {
 import AttributeValue from "../models/AttributeValue";
 
 export function findAttributeValues() {
-  return AttributeValue.query()
+  return AttributeValue.query() // TODO: должна быть паджинация
 }
 
 export function findAttributeValueById(id: number) {

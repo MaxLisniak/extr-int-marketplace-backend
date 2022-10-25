@@ -44,7 +44,7 @@ export const commentFindPayloadSchema = yup.object().shape({
   product_id: yup
     .number()
     .integer()
-    .positive(),
+    .positive(), // TODO: надо добавить required()
   page: yup
     .number()
     .integer()

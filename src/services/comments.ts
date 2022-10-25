@@ -12,11 +12,11 @@ export function findComments(params: commentFindPayloadType) {
   const query = Comment
     .query()
 
-  if (params.product_id) {
+  if (params.product_id) { // TODO: есть ли смысл вытягивать комменты без привязки к продукту?
     query.where("product_id", params.product_id)
   }
 
-  query.limit(COMMENTS_PER_PAGE)
+  query.limit(COMMENTS_PER_PAGE) // TODO: замени на offset/limit
 
   if (params.page) {
     query.offset((params.page - 1) * COMMENTS_PER_PAGE)
@@ -35,7 +35,7 @@ export function findCommentById(id: number) {
     .withGraphFetched("user")
 }
 
-export function createComment(object: commentCreatePayloadType) {
+export function createComment(object: commentCreatePayloadType) { // TODO: добавь еще и рейтинг товара 1-5 звезд
   return Comment
     .query()
     .insertAndFetch(object)

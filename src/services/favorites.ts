@@ -10,7 +10,7 @@ export async function addFavoriteProduct(payload: favoriteType) {
     .query()
     .findOne({ user_id, product_id })
 
-  if (favorite) throw new Error("Can't add to favorite")
+  if (favorite) throw new Error("Can't add to favorite") // TODO: засунь это в валидатор
 
   return User.relatedQuery("favoriteProducts")
     .for(user_id)
@@ -25,7 +25,7 @@ export async function removeFavoriteProduct(payload: favoriteType) {
     .query()
     .findOne({ user_id, product_id })
 
-  if (!favorite) throw new Error("Can't remove from favorite")
+  if (!favorite) throw new Error("Can't remove from favorite") // TODO: засунь это в валидатор
 
   return User.relatedQuery("favoriteProducts")
     .for(user_id)

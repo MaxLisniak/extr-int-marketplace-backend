@@ -36,7 +36,7 @@ export const categoryFindOnePayloadSchema = yup.object().shape({
     .required(),
 })
 
-export interface categorySchema {
+export interface categorySchema { // TODO: это надо вынести в отдельную папку interfaces или constants
   id: number,
   parent_id: number,
   name: string,

@@ -69,7 +69,7 @@ export async function findProductsByFilters(payload: filterPayloadType) {
     query.whereIn("brand_id", brands)
   }
 
-  if (price.min && price.max) {
+  if (price.min && price.max) { // TODO: лучше отдельно фильтровать по min max - так ты будешь меньше зависеть от фронта
     query.whereBetween("price", [price.min, price.max])
   }
   const total = query
@@ -80,13 +80,13 @@ export async function findProductsByFilters(payload: filterPayloadType) {
     query.offset(offset)
   }
 
-  if (limit) {
+  if (limit) { // TODO: задай дефаултное значение для лимита при его инициализации и этот ифак будет не ненужен
     query.limit(limit)
   } else {
     query.limit(PRODUCTS_PER_PAGE)
   }
 
-  return { products: await query, total: await total }
+  return { products: await query, total: await total } // TODO: лучше отправлять 2 запроса одновременно с помощью Promise.all
 }
 
 export function findProductById(id: number) {

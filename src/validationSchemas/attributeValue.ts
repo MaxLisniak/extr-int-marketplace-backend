@@ -3,7 +3,7 @@ import * as yup from 'yup';
 export const attributeValueCreatePayloadSchema = yup.object().shape({
   value: yup
     .string()
-    .min(0)
+    .min(0) // TODO: зачем тебе пустое значение
     .max(64)
     .required(),
   attribute_name_id: yup
@@ -21,7 +21,7 @@ export const attributeValueUpdatePayloadSchema = yup.object().shape({
     .required(),
   value: yup
     .string()
-    .min(0)
+    .min(0) // TODO: зачем тебе пустое значение
     .max(64),
   attribute_name_id: yup
     .number()

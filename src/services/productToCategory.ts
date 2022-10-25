@@ -11,7 +11,7 @@ export async function addCategoryToProduct(payload: productToCategoryPayloadType
     .query()
     .findOne({ category_id, product_id })
 
-  if (pair) throw new Error("Can't add category, it's already included")
+  if (pair) throw new Error("Can't add category, it's already included") // TODO: засунь это в валидатор
 
   return Product
     .relatedQuery('categories')
@@ -27,7 +27,7 @@ export async function removeCategoryFromProduct(payload: productToCategoryPayloa
     .query()
     .findOne({ category_id, product_id })
 
-  if (!pair) throw new Error("Can't remove category, it's not included")
+  if (!pair) throw new Error("Can't remove category, it's not included") // TODO: засунь это в валидатор
 
   return Product
     .relatedQuery('categories')
@@ -37,7 +37,7 @@ export async function removeCategoryFromProduct(payload: productToCategoryPayloa
 }
 
 export function findProductToCategories() {
-  return ProductToCategory.query()
+  return ProductToCategory.query() // TODO: ты хочешь вытянуть всю таблицу?
 }
 
 export function findProductToCategoryById(id: number) {
