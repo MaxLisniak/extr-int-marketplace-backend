@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import {
   brandCreatePayloadSchema,
   brandFindOnePayloadSchema,
+  brandFindPayloadSchema,
   brandUpdatePayloadSchema
 } from "../validationSchemas/brand";
 import { idSchema } from "../validationSchemas/id";
@@ -14,7 +15,9 @@ import {
 } from "../services/brands";
 
 export async function findBrandsController(req: Request, res: Response): Promise<void> {
-  const brands = await findBrands()
+  const payload = brandFindPayloadSchema
+    .validateSync(req.query, { stripUnknown: true })
+  const brands = await findBrands(payload)
   res.json({ data: brands });
 }
 
