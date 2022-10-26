@@ -31,7 +31,7 @@ export async function findProductByIdController(req: Request, res: Response): Pr
 
 export async function findProductsByFiltersController(req: Request, res: Response): Promise<void> {
   const payload = filterPayloadSchema.validateSync({ ...req.body })
-  const { products, total } = await findProductsByFilters(payload);
+  const [products, total] = await findProductsByFilters(payload);
   res.json({ data: products, total: total[0] })
 }
 

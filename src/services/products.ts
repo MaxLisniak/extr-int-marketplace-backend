@@ -91,8 +91,8 @@ export async function findProductsByFilters(payload: filterPayloadType) {
   query
     .offset(offset)
     .limit(limit)
-
-  return { products: await query, total: await total } // TODO: лучше отправлять 2 запроса одновременно с помощью Promise.all
+  return Promise.all([query, total])
+  // return { products: await query, total: await total } // TODO: лучше отправлять 2 запроса одновременно с помощью Promise.all
 }
 
 export function findProductById(id: number) {
