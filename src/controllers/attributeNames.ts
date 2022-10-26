@@ -3,6 +3,7 @@ import {
   attributeNameCreatePayloadSchema,
   attributeNameUpdatePayloadSchema,
   attributeNameFindOnePayloadSchema,
+  attributeNameFindPayloadSchema,
 } from "../validationSchemas/attributeName";
 import { idSchema } from '../validationSchemas/id'; import {
   findAttributeNames,
@@ -14,7 +15,9 @@ import { idSchema } from '../validationSchemas/id'; import {
 
 
 export async function findAttributeNamesController(req: Request, res: Response): Promise<void> {
-  const attributeNames = await findAttributeNames()
+  const payload = attributeNameFindPayloadSchema
+    .validateSync(req.query, { stripUnknown: true });
+  const attributeNames = await findAttributeNames(payload)
   res.json({ data: attributeNames });
 }
 

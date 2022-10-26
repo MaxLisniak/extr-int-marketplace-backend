@@ -1,11 +1,18 @@
 import {
   attributeNameCreatePayloadType,
+  attributeNameFindPayloadType,
   attributeNameUpdatePayloadType,
 } from "../validationSchemas/attributeName"
 import AttributeName from "../models/AttributeName"
 
-export function findAttributeNames() {
-  return AttributeName.query() // TODO: должна быть паджинация
+export function findAttributeNames(payload: attributeNameFindPayloadType) {
+  const { limit = 10, offset = 0 } = payload;
+  return AttributeName
+    .query()
+    .offset(offset)
+    .limit(limit)
+    .orderBy('name', 'DESC');
+  // TODO: должна быть паджинация 
 }
 
 export function findAttributeNameById(id: number) {

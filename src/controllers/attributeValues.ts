@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import {
   attributeValueCreatePayloadSchema,
   attributeValueFindOnePayloadSchema,
+  attributeValueFindPayloadSchema,
   attributeValueUpdatePayloadSchema
 } from "../validationSchemas/attributeValue";
 import { idSchema } from "../validationSchemas/id";
@@ -14,7 +15,9 @@ import {
 } from "../services/attributeValues";
 
 export async function findAttributeValuesController(req: Request, res: Response): Promise<void> {
-  const attributeValues = await findAttributeValues()
+  const payload = attributeValueFindPayloadSchema
+    .validateSync(req.query, { stripUnknown: true })
+  const attributeValues = await findAttributeValues(payload)
   res.json({ data: attributeValues });
 }
 

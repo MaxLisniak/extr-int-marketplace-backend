@@ -1,11 +1,18 @@
 import {
   attributeValueCreatePayloadType,
+  attributeValueFindPayloadType,
   attributeValueUpdatePayloadType
 } from "../validationSchemas/attributeValue";
 import AttributeValue from "../models/AttributeValue";
 
-export function findAttributeValues() {
-  return AttributeValue.query() // TODO: должна быть паджинация
+export function findAttributeValues(payload: attributeValueFindPayloadType) {
+  const { limit = 10, offset = 0, attribute_name_id } = payload;
+  return AttributeValue
+    .query()
+    .where({ attribute_name_id })
+    .offset(offset)
+    .limit(limit);
+  // TODO: должна быть паджинация
 }
 
 export function findAttributeValueById(id: number) {

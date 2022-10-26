@@ -28,7 +28,19 @@ export const attributeNameFindOnePayloadSchema = yup.object().shape({
     .required(),
 })
 
+export const attributeNameFindPayloadSchema = yup.object().shape({
+  limit: yup
+    .number()
+    .integer()
+    .positive(),
+  offset: yup
+    .number()
+    .integer()
+    .positive()
+})
+
 
 export type attributeNameCreatePayloadType = yup.InferType<typeof attributeNameCreatePayloadSchema>
 export type attributeNameUpdatePayloadType = yup.InferType<typeof attributeNameUpdatePayloadSchema>
 export type attributeNameFindOnePayloadType = yup.InferType<typeof attributeNameFindOnePayloadSchema>
+export type attributeNameFindPayloadType = yup.InferType<typeof attributeNameFindPayloadSchema>

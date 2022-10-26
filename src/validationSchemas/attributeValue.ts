@@ -37,7 +37,24 @@ export const attributeValueFindOnePayloadSchema = yup.object().shape({
     .required(),
 })
 
+export const attributeValueFindPayloadSchema = yup.object().shape({
+  attribute_name_id: yup
+    .number()
+    .integer()
+    .positive()
+    .required(),
+  limit: yup
+    .number()
+    .integer()
+    .positive(),
+  offset: yup
+    .number()
+    .integer()
+    .positive()
+})
+
 
 export type attributeValueFindOnePayloadType = yup.InferType<typeof attributeValueFindOnePayloadSchema>
 export type attributeValueUpdatePayloadType = yup.InferType<typeof attributeValueUpdatePayloadSchema>
 export type attributeValueCreatePayloadType = yup.InferType<typeof attributeValueCreatePayloadSchema>
+export type attributeValueFindPayloadType = yup.InferType<typeof attributeValueFindPayloadSchema>
