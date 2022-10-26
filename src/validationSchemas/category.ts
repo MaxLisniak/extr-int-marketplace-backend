@@ -36,12 +36,6 @@ export const categoryFindOnePayloadSchema = yup.object().shape({
     .required(),
 })
 
-export interface categorySchema { // TODO: это надо вынести в отдельную папку interfaces или constants
-  id: number,
-  parent_id: number,
-  name: string,
-  subcategories: categorySchema[]
-}
 
 export type categoryFindOnePayloadType = yup.InferType<typeof categoryFindOnePayloadSchema>
 export type categoryCreatePayloadType = yup.InferType<typeof categoryCreatePayloadSchema>

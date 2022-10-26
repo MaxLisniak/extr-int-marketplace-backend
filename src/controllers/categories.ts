@@ -13,7 +13,7 @@ import {
   deleteCategory,
   findCategoriesNested,
 } from '../services/categories';
-import { categorySchema } from '../validationSchemas/category';
+import { categorySchema } from '../interfaces/categorySchema';
 
 export async function findCategoriesController(req: Request, res: Response): Promise<void> {
   const categories = await findCategories()
