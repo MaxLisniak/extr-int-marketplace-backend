@@ -12,7 +12,6 @@ export function findBrands(params: brandFindPayloadType) {
     .offset(offset)
     .limit(limit)
     .orderBy('name', 'DESC');
-  // TODO: должна быть паджинация
 }
 
 export function findBrandById(id: number) {

@@ -12,7 +12,6 @@ export function findAttributeValues(params: attributeValueFindPayloadType) {
     .where({ attribute_name_id })
     .offset(offset)
     .limit(limit);
-  // TODO: должна быть паджинация
 }
 
 export function findAttributeValueById(id: number) {

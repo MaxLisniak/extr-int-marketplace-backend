@@ -1,5 +1,29 @@
 import * as yup from 'yup';
 
+export const commentFindPayloadSchema = yup.object().shape({
+  product_id: yup
+    .number()
+    .integer()
+    .positive()
+    .required(),
+  limit: yup
+    .number()
+    .integer()
+    .positive(),
+  offset: yup
+    .number()
+    .integer()
+    .positive(),
+});
+
+export const commentFindOnePayloadSchema = yup.object().shape({
+  id: yup
+    .number()
+    .integer()
+    .positive()
+    .required(),
+});
+
 export const commentCreatePayloadSchema = yup.object().shape({
   text: yup
     .string()
@@ -40,23 +64,7 @@ export const commentUpdatePayloadSchema = yup.object().shape({
     .string(),
 });
 
-export const commentFindPayloadSchema = yup.object().shape({
-  product_id: yup
-    .number()
-    .integer()
-    .positive(), // TODO: надо добавить required()
-  page: yup
-    .number()
-    .integer()
-    .positive(),
-});
-export const commentFindOnePayloadSchema = yup.object().shape({
-  id: yup
-    .number()
-    .integer()
-    .positive()
-    .required(),
-});
+
 
 export type commentFindPayloadType = yup.InferType<typeof commentFindPayloadSchema>
 export type commentFindOnePayloadType = yup.InferType<typeof commentFindOnePayloadSchema>

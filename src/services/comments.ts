@@ -6,26 +6,17 @@ import {
 } from "../validationSchemas/comment"
 import Comment from "../models/Comment"
 
-const COMMENTS_PER_PAGE = 1
-
 export function findComments(params: commentFindPayloadType) {
-  const query = Comment
+
+  const { product_id, limit = 10, offset = 0 } = params
+
+  return Comment
     .query()
-
-  if (params.product_id) { // TODO: есть ли смысл вытягивать комменты без привязки к продукту?
-    query.where("product_id", params.product_id)
-  }
-
-  query.limit(COMMENTS_PER_PAGE) // TODO: замени на offset/limit
-
-  if (params.page) {
-    query.offset((params.page - 1) * COMMENTS_PER_PAGE)
-  }
-
-  query.withGraphFetched("user")
-  query.orderBy("created", 'DESC')
-
-  return query;
+    .where({ product_id })
+    .offset(offset)
+    .limit(limit)
+    .withGraphFetched("user")
+    .orderBy("created", 'DESC')
 }
 
 export function findCommentById(id: number) {

@@ -12,7 +12,6 @@ export function findAttributeNames(params: attributeNameFindPayloadType) {
     .offset(offset)
     .limit(limit)
     .orderBy('name', 'DESC');
-  // TODO: должна быть паджинация 
 }
 
 export function findAttributeNameById(id: number) {
