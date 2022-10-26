@@ -20,7 +20,6 @@ export const productCreatePayloadSchema = yup.object().shape({
     .required(),
   price: yup
     .number()
-    .integer() // TODO: цена не может быть 99,99?
     .positive(),
 });
 
