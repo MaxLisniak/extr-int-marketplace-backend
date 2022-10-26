@@ -7,6 +7,7 @@ exports.up = function (knex) {
     .createTable('comments', function (table) {
       table.increments();
       table.string('text', 512).notNullable();
+      table.integer('rating').unsigned().nullable();
       table.timestamp('created').notNullable()
         .defaultTo(knex.fn.now())
       table.integer("user_id").unsigned();

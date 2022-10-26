@@ -8,6 +8,7 @@ class Comment extends Model {
   created: string
   user_id: number
   product_id: number
+  rating: number
 
   static get tableName() {
     return "comments"

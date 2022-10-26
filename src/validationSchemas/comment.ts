@@ -40,6 +40,11 @@ export const commentCreatePayloadSchema = yup.object().shape({
     .integer()
     .positive()
     .required(),
+  rating: yup
+    .number()
+    .integer()
+    .min(1)
+    .max(5)
 });
 
 export const commentUpdatePayloadSchema = yup.object().shape({
@@ -62,6 +67,11 @@ export const commentUpdatePayloadSchema = yup.object().shape({
     .positive(),
   created: yup
     .string(),
+  rating: yup
+    .number()
+    .integer()
+    .min(1)
+    .max(5)
 });
 
 
