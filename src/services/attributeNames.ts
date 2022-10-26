@@ -5,8 +5,8 @@ import {
 } from "../validationSchemas/attributeName"
 import AttributeName from "../models/AttributeName"
 
-export function findAttributeNames(payload: attributeNameFindPayloadType) {
-  const { limit = 10, offset = 0 } = payload;
+export function findAttributeNames(params: attributeNameFindPayloadType) {
+  const { limit = 10, offset = 0 } = params;
   return AttributeName
     .query()
     .offset(offset)

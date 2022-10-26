@@ -5,8 +5,8 @@ import {
 } from "../validationSchemas/brand";
 import Brand from "../models/Brand";
 
-export function findBrands(payload: brandFindPayloadType) {
-  const { limit = 10, offset = 0 } = payload;
+export function findBrands(params: brandFindPayloadType) {
+  const { limit = 10, offset = 0 } = params;
   return Brand
     .query()
     .offset(offset)

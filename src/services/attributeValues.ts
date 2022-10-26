@@ -5,8 +5,8 @@ import {
 } from "../validationSchemas/attributeValue";
 import AttributeValue from "../models/AttributeValue";
 
-export function findAttributeValues(payload: attributeValueFindPayloadType) {
-  const { limit = 10, offset = 0, attribute_name_id } = payload;
+export function findAttributeValues(params: attributeValueFindPayloadType) {
+  const { limit = 10, offset = 0, attribute_name_id } = params;
   return AttributeValue
     .query()
     .where({ attribute_name_id })
