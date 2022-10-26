@@ -22,7 +22,7 @@ export const brandFindOnePayloadSchema = yup.object().shape({
 export const brandCreatePayloadSchema = yup.object().shape({
   name: yup
     .string()
-    .min(0) // TODO: зачем тебе пустое значение
+    .min(1)
     .max(64)
     .required(),
 })
@@ -35,7 +35,7 @@ export const brandUpdatePayloadSchema = yup.object().shape({
     .required(),
   name: yup
     .string()
-    .min(0) // TODO: зачем тебе пустое значение
+    .min(1)
     .max(64),
 })
 
