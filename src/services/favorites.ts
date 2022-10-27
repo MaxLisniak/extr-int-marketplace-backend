@@ -1,8 +1,8 @@
 import User from "../models/User"
 import Favorite from "../models/Favorite"
-import { favoriteFindPayloadType, favoriteType } from "../validationSchemas/favorite"
+import { addFavoritePayloadType, favoriteFindPayloadType, removeFavoritePayloadType } from "../validationSchemas/favorite"
 
-export async function addFavoriteProduct(payload: favoriteType) {
+export async function addFavoriteProduct(payload: addFavoritePayloadType) {
 
   const { user_id, product_id } = payload
 
@@ -11,7 +11,7 @@ export async function addFavoriteProduct(payload: favoriteType) {
     .relate(product_id)
 }
 
-export async function removeFavoriteProduct(payload: favoriteType) {
+export async function removeFavoriteProduct(payload: removeFavoritePayloadType) {
 
   const { user_id, product_id } = payload
 
