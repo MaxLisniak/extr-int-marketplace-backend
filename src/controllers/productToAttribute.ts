@@ -2,7 +2,7 @@ import { Response, Request } from "express";
 import {
   productToAttributeFindOnePayloadSchema,
   addAttributeToProductPayloadSchema,
-  removeAttributeToProductPayloadSchema
+  removeAttributeFromProductPayloadSchema
 } from "../validationSchemas/productToAttribute";
 import {
   addAttributeToProduct,
@@ -18,7 +18,7 @@ export async function addAttributeToProductController(req: Request, res: Respons
   res.sendStatus(200);
 }
 export async function removeAttributeFromProductController(req: Request, res: Response): Promise<void> {
-  const payload = await removeAttributeToProductPayloadSchema
+  const payload = await removeAttributeFromProductPayloadSchema
     .validate(req.body, { stripUnknown: true })
   await removeAttributeFromProduct(payload)
   res.sendStatus(200);

@@ -1,17 +1,14 @@
-import { productToCategoryPayloadType } from "../validationSchemas/productToCategory"
+import {
+  addCategoryToProductPayloadType,
+  removeCategoryFromProductPayloadType
+} from "../validationSchemas/productToCategory"
 import Product from "../models/Product"
 import ProductToCategory from "../models/ProductToCategory"
 
 
-export async function addCategoryToProduct(payload: productToCategoryPayloadType) {
+export async function addCategoryToProduct(payload: addCategoryToProductPayloadType) {
 
   const { category_id, product_id } = payload
-
-  const pair = await ProductToCategory
-    .query()
-    .findOne({ category_id, product_id })
-
-  if (pair) throw new Error("Can't add category, it's already included") // TODO: засунь это в валидатор
 
   return Product
     .relatedQuery('categories')
@@ -19,15 +16,9 @@ export async function addCategoryToProduct(payload: productToCategoryPayloadType
     .relate(category_id)
 }
 
-export async function removeCategoryFromProduct(payload: productToCategoryPayloadType) {
+export async function removeCategoryFromProduct(payload: removeCategoryFromProductPayloadType) {
 
   const { category_id, product_id } = payload
-
-  const pair = await ProductToCategory
-    .query()
-    .findOne({ category_id, product_id })
-
-  if (!pair) throw new Error("Can't remove category, it's not included") // TODO: засунь это в валидатор
 
   return Product
     .relatedQuery('categories')

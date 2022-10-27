@@ -67,7 +67,7 @@ class Product extends Model {
         from: 'products.id',
         through: {
           from: 'product_to_category.product_id',
-          to: 'product_to_category.category_id_id'
+          to: 'product_to_category.category_id'
         },
         to: 'categories.id'
       }

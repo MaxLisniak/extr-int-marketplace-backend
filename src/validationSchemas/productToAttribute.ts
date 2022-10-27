@@ -2,19 +2,6 @@ import ProductToAttribute from '../models/ProductToAttribute';
 import * as yup from 'yup';
 
 
-// export const productToAttributePayloadSchema = yup.object().shape({
-//   product_id: yup
-//     .number()
-//     .integer()
-//     .positive()
-//     .required(),
-//   attribute_value_id: yup
-//     .number()
-//     .integer()
-//     .positive()
-//     .required(),
-// })
-
 export const addAttributeToProductPayloadSchema = yup.object().shape({
   product_id: yup
     .number()
@@ -35,7 +22,7 @@ export const addAttributeToProductPayloadSchema = yup.object().shape({
       })
 })
 
-export const removeAttributeToProductPayloadSchema = yup.object().shape({
+export const removeAttributeFromProductPayloadSchema = yup.object().shape({
   product_id: yup
     .number()
     .integer()
@@ -63,5 +50,5 @@ export const productToAttributeFindOnePayloadSchema = yup.object().shape({
 });
 
 export type addAttributeToProductPayloadType = yup.InferType<typeof addAttributeToProductPayloadSchema>
-export type removeAttributeToProductPayloadType = yup.InferType<typeof removeAttributeToProductPayloadSchema>
+export type removeAttributeFromProductPayloadType = yup.InferType<typeof removeAttributeFromProductPayloadSchema>
 export type productToAttributeFindOnePayloadType = yup.InferType<typeof productToAttributeFindOnePayloadSchema>

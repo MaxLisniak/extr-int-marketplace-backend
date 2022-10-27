@@ -1,7 +1,8 @@
 import { Request, Response } from "express";
 import {
   productToKeywordFindOnePayloadSchema,
-  productToKeywordPayloadSchema
+  addKeywordToProductPayloadSchema,
+  removeKeywordFromProductPayloadSchema
 } from "../validationSchemas/productToKeyword";
 import {
   addKeywordToProduct,
@@ -11,13 +12,15 @@ import {
 } from "../services/productToKeyword";
 
 export async function addKeywordToProductController(req: Request, res: Response): Promise<void> {
-  const payload = productToKeywordPayloadSchema.validateSync(req.body, { stripUnknown: true })
+  const payload = await addKeywordToProductPayloadSchema
+    .validate(req.body, { stripUnknown: true })
   await addKeywordToProduct(payload)
   res.sendStatus(200);
 }
 
 export async function removeKeywordFromProductController(req: Request, res: Response): Promise<void> {
-  const payload = productToKeywordPayloadSchema.validateSync(req.body, { stripUnknown: true })
+  const payload = await removeKeywordFromProductPayloadSchema
+    .validate(req.body, { stripUnknown: true })
   await removeKeywordFromProduct(payload)
   res.sendStatus(200);
 }
