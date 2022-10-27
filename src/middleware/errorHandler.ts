@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from "express";
 import logger from "../logger";
 
 const errorHandler = (err: any, req: Request, res: Response, next: NextFunction) => {
-  logger.error(`(${res.locals?.requestId}) ${err.name} [${err.errors}]`)
+  logger.error(`(${res.locals?.requestId}) ${err}`)
   if (
     err.name === 'DBError' ||
     err.name === 'NotNullViolationError' ||
