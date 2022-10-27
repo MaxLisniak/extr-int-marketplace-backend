@@ -26,7 +26,7 @@ export function findCommentById(id: number) {
     .withGraphFetched("user")
 }
 
-export function createComment(object: commentCreatePayloadType) { // TODO: добавь еще и рейтинг товара 1-5 звезд
+export function createComment(object: commentCreatePayloadType) {
   return Comment
     .query()
     .insertAndFetch(object)

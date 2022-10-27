@@ -25,7 +25,7 @@ export async function findCategoriesNestedController(req: Request, res: Response
   console.log(categories)
   const nest = (items: categorySchema[], id: number | null = null): categorySchema[] =>
     items
-      .filter(item => item.parent_id === id) // TODO: эта логика не будет работать - слишком много предположение - первый элемент массива должен быть единственной корневой категорией - тебе нужно на первой итерации получить список всех корневых категорий, и только после этого строить структуру для каждой из них отдельно
+      .filter(item => item.parent_id === id)
       .map(item => ({ ...item, subcategories: nest(items, item.id) }));
   res.json({ data: nest(categories) });
 }
