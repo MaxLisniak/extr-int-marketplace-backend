@@ -1,3 +1,5 @@
+import AttributeName from '../models/AttributeName';
+import AttributeValue from '../models/AttributeValue';
 import * as yup from 'yup';
 
 export const attributeValueFindPayloadSchema = yup.object().shape({
@@ -34,7 +36,14 @@ export const attributeValueCreatePayloadSchema = yup.object().shape({
     .number()
     .integer()
     .positive()
-    .required(),
+    .required()
+    .test('attributeValueCreate', "Can't create attribute, specified attribute name does not exist",
+      async function (value, context) {
+        const res = await AttributeName
+          .query()
+          .findById(value)
+        return res !== undefined
+      })
 })
 
 export const attributeValueUpdatePayloadSchema = yup.object().shape({
@@ -51,6 +60,28 @@ export const attributeValueUpdatePayloadSchema = yup.object().shape({
     .number()
     .integer()
     .positive()
+    .test('attributeValueUpdate', "Can't update attribute, specified attribute name does not exist",
+      async function (value, context) {
+        const res = await AttributeName
+          .query()
+          .findById(value)
+        return res !== undefined
+      })
+})
+
+export const attributeValueDeletePayloadSchema = yup.object().shape({
+  id: yup
+    .number()
+    .integer()
+    .positive()
+    .required()
+    .test('attributeValueDelete', "Can't delete attribute, it does not exist",
+      async function (value, context) {
+        const res = await AttributeValue
+          .query()
+          .findById(value)
+        return res !== undefined
+      })
 })
 
 
@@ -58,3 +89,4 @@ export type attributeValueFindPayloadType = yup.InferType<typeof attributeValueF
 export type attributeValueFindOnePayloadType = yup.InferType<typeof attributeValueFindOnePayloadSchema>
 export type attributeValueCreatePayloadType = yup.InferType<typeof attributeValueCreatePayloadSchema>
 export type attributeValueUpdatePayloadType = yup.InferType<typeof attributeValueUpdatePayloadSchema>
+export type attributeValueDeletePayloadType = yup.InferType<typeof attributeValueDeletePayloadSchema>

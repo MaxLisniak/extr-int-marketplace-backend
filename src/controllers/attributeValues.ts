@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import {
   attributeValueCreatePayloadSchema,
+  attributeValueDeletePayloadSchema,
   attributeValueFindOnePayloadSchema,
   attributeValueFindPayloadSchema,
   attributeValueUpdatePayloadSchema
@@ -29,21 +30,22 @@ export async function findAttributeValueByIdController(req: Request, res: Respon
 }
 
 export async function createAttributeValueController(req: Request, res: Response): Promise<void> {
-  const payload = attributeValueCreatePayloadSchema
-    .validateSync(req.body, { stripUnknown: true })
+  const payload = await attributeValueCreatePayloadSchema
+    .validate(req.body, { stripUnknown: true })
   const attributeValue = await createAttributeValue(payload)
   res.json({ data: attributeValue });
 }
 
 export async function updateAttributeValueController(req: Request, res: Response): Promise<void> {
-  const payload = attributeValueUpdatePayloadSchema
-    .validateSync({ ...req.body, ...req.params }, { stripUnknown: true })
+  const payload = await attributeValueUpdatePayloadSchema
+    .validate({ ...req.body, ...req.params }, { stripUnknown: true })
   const attributeValue = await updateAttributeValue(payload.id, payload)
   res.json({ data: attributeValue });
 }
 
 export async function deleteAttributeValueController(req: Request, res: Response): Promise<void> {
-  const payload = idSchema.validateSync(req.params, { stripUnknown: true })
+  const payload = await attributeValueDeletePayloadSchema
+    .validate(req.params, { stripUnknown: true })
   await deleteAttributeValue(payload.id)
   res.sendStatus(200);
 }
