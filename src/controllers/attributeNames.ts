@@ -4,6 +4,7 @@ import {
   attributeNameUpdatePayloadSchema,
   attributeNameFindOnePayloadSchema,
   attributeNameFindPayloadSchema,
+  attributeNameDeletePayloadSchema,
 } from "../validationSchemas/attributeName";
 import { idSchema } from '../validationSchemas/id'; import {
   findAttributeNames,
@@ -43,7 +44,8 @@ export async function updateAttributeNameController(req: Request, res: Response)
 }
 
 export async function deleteAttributeNameController(req: Request, res: Response): Promise<void> {
-  const payload = idSchema.validateSync(req.params)
+  const payload = await attributeNameDeletePayloadSchema
+    .validate(req.params)
   await deleteAttributeName(payload.id)
   res.sendStatus(200);
 }
