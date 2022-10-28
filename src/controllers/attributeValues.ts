@@ -6,7 +6,6 @@ import {
   attributeValueFindPayloadSchema,
   attributeValueUpdatePayloadSchema
 } from "../validationSchemas/attributeValue";
-import { idSchema } from "../validationSchemas/id";
 import {
   findAttributeValues,
   findAttributeValueById,

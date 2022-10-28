@@ -37,13 +37,11 @@ export const attributeValueCreatePayloadSchema = yup.object().shape({
     .integer()
     .positive()
     .required()
-    .test('attributeValueCreate', "Can't create attribute, specified attribute name does not exist",
-      async function (value, context) {
-        const res = await AttributeName
-          .query()
-          .findById(value)
-        return res !== undefined
-      })
+    .test(
+      'attributeValueCreate-attributeNameDoesNotExist',
+      "Can't create attribute, specified attribute name does not exist",
+      async value => Boolean(await AttributeName.query().findById(value))
+    )
 })
 
 export const attributeValueUpdatePayloadSchema = yup.object().shape({
@@ -51,7 +49,12 @@ export const attributeValueUpdatePayloadSchema = yup.object().shape({
     .number()
     .integer()
     .positive()
-    .required(),
+    .required()
+    .test(
+      'attributeValueUpdate-entryDoesNotExist',
+      "Can't update attribute, it does not exist",
+      async value => Boolean(await AttributeName.query().findById(value))
+    ),
   value: yup
     .string()
     .min(1)
@@ -60,13 +63,11 @@ export const attributeValueUpdatePayloadSchema = yup.object().shape({
     .number()
     .integer()
     .positive()
-    .test('attributeValueUpdate', "Can't update attribute, specified attribute name does not exist",
-      async function (value, context) {
-        const res = await AttributeName
-          .query()
-          .findById(value)
-        return res !== undefined
-      })
+    .test(
+      'attributeValueUpdate-AttributeNameIdDoesNotExist',
+      "Can't update attribute, specified attribute name does not exist",
+      async value => !value || Boolean(await AttributeName.query().findById(value))
+    )
 })
 
 export const attributeValueDeletePayloadSchema = yup.object().shape({
@@ -75,13 +76,11 @@ export const attributeValueDeletePayloadSchema = yup.object().shape({
     .integer()
     .positive()
     .required()
-    .test('attributeValueDelete', "Can't delete attribute, it does not exist",
-      async function (value, context) {
-        const res = await AttributeValue
-          .query()
-          .findById(value)
-        return res !== undefined
-      })
+    .test(
+      'attributeValueDelete-entryDoesNotExist',
+      "Can't delete attribute, it does not exist",
+      async value => Boolean(await AttributeName.query().findById(value))
+    )
 })
 
 
