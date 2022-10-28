@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import {
   brandCreatePayloadSchema,
+  brandDeletePayloadSchema,
   brandFindOnePayloadSchema,
   brandFindPayloadSchema,
   brandUpdatePayloadSchema
@@ -36,14 +37,15 @@ export async function createBrandController(req: Request, res: Response): Promis
 }
 
 export async function updateBrandController(req: Request, res: Response): Promise<void> {
-  const payload = brandUpdatePayloadSchema
-    .validateSync({ ...req.body, ...req.params }, { stripUnknown: true })
+  const payload = await brandUpdatePayloadSchema
+    .validate({ ...req.body, ...req.params }, { stripUnknown: true })
   const brand = await updateBrand(payload.id, payload)
   res.json({ data: brand });
 }
 
 export async function deleteBrandController(req: Request, res: Response): Promise<void> {
-  const payload = idSchema.validateSync(req.params, { stripUnknown: true })
+  const payload = await brandDeletePayloadSchema
+    .validate(req.params, { stripUnknown: true })
   await deleteBrand(payload.id)
   res.sendStatus(200);
 }
