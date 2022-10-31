@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import logger from "../logger";
 import {
 	userCreatePayloadSchema,
+	userDeletePayloadSchema,
 	userFindOnePayloadSchema,
 	userSignInPayloadSchema,
 	userUpdatePayloadSchema,
@@ -16,7 +17,6 @@ import {
 	signUp,
 	handleRefreshToken,
 } from "../services/users";
-import { idSchema } from "../validationSchemas/id";
 
 export async function findUsersController(req: Request, res: Response): Promise<void> {
 	const users = await findUsers()
@@ -31,14 +31,15 @@ export async function findUserByIdController(req: Request, res: Response): Promi
 }
 
 export async function updateUserController(req: Request, res: Response): Promise<void> {
-	const payload = userUpdatePayloadSchema
-		.validateSync({ ...req.body, ...req.params }, { stripUnknown: true })
+	const payload = await userUpdatePayloadSchema
+		.validate({ ...req.body, ...req.params }, { stripUnknown: true })
 	const user = await updateUser(payload.id, payload)
 	res.json({ data: user })
 }
 
 export async function deleteUserController(req: Request, res: Response): Promise<void> {
-	const paramsPayload = idSchema.validateSync(req.params, { stripUnknown: true })
+	const paramsPayload = await userDeletePayloadSchema
+		.validate(req.params, { stripUnknown: true })
 	await deleteUser(paramsPayload.id)
 	res.sendStatus(200);
 }
