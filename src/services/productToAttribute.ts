@@ -1,6 +1,5 @@
 import Product from "../models/Product"
 import ProductToAttribute from "../models/ProductToAttribute"
-import createHttpError from "http-errors"
 import { addAttributeToProductPayloadType, removeAttributeFromProductPayloadType } from "../validationSchemas/productToAttribute"
 
 export async function addAttributeToProduct(payload: addAttributeToProductPayloadType) {
