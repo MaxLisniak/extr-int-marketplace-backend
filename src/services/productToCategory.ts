@@ -27,9 +27,6 @@ export async function removeCategoryFromProduct(payload: removeCategoryFromProdu
     .where('categories.id', category_id)
 }
 
-export function findProductToCategories() {
-  return ProductToCategory.query() // TODO: ты хочешь вытянуть всю таблицу?
-}
 
 export function findProductToCategoryById(id: number) {
   return ProductToCategory

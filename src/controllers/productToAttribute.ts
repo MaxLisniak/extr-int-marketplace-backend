@@ -7,7 +7,6 @@ import {
 import {
   addAttributeToProduct,
   findProductToAttributeById,
-  findProductToAttributes,
   removeAttributeFromProduct
 } from "../services/productToAttribute";
 
@@ -22,11 +21,6 @@ export async function removeAttributeFromProductController(req: Request, res: Re
     .validate(req.body, { stripUnknown: true })
   await removeAttributeFromProduct(payload)
   res.sendStatus(200);
-}
-
-export async function findProductToAttributesController(req: Request, res: Response): Promise<void> {
-  const productToAttributes = await findProductToAttributes()
-  res.json({ data: productToAttributes });
 }
 
 export async function findProductToAttributeByIdController(req: Request, res: Response): Promise<void> {

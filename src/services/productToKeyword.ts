@@ -26,10 +26,6 @@ export async function removeKeywordFromProduct(payload: removeKeywordFromProduct
     .where('keywords.id', keyword_id)
 }
 
-export function findProductToKeywords() {
-  return ProductToKeyword.query() // TODO: ты хочешь вытянуть всю таблицу?
-}
-
 export function findProductToKeywordById(id: number) {
   return ProductToKeyword
     .query()

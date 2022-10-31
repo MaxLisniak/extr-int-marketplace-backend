@@ -6,7 +6,6 @@ import {
 } from "../validationSchemas/productToCategory";
 import {
   addCategoryToProduct,
-  findProductToCategories,
   findProductToCategoryById,
   removeCategoryFromProduct
 } from "../services/productToCategory";
@@ -23,11 +22,6 @@ export async function removeCategoryFromProductController(req: Request, res: Res
     .validate(req.body, { stripUnknown: true })
   await removeCategoryFromProduct(payload)
   res.sendStatus(200);
-}
-
-export async function findProductToCategoriesController(req: Request, res: Response): Promise<void> {
-  const productToCategories = await findProductToCategories()
-  res.json({ data: productToCategories });
 }
 
 export async function findProductToCategoryByIdController(req: Request, res: Response): Promise<void> {

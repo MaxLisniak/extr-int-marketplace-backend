@@ -6,7 +6,6 @@ import {
 } from "../validationSchemas/productToKeyword";
 import {
   addKeywordToProduct,
-  findProductToKeywords,
   findProductToKeywordById,
   removeKeywordFromProduct
 } from "../services/productToKeyword";
@@ -23,11 +22,6 @@ export async function removeKeywordFromProductController(req: Request, res: Resp
     .validate(req.body, { stripUnknown: true })
   await removeKeywordFromProduct(payload)
   res.sendStatus(200);
-}
-
-export async function findProductToKeywordsController(req: Request, res: Response): Promise<void> {
-  const productToKeywords = await findProductToKeywords()
-  res.json({ data: productToKeywords });
 }
 
 export async function findProductToKeywordByIdController(req: Request, res: Response): Promise<void> {

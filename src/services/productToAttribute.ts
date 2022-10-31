@@ -23,10 +23,6 @@ export async function removeAttributeFromProduct(payload: removeAttributeFromPro
     .where('attribute_values.id', attribute_value_id)
 }
 
-export function findProductToAttributes() {
-  return ProductToAttribute.query() // TODO: ты хочешь вытянуть всю таблицу?
-}
-
 export function findProductToAttributeById(id: number) {
   return ProductToAttribute
     .query()
