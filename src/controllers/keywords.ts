@@ -3,7 +3,8 @@ import {
   keywordCreatePayloadSchema,
   keywordFindOnePayloadSchema,
   keywordFindPayloadSchema,
-  keywordUpdatePayloadSchema
+  keywordUpdatePayloadSchema,
+  keywordDeletePayloadSchema
 } from "../validationSchemas/keyword";
 import {
   findKeywords,
@@ -12,7 +13,6 @@ import {
   updateKeyword,
   deleteKeyword,
 } from "../services/keywords";
-import { idSchema } from "../validationSchemas/id";
 
 export async function findKeywordsController(req: Request, res: Response): Promise<void> {
   const payload = keywordFindPayloadSchema
@@ -43,7 +43,8 @@ export async function updateKeywordController(req: Request, res: Response): Prom
 }
 
 export async function deleteKeywordController(req: Request, res: Response): Promise<void> {
-  const payload = idSchema.validateSync(req.params, { stripUnknown: true })
+  const payload = await keywordDeletePayloadSchema
+    .validate(req.params, { stripUnknown: true })
   await deleteKeyword(payload.id)
   res.sendStatus(200);
 }

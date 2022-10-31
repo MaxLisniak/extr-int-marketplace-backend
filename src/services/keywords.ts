@@ -1,7 +1,7 @@
 import {
-  keywordCreateType,
+  keywordCreatePayloadType,
   keywordFindPayloadType,
-  keywordUpdateType
+  keywordUpdatePayloadType
 } from "../validationSchemas/keyword"
 import Keyword from "../models/Keyword"
 
@@ -27,13 +27,13 @@ export function findKeywordById(id: number) {
   return query
 }
 
-export function createKeyword(object: keywordCreateType) {
+export function createKeyword(object: keywordCreatePayloadType) {
   return Keyword
     .query()
     .insertAndFetch(object)
 }
 
-export function updateKeyword(id: number, object: keywordUpdateType) {
+export function updateKeyword(id: number, object: keywordUpdatePayloadType) {
   return Keyword
     .query()
     .patchAndFetchById(id, object)
