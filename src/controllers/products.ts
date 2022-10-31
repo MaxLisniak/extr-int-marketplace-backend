@@ -4,6 +4,7 @@ import {
   productUpdatePayloadSchema,
   productFindOnePayloadSchema,
   filterPayloadSchema,
+  productDeletePayloadSchema,
 } from "../validationSchemas/product";
 import {
   findProductById,
@@ -12,15 +13,7 @@ import {
   deleteProduct,
   findProductsByFilters,
 } from "../services/products";
-import { idSchema } from "../validationSchemas/id";
 
-// export async function findProductsController(req: Request, res: Response): Promise<void> { 
-//   const payload = productFindPayloadSchema
-//     .validateSync(req.query, { stripUnknown: true })
-//   const products = await findProducts(payload)
-//   if (products.length === 0) throw new Error("Nothing found") 
-//   res.json({ data: products });
-// }
 
 export async function findProductByIdController(req: Request, res: Response): Promise<void> {
   const payload = productFindOnePayloadSchema
@@ -36,21 +29,22 @@ export async function findProductsByFiltersController(req: Request, res: Respons
 }
 
 export async function createProductController(req: Request, res: Response): Promise<void> {
-  const payload = productCreatePayloadSchema
-    .validateSync({ ...req.body }, { stripUnknown: true })
+  const payload = await productCreatePayloadSchema
+    .validate({ ...req.body }, { stripUnknown: true })
   const product = await createProduct(payload)
   res.json({ data: product });
 }
 
 export async function updateProductController(req: Request, res: Response): Promise<void> {
-  const payload = productUpdatePayloadSchema
-    .validateSync({ ...req.params, ...req.body }, { stripUnknown: true })
+  const payload = await productUpdatePayloadSchema
+    .validate({ ...req.params, ...req.body }, { stripUnknown: true })
   const product = await updateProduct(payload.id, payload)
   res.json({ data: product })
 }
 
 export async function deleteProductController(req: Request, res: Response): Promise<void> {
-  const payload = idSchema.validateSync(req.params, { stripUnknown: true })
+  const payload = await productDeletePayloadSchema
+    .validate(req.params, { stripUnknown: true })
   await deleteProduct(payload.id)
   res.sendStatus(200);
 }
