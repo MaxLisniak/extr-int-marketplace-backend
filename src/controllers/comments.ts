@@ -3,7 +3,8 @@ import {
   commentFindPayloadSchema,
   commentCreatePayloadSchema,
   commentUpdatePayloadSchema,
-  commentFindOnePayloadSchema
+  commentFindOnePayloadSchema,
+  commentDeletePayloadSchema
 } from "../validationSchemas/comment";
 import {
   findComments,
@@ -12,7 +13,6 @@ import {
   updateComment,
   deleteComment,
 } from "../services/comments";
-import { idSchema } from "../validationSchemas/id";
 
 export async function findCommentsController(req: Request, res: Response): Promise<void> {
   const payload = commentFindPayloadSchema
@@ -29,21 +29,22 @@ export async function findCommentByIdController(req: Request, res: Response): Pr
 }
 
 export async function createCommentController(req: Request, res: Response): Promise<void> {
-  const payload = commentCreatePayloadSchema
-    .validateSync(req.body, { stripUnknown: true })
+  const payload = await commentCreatePayloadSchema
+    .validate(req.body, { stripUnknown: true })
   const comment = await createComment(payload)
   res.json({ data: comment })
 }
 
 export async function updateCommentController(req: Request, res: Response): Promise<void> {
-  const payload = commentUpdatePayloadSchema
-    .validateSync({ ...req.body, ...req.params }, { stripUnknown: true })
+  const payload = await commentUpdatePayloadSchema
+    .validate({ ...req.body, ...req.params }, { stripUnknown: true })
   const comment = await updateComment(payload.id, payload)
   res.json({ data: comment })
 }
 
 export async function deleteCommentController(req: Request, res: Response): Promise<void> {
-  const payload = idSchema.validateSync(req.params, { stripUnknown: true })
+  const payload = await commentDeletePayloadSchema
+    .validate(req.params, { stripUnknown: true })
   await deleteComment(payload.id)
   res.sendStatus(200);
 }
