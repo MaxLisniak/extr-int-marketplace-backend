@@ -6,7 +6,6 @@ import {
   categoryDeletePayloadSchema,
 } from "../validationSchemas/category";
 import {
-  findCategories,
   findCategoryById,
   createCategory,
   updateCategory,
@@ -15,10 +14,6 @@ import {
 } from '../services/categories';
 import { categorySchema } from '../interfaces/categorySchema';
 
-export async function findCategoriesController(req: Request, res: Response): Promise<void> {
-  const categories = await findCategories()
-  res.json({ data: categories });
-}
 
 export async function findCategoriesNestedController(req: Request, res: Response): Promise<void> {
   const categories = await findCategoriesNested()

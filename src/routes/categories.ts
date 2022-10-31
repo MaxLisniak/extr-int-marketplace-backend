@@ -1,6 +1,5 @@
 import Router from "express-promise-router";
 import {
-  findCategoriesController,
   findCategoryByIdController,
   createCategoryController,
   updateCategoryController,
@@ -10,8 +9,7 @@ import {
 
 const router = Router();
 
-router.get('/', findCategoriesController);
-router.get('/nested', findCategoriesNestedController)
+router.get('/', findCategoriesNestedController)
 router.post('/', createCategoryController);
 router.get('/:id', findCategoryByIdController);
 router.patch('/:id', updateCategoryController);
