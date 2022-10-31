@@ -1,5 +1,7 @@
-import ProductToCategory from '../models/ProductToCategory';
 import * as yup from 'yup';
+import ProductToCategory from '../models/ProductToCategory';
+import Product from '../models/Product';
+import Category from '../models/Categoty';
 
 
 export const addCategoryToProductPayloadSchema = yup.object().shape({
@@ -7,19 +9,30 @@ export const addCategoryToProductPayloadSchema = yup.object().shape({
     .number()
     .integer()
     .positive()
-    .required(),
+    .required()
+    .test(
+      'categoryToProductAdd-productDoesNotExist',
+      "Can't add category, specified product does not exist",
+      async value => Boolean(await Product.query().findById(value))
+    ),
   category_id: yup
     .number()
     .integer()
     .positive()
     .required()
-    .test('productToCategoryAdd', "Can't add category",
+    .test(
+      'categoryToProductAdd-categoryDoesNotExist',
+      "Can't add category, it does not exist",
+      async value => Boolean(await Category.query().findById(value))
+    )
+    .test(
+      'categoryToProductAdd-alreadyAdded',
+      "Can't add category, it is already added",
       async function () {
-        const res = await ProductToCategory
-          .query()
-          .findOne({ category_id: this.parent.category_id, product_id: this.parent.product_id })
-        return res === undefined
-      })
+        const { category_id, product_id } = this.parent
+        return !await ProductToCategory.query().findOne({ category_id, product_id })
+      }
+    )
 })
 
 export const removeCategoryFromProductPayloadSchema = yup.object().shape({
@@ -27,19 +40,30 @@ export const removeCategoryFromProductPayloadSchema = yup.object().shape({
     .number()
     .integer()
     .positive()
-    .required(),
+    .required()
+    .test(
+      'categoryFromProductRemove-productDoesNotExist',
+      "Can't remove category, specified product does not exist",
+      async value => Boolean(await Product.query().findById(value))
+    ),
   category_id: yup
     .number()
     .integer()
     .positive()
     .required()
-    .test('productToCategoryRemove', "Can't remove category",
+    .test(
+      'categoryFromProductRemove-categoryDoesNotExist',
+      "Can't remove category, it does not exist",
+      async value => Boolean(await Category.query().findById(value))
+    )
+    .test(
+      'categoryFromProductRemove-notAdded',
+      "Can't remove category, it is not added",
       async function () {
-        const res = await ProductToCategory
-          .query()
-          .findOne({ category_id: this.parent.category_id, product_id: this.parent.product_id })
-        return res !== undefined
-      })
+        const { category_id, product_id } = this.parent
+        return Boolean(await ProductToCategory.query().findOne({ category_id, product_id }))
+      }
+    )
 })
 
 export const productToCategoryFindOnePayloadSchema = yup.object().shape({

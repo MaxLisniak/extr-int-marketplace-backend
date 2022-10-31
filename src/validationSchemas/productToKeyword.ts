@@ -1,5 +1,7 @@
-import ProductToKeyword from '../models/ProductToKeyword';
 import * as yup from 'yup';
+import ProductToKeyword from '../models/ProductToKeyword';
+import Product from '../models/Product';
+import Keyword from '../models/Keyword';
 
 
 export const addKeywordToProductPayloadSchema = yup.object().shape({
@@ -7,19 +9,30 @@ export const addKeywordToProductPayloadSchema = yup.object().shape({
     .number()
     .integer()
     .positive()
-    .required(),
+    .required()
+    .test(
+      'keywordToProductAdd-productDoesNotExist',
+      "Can't add keyword, specified product does not exist",
+      async value => Boolean(await Product.query().findById(value))
+    ),
   keyword_id: yup
     .number()
     .integer()
     .positive()
     .required()
-    .test('productToKeywordAdd', "Can't add keyword",
+    .test(
+      'keywordToProductAdd-keywordDoesNotExist',
+      "Can't add keyword, it does not exist",
+      async value => Boolean(await Keyword.query().findById(value))
+    )
+    .test(
+      'keywordToProductAdd-alreadyAdded',
+      "Can't add keyword, it is already added",
       async function () {
-        const res = await ProductToKeyword
-          .query()
-          .findOne({ keyword_id: this.parent.keyword_id, product_id: this.parent.product_id })
-        return res === undefined
-      })
+        const { keyword_id, product_id } = this.parent;
+        return !await ProductToKeyword.query().findOne(keyword_id, product_id)
+      }
+    )
 })
 
 export const removeKeywordFromProductPayloadSchema = yup.object().shape({
@@ -27,19 +40,30 @@ export const removeKeywordFromProductPayloadSchema = yup.object().shape({
     .number()
     .integer()
     .positive()
-    .required(),
+    .required()
+    .test(
+      'keywordFromProductRemove-productDoesNotExist',
+      "Can't remove keyword, specified product does not exist",
+      async value => Boolean(await Product.query().findById(value))
+    ),
   keyword_id: yup
     .number()
     .integer()
     .positive()
     .required()
-    .test('productToKeywordRemove', "Can't remove keyword",
+    .test(
+      'keywordFromProductRemove-keywordDoesNotExist',
+      "Can't remove keyword, it does not exist",
+      async value => Boolean(await Keyword.query().findById(value))
+    )
+    .test(
+      'keywordFromProductRemove-notAdded',
+      "Can't remove keyword, it is not added",
       async function () {
-        const res = await ProductToKeyword
-          .query()
-          .findOne({ keyword_id: this.parent.keyword_id, product_id: this.parent.product_id })
-        return res !== undefined
-      })
+        const { keyword_id, product_id } = this.parent;
+        return Boolean(await ProductToKeyword.query().findOne(keyword_id, product_id))
+      }
+    )
 })
 
 export const productToKeywordFindOnePayloadSchema = yup.object().shape({

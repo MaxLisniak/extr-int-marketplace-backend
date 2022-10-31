@@ -1,5 +1,7 @@
-import ProductToAttribute from '../models/ProductToAttribute';
 import * as yup from 'yup';
+import ProductToAttribute from '../models/ProductToAttribute';
+import Product from '../models/Product';
+import AttributeValue from '../models/AttributeValue';
 
 
 export const addAttributeToProductPayloadSchema = yup.object().shape({
@@ -7,19 +9,29 @@ export const addAttributeToProductPayloadSchema = yup.object().shape({
     .number()
     .integer()
     .positive()
-    .required(),
+    .required()
+    .test(
+      'attributeToProductAdd-productDoesNotExist',
+      "Can't add attribute, specified product does not exist",
+      async value => Boolean(await Product.query().findById(value))
+    ),
   attribute_value_id: yup
     .number()
     .integer()
     .positive()
     .required()
-    .test('productToAttributeAdd', "Can't add attribute",
+    .test(
+      'attributeToProductAdd-attributeDoesNotExist',
+      "Can't add attribute, it does not exist",
+      async value => Boolean(await AttributeValue.query().findById(value))
+    )
+    .test('attributeToProductAdd-alreadyAdded',
+      "Can't add attribute, it's already added",
       async function () {
-        const res = await ProductToAttribute
-          .query()
-          .findOne({ attribute_value_id: this.parent.attribute_value_id, product_id: this.parent.product_id })
-        return res === undefined
-      })
+        const { attribute_value_id, product_id } = this.parent;
+        return !await ProductToAttribute.query().findOne({ attribute_value_id, product_id })
+      }
+    )
 })
 
 export const removeAttributeFromProductPayloadSchema = yup.object().shape({
@@ -27,19 +39,30 @@ export const removeAttributeFromProductPayloadSchema = yup.object().shape({
     .number()
     .integer()
     .positive()
-    .required(),
+    .required()
+    .test(
+      'attributeFromProductRemove-productDoesNotExist',
+      "Can't remove attribute, specified product does not exist",
+      async value => Boolean(await Product.query().findById(value))
+    ),
   attribute_value_id: yup
     .number()
     .integer()
     .positive()
     .required()
-    .test('productToAttributeRemove', "Can't remove attribute",
+    .test(
+      'attributeFromProductRemove-attributeDoesNotExist',
+      "Can't remove attribute, it does not exist",
+      async value => Boolean(await AttributeValue.query().findById(value))
+    )
+    .test(
+      'attributeFromProductRemove-notAdded',
+      "Can't remove attribute, it is not added",
       async function () {
-        const res = await ProductToAttribute
-          .query()
-          .findOne({ attribute_value_id: this.parent.attribute_value_id, product_id: this.parent.product_id })
-        return res !== undefined
-      })
+        const { attribute_value_id, product_id } = this.parent;
+        return Boolean(await ProductToAttribute.query().findOne({ attribute_value_id, product_id }))
+      }
+    )
 })
 
 export const productToAttributeFindOnePayloadSchema = yup.object().shape({
