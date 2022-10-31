@@ -6,7 +6,7 @@ import {
   attributeNameFindPayloadSchema,
   attributeNameDeletePayloadSchema,
 } from "../validationSchemas/attributeName";
-import { idSchema } from '../validationSchemas/id'; import {
+import {
   findAttributeNames,
   findAttributeNameById,
   createAttributeName,

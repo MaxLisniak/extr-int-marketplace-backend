@@ -6,7 +6,6 @@ import {
   brandFindPayloadSchema,
   brandUpdatePayloadSchema
 } from "../validationSchemas/brand";
-import { idSchema } from "../validationSchemas/id";
 import {
   findBrands,
   findBrandById,
