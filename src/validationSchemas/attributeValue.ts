@@ -53,7 +53,7 @@ export const attributeValueUpdatePayloadSchema = yup.object().shape({
     .test(
       'attributeValueUpdate-entryDoesNotExist',
       "Can't update attribute, it does not exist",
-      async value => Boolean(await AttributeName.query().findById(value))
+      async value => Boolean(await AttributeValue.query().findById(value))
     ),
   value: yup
     .string()
@@ -79,7 +79,7 @@ export const attributeValueDeletePayloadSchema = yup.object().shape({
     .test(
       'attributeValueDelete-entryDoesNotExist',
       "Can't delete attribute, it does not exist",
-      async value => Boolean(await AttributeName.query().findById(value))
+      async value => Boolean(await AttributeValue.query().findById(value))
     )
 })
 
