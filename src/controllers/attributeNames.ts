@@ -37,8 +37,8 @@ export async function createAttributeNameController(req: Request, res: Response)
 }
 
 export async function updateAttributeNameController(req: Request, res: Response): Promise<void> {
-  const payload = attributeNameUpdatePayloadSchema
-    .validateSync({ ...req.params, ...req.body }, { stripUnknown: true })
+  const payload = await attributeNameUpdatePayloadSchema
+    .validate({ ...req.params, ...req.body }, { stripUnknown: true })
   const attributeName = await updateAttributeName(payload.id, payload)
   res.json({ data: attributeName });
 }
