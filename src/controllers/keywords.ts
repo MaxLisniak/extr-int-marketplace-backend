@@ -36,8 +36,8 @@ export async function createKeywordController(req: Request, res: Response): Prom
 }
 
 export async function updateKeywordController(req: Request, res: Response): Promise<void> {
-  const payload = keywordUpdatePayloadSchema
-    .validateSync({ ...req.body, ...req.params }, { stripUnknown: true })
+  const payload = await keywordUpdatePayloadSchema
+    .validate({ ...req.body, ...req.params }, { stripUnknown: true })
   const keyword = await updateKeyword(payload.id, payload)
   res.json({ data: keyword })
 }

@@ -28,7 +28,12 @@ export const keywordUpdatePayloadSchema = yup.object().shape({
     .number()
     .integer()
     .positive()
-    .required(),
+    .required()
+    .test(
+      'keywordUpdate-entryDoesNotExist',
+      "Can't update keyword, it does not exist",
+      async value => Boolean(await Keyword.query().findById(value))
+    ),
   keyword: yup
     .string()
     .min(1)
