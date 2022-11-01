@@ -1,5 +1,5 @@
 import * as yup from 'yup';
-import ProductToKeyword from '../models/ProductToKeyword';
+import KeywordToProduct from '../models/KeywordToProduct';
 import Product from '../models/Product';
 import Keyword from '../models/Keyword';
 
@@ -30,7 +30,7 @@ export const addKeywordToProductPayloadSchema = yup.object().shape({
       "Can't add keyword, it is already added",
       async function () {
         const { keyword_id, product_id } = this.parent;
-        return !await ProductToKeyword.query().findOne(keyword_id, product_id)
+        return !await KeywordToProduct.query().findOne(keyword_id, product_id)
       }
     )
 })
@@ -61,12 +61,12 @@ export const removeKeywordFromProductPayloadSchema = yup.object().shape({
       "Can't remove keyword, it is not added",
       async function () {
         const { keyword_id, product_id } = this.parent;
-        return Boolean(await ProductToKeyword.query().findOne(keyword_id, product_id))
+        return Boolean(await KeywordToProduct.query().findOne(keyword_id, product_id))
       }
     )
 })
 
-export const productToKeywordFindOnePayloadSchema = yup.object().shape({
+export const keywordToProductFindOnePayloadSchema = yup.object().shape({
   id: yup
     .number()
     .integer()
@@ -75,4 +75,4 @@ export const productToKeywordFindOnePayloadSchema = yup.object().shape({
 
 export type addKeywordToProductPayloadType = yup.InferType<typeof addKeywordToProductPayloadSchema>
 export type removeKeywordFromProductPayloadType = yup.InferType<typeof removeKeywordFromProductPayloadSchema>
-export type productToKeywordFindOnePayloadType = yup.InferType<typeof productToKeywordFindOnePayloadSchema>
+export type keywordToProductFindOnePayloadType = yup.InferType<typeof keywordToProductFindOnePayloadSchema>

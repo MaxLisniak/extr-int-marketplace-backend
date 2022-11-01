@@ -1,12 +1,12 @@
 import Router from "express-promise-router";
 import {
   addAttributeToProductController,
-  findProductToAttributeByIdController,
+  findAttributeToProductByIdController,
   removeAttributeFromProductController
-} from "../controllers/productToAttribute";
+} from "../controllers/attributeToProduct";
 const router = Router();
 
-router.get('/:id', findProductToAttributeByIdController)
+router.get('/:id', findAttributeToProductByIdController)
 router.post('/', addAttributeToProductController);
 router.delete('/', removeAttributeFromProductController);
 

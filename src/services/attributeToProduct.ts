@@ -1,6 +1,6 @@
 import Product from "../models/Product"
-import ProductToAttribute from "../models/ProductToAttribute"
-import { addAttributeToProductPayloadType, removeAttributeFromProductPayloadType } from "../validationSchemas/productToAttribute"
+import AttributeToProduct from "../models/AttributeToProduct"
+import { addAttributeToProductPayloadType, removeAttributeFromProductPayloadType } from "../validationSchemas/attributeToProduct"
 
 export async function addAttributeToProduct(payload: addAttributeToProductPayloadType) {
 
@@ -23,8 +23,8 @@ export async function removeAttributeFromProduct(payload: removeAttributeFromPro
     .where('attribute_values.id', attribute_value_id)
 }
 
-export function findProductToAttributeById(id: number) {
-  return ProductToAttribute
+export function findAttributeToProductById(id: number) {
+  return AttributeToProduct
     .query()
     .findById(id)
 }

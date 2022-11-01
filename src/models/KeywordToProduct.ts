@@ -1,13 +1,13 @@
 import Model from "./BaseModel";
 
-class ProductToAttribute extends Model {
+class KeywordToProduct extends Model {
   id: number
   product_id: number
   keyword_id: number
 
   static get tableName() {
-    return "product_to_keyword"
+    return "keyword_to_product"
   }
 }
 
-export default ProductToAttribute;
+export default KeywordToProduct;

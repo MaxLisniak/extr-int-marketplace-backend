@@ -4,7 +4,7 @@ import {
   filterPayloadType,
 } from "../validationSchemas/product"
 import Product from "../models/Product"
-import ProductToAttribute from "../models/ProductToAttribute"
+import AttributeToProduct from "../models/AttributeToProduct"
 
 
 export async function findProductsByFilters(payload: filterPayloadType) {
@@ -21,13 +21,13 @@ export async function findProductsByFilters(payload: filterPayloadType) {
   const query = Product.query()
 
   if (attribute_filters) {
-    query.whereIn('products.id', ProductToAttribute
+    query.whereIn('products.id', AttributeToProduct
       .query()
       .distinct("product_id")
       .alias('pa')
       .whereRaw(
         attribute_filters.map(filterValues => {
-          return `exists(select 1 from product_to_attribute where (${filterValues.map(id => `attribute_value_id=${id}`)
+          return `exists(select 1 from attribute_to_product where (${filterValues.map(id => `attribute_value_id=${id}`)
             .join(' or ')
             }) and product_id = pa.product_id)`
         }).join(' and ')
@@ -36,7 +36,7 @@ export async function findProductsByFilters(payload: filterPayloadType) {
   }
 
   if (category_id) {
-    query.join("product_to_category", "products.id", "product_to_category.product_id")
+    query.join("category_to_product", "products.id", "category_to_product.product_id")
       .where("category_id", category_id)
   }
 

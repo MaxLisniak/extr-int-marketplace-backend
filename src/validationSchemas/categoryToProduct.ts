@@ -1,5 +1,5 @@
 import * as yup from 'yup';
-import ProductToCategory from '../models/ProductToCategory';
+import CategoryToProduct from '../models/CategoryToProduct';
 import Product from '../models/Product';
 import Category from '../models/Categoty';
 
@@ -30,7 +30,7 @@ export const addCategoryToProductPayloadSchema = yup.object().shape({
       "Can't add category, it is already added",
       async function () {
         const { category_id, product_id } = this.parent
-        return !await ProductToCategory.query().findOne({ category_id, product_id })
+        return !await CategoryToProduct.query().findOne({ category_id, product_id })
       }
     )
 })
@@ -61,12 +61,12 @@ export const removeCategoryFromProductPayloadSchema = yup.object().shape({
       "Can't remove category, it is not added",
       async function () {
         const { category_id, product_id } = this.parent
-        return Boolean(await ProductToCategory.query().findOne({ category_id, product_id }))
+        return Boolean(await CategoryToProduct.query().findOne({ category_id, product_id }))
       }
     )
 })
 
-export const productToCategoryFindOnePayloadSchema = yup.object().shape({
+export const categoryToProductFindOnePayloadSchema = yup.object().shape({
   id: yup
     .number()
     .integer()
@@ -75,4 +75,4 @@ export const productToCategoryFindOnePayloadSchema = yup.object().shape({
 
 export type addCategoryToProductPayloadType = yup.InferType<typeof addCategoryToProductPayloadSchema>
 export type removeCategoryFromProductPayloadType = yup.InferType<typeof removeCategoryFromProductPayloadSchema>
-export type productToCategoryFindOnePayloadType = yup.InferType<typeof productToCategoryFindOnePayloadSchema>
+export type categoryToProductFindOnePayloadType = yup.InferType<typeof categoryToProductFindOnePayloadSchema>

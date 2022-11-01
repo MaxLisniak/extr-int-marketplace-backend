@@ -1,9 +1,9 @@
 import {
   addKeywordToProductPayloadType,
   removeKeywordFromProductPayloadType
-} from "../validationSchemas/productToKeyword"
+} from "../validationSchemas/keywordToProduct"
 import Product from "../models/Product"
-import ProductToKeyword from "../models/ProductToKeyword"
+import KeywordToProduct from "../models/KeywordToProduct"
 
 export async function addKeywordToProduct(payload: addKeywordToProductPayloadType) {
 
@@ -26,8 +26,8 @@ export async function removeKeywordFromProduct(payload: removeKeywordFromProduct
     .where('keywords.id', keyword_id)
 }
 
-export function findProductToKeywordById(id: number) {
-  return ProductToKeyword
+export function findKeywordToProductById(id: number) {
+  return KeywordToProduct
     .query()
     .findById(id)
 }

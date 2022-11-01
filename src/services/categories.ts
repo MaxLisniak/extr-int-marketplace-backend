@@ -4,11 +4,7 @@ import {
 } from "../validationSchemas/category"
 import Category from "../models/Categoty"
 
-export function findCategories() {
-  return Category
-    .query() // TODO: ты вытягиваешь всю таблицу
-    .orderBy('id', 'DESC')
-}
+
 export function findCategoriesNested() {
   return Category
     .query()

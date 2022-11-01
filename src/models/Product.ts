@@ -42,8 +42,8 @@ class Product extends Model {
       join: {
         from: 'products.id',
         through: {
-          from: 'product_to_keyword.product_id',
-          to: 'product_to_keyword.keyword_id'
+          from: 'keyword_to_product.product_id',
+          to: 'keyword_to_product.keyword_id'
         },
         to: 'keywords.id'
       }
@@ -54,8 +54,8 @@ class Product extends Model {
       join: {
         from: 'products.id',
         through: {
-          from: 'product_to_attribute.product_id',
-          to: 'product_to_attribute.attribute_value_id'
+          from: 'attribute_to_product.product_id',
+          to: 'attribute_to_product.attribute_value_id'
         },
         to: 'attribute_values.id'
       }
@@ -66,8 +66,8 @@ class Product extends Model {
       join: {
         from: 'products.id',
         through: {
-          from: 'product_to_category.product_id',
-          to: 'product_to_category.category_id'
+          from: 'category_to_product.product_id',
+          to: 'category_to_product.category_id'
         },
         to: 'categories.id'
       }

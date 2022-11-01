@@ -4,7 +4,7 @@
  */
 exports.up = function (knex) {
   return knex.schema
-    .createTable('product_to_category', function (table) {
+    .createTable('category_to_product', function (table) {
       table.increments();
       table.integer("category_id").unsigned();
       table.integer("product_id").unsigned();
@@ -25,5 +25,5 @@ exports.up = function (knex) {
  * @returns { Promise<void> }
  */
 exports.down = function (knex) {
-  return knex.schema.dropTable("product_to_category")
+  return knex.schema.dropTable("category_to_product")
 };

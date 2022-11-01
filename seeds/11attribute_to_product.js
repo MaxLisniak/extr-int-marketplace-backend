@@ -4,8 +4,8 @@
  */
 exports.seed = async function (knex) {
   // Deletes ALL existing entries
-  await knex('product_to_attribute').del()
-  await knex('product_to_attribute').insert([
+  await knex('attribute_to_product').del()
+  await knex('attribute_to_product').insert([
     { id: 1, attribute_value_id: 1, product_id: 2 },
     { id: 2, attribute_value_id: 2, product_id: 3 },
     { id: 3, attribute_value_id: 3, product_id: 4 },

@@ -1,9 +1,9 @@
 import {
   addCategoryToProductPayloadType,
   removeCategoryFromProductPayloadType
-} from "../validationSchemas/productToCategory"
+} from "../validationSchemas/categoryToProduct"
 import Product from "../models/Product"
-import ProductToCategory from "../models/ProductToCategory"
+import CategoryToProduct from "../models/CategoryToProduct"
 
 
 export async function addCategoryToProduct(payload: addCategoryToProductPayloadType) {
@@ -28,8 +28,8 @@ export async function removeCategoryFromProduct(payload: removeCategoryFromProdu
 }
 
 
-export function findProductToCategoryById(id: number) {
-  return ProductToCategory
+export function findCategoryToProductById(id: number) {
+  return CategoryToProduct
     .query()
     .findById(id)
 }

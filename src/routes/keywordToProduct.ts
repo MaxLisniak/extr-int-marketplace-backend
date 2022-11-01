@@ -1,12 +1,12 @@
 import Router from "express-promise-router";
 import {
   addKeywordToProductController,
-  findProductToKeywordByIdController,
+  findKeywordToProductByIdController,
   removeKeywordFromProductController
-} from "../controllers/productToKeyword";
+} from "../controllers/keywordToProduct";
 const router = Router();
 
-router.get('/:id', findProductToKeywordByIdController)
+router.get('/:id', findKeywordToProductByIdController)
 router.post('/', addKeywordToProductController);
 router.delete('/', removeKeywordFromProductController);
 

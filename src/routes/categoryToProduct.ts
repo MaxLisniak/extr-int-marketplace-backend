@@ -1,12 +1,12 @@
 import Router from "express-promise-router";
 import {
   addCategoryToProductController,
-  findProductToCategoryByIdController,
+  findCategoryToProductByIdController,
   removeCategoryFromProductController
-} from "../controllers/productToCategory";
+} from "../controllers/categoryToProduct";
 const router = Router();
 
-router.get('/:id', findProductToCategoryByIdController)
+router.get('/:id', findCategoryToProductByIdController)
 router.post('/', addCategoryToProductController);
 router.delete('/', removeCategoryFromProductController);
 

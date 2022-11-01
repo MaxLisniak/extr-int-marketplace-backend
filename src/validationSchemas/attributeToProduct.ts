@@ -1,5 +1,5 @@
 import * as yup from 'yup';
-import ProductToAttribute from '../models/ProductToAttribute';
+import AttributeToProduct from '../models/AttributeToProduct';
 import Product from '../models/Product';
 import AttributeValue from '../models/AttributeValue';
 
@@ -29,7 +29,7 @@ export const addAttributeToProductPayloadSchema = yup.object().shape({
       "Can't add attribute, it's already added",
       async function () {
         const { attribute_value_id, product_id } = this.parent;
-        return !await ProductToAttribute.query().findOne({ attribute_value_id, product_id })
+        return !await AttributeToProduct.query().findOne({ attribute_value_id, product_id })
       }
     )
 })
@@ -60,12 +60,12 @@ export const removeAttributeFromProductPayloadSchema = yup.object().shape({
       "Can't remove attribute, it is not added",
       async function () {
         const { attribute_value_id, product_id } = this.parent;
-        return Boolean(await ProductToAttribute.query().findOne({ attribute_value_id, product_id }))
+        return Boolean(await AttributeToProduct.query().findOne({ attribute_value_id, product_id }))
       }
     )
 })
 
-export const productToAttributeFindOnePayloadSchema = yup.object().shape({
+export const attributeToProductFindOnePayloadSchema = yup.object().shape({
   id: yup
     .number()
     .integer()
@@ -74,4 +74,4 @@ export const productToAttributeFindOnePayloadSchema = yup.object().shape({
 
 export type addAttributeToProductPayloadType = yup.InferType<typeof addAttributeToProductPayloadSchema>
 export type removeAttributeFromProductPayloadType = yup.InferType<typeof removeAttributeFromProductPayloadSchema>
-export type productToAttributeFindOnePayloadType = yup.InferType<typeof productToAttributeFindOnePayloadSchema>
+export type attributeToProductFindOnePayloadType = yup.InferType<typeof attributeToProductFindOnePayloadSchema>

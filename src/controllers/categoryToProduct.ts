@@ -2,13 +2,13 @@ import { Request, Response } from "express";
 import {
   addCategoryToProductPayloadSchema,
   removeCategoryFromProductPayloadSchema,
-  productToCategoryFindOnePayloadSchema,
-} from "../validationSchemas/productToCategory";
+  categoryToProductFindOnePayloadSchema,
+} from "../validationSchemas/categoryToProduct";
 import {
   addCategoryToProduct,
-  findProductToCategoryById,
+  findCategoryToProductById,
   removeCategoryFromProduct
-} from "../services/productToCategory";
+} from "../services/categoryToProduct";
 
 export async function addCategoryToProductController(req: Request, res: Response): Promise<void> {
   const payload = await addCategoryToProductPayloadSchema
@@ -24,9 +24,9 @@ export async function removeCategoryFromProductController(req: Request, res: Res
   res.sendStatus(200);
 }
 
-export async function findProductToCategoryByIdController(req: Request, res: Response): Promise<void> {
-  const payload = productToCategoryFindOnePayloadSchema
+export async function findCategoryToProductByIdController(req: Request, res: Response): Promise<void> {
+  const payload = categoryToProductFindOnePayloadSchema
     .validateSync(req.params, { stripUnknown: true })
-  const productToCategory = await findProductToCategoryById(payload.id)
-  res.json({ data: productToCategory })
+  const categoryToProduct = await findCategoryToProductById(payload.id)
+  res.json({ data: categoryToProduct })
 }

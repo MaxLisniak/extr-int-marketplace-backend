@@ -4,7 +4,7 @@
  */
 exports.up = function (knex) {
   return knex.schema
-    .createTable('product_to_attribute', function (table) {
+    .createTable('attribute_to_product', function (table) {
       table.increments();
       table.integer("attribute_value_id").unsigned();
       table.integer("product_id").unsigned();
@@ -25,5 +25,5 @@ exports.up = function (knex) {
  * @returns { Promise<void> }
  */
 exports.down = function (knex) {
-  return knex.schema.dropTable("product_to_attribute")
+  return knex.schema.dropTable("attribute_to_product")
 };

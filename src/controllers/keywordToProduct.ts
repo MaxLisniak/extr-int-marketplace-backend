@@ -1,14 +1,14 @@
 import { Request, Response } from "express";
 import {
-  productToKeywordFindOnePayloadSchema,
+  keywordToProductFindOnePayloadSchema,
   addKeywordToProductPayloadSchema,
   removeKeywordFromProductPayloadSchema
-} from "../validationSchemas/productToKeyword";
+} from "../validationSchemas/keywordToProduct";
 import {
   addKeywordToProduct,
-  findProductToKeywordById,
+  findKeywordToProductById,
   removeKeywordFromProduct
-} from "../services/productToKeyword";
+} from "../services/keywordToProduct";
 
 export async function addKeywordToProductController(req: Request, res: Response): Promise<void> {
   const payload = await addKeywordToProductPayloadSchema
@@ -24,9 +24,9 @@ export async function removeKeywordFromProductController(req: Request, res: Resp
   res.sendStatus(200);
 }
 
-export async function findProductToKeywordByIdController(req: Request, res: Response): Promise<void> {
-  const payload = productToKeywordFindOnePayloadSchema
+export async function findKeywordToProductByIdController(req: Request, res: Response): Promise<void> {
+  const payload = keywordToProductFindOnePayloadSchema
     .validateSync(req.params, { stripUnknown: true })
-  const productToKeyword = await findProductToKeywordById(payload.id)
-  res.json({ data: productToKeyword });
+  const keywordToProduct = await findKeywordToProductById(payload.id)
+  res.json({ data: keywordToProduct });
 }

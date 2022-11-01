@@ -1,14 +1,14 @@
 import { Response, Request } from "express";
 import {
-  productToAttributeFindOnePayloadSchema,
+  attributeToProductFindOnePayloadSchema,
   addAttributeToProductPayloadSchema,
   removeAttributeFromProductPayloadSchema
-} from "../validationSchemas/productToAttribute";
+} from "../validationSchemas/attributeToProduct";
 import {
   addAttributeToProduct,
-  findProductToAttributeById,
+  findAttributeToProductById,
   removeAttributeFromProduct
-} from "../services/productToAttribute";
+} from "../services/attributeToProduct";
 
 export async function addAttributeToProductController(req: Request, res: Response): Promise<void> {
   const payload = await addAttributeToProductPayloadSchema
@@ -23,9 +23,9 @@ export async function removeAttributeFromProductController(req: Request, res: Re
   res.sendStatus(200);
 }
 
-export async function findProductToAttributeByIdController(req: Request, res: Response): Promise<void> {
-  const payload = productToAttributeFindOnePayloadSchema
+export async function findAttributeToProductByIdController(req: Request, res: Response): Promise<void> {
+  const payload = attributeToProductFindOnePayloadSchema
     .validateSync(req.params, { stripUnknown: true })
-  const productToAttribute = await findProductToAttributeById(payload.id)
-  res.json({ data: productToAttribute });
+  const attributeToProduct = await findAttributeToProductById(payload.id)
+  res.json({ data: attributeToProduct });
 }
