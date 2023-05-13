@@ -1,4 +1,4 @@
-import Category from '../models/Categoty';
+import Category from '../models/categories.model';
 import * as yup from 'yup';
 
 

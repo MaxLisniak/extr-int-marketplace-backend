@@ -1,6 +1,6 @@
 
 import { BrandCreatePayload, BrandFindPayload, BrandUpdatePayload } from "../lib/types/brands.types";
-import Brand from "../models/Brand";
+import Brand from "../models/brands.model";
 
 async function findBrands(params: BrandFindPayload) {
   const { limit = 10, offset = 0 } = params;

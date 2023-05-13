@@ -1,7 +1,7 @@
 import * as yup from 'yup';
-import Favorite from '../models/Favorite';
-import Product from '../models/Product';
-import User from '../models/User';
+import Favorite from '../models/favorites.model';
+import Product from '../models/products.model';
+import User from '../models/users.model';
 
 
 const addFavoritePayload = yup.object().shape({

@@ -1,5 +1,5 @@
 import * as yup from 'yup';
-import User from '../models/User';
+import User from '../models/users.model';
 
 
 const userFindOnePayload = yup.object().shape({

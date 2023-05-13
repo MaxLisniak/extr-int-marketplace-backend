@@ -1,4 +1,4 @@
-import Keyword from '../models/Keyword';
+import Keyword from '../models/keywords.model';
 import * as yup from 'yup';
 
 

@@ -1,6 +1,6 @@
 
 import { AttributeNameCreatePayload, AttributeNameFindPayload, AttributeNameUpdatePayload } from "../lib/types/attribute-names.types";
-import AttributeName from "../models/AttributeName"
+import AttributeName from "../models/attribute-names.model"
 
 function findAttributeNames(params: AttributeNameFindPayload) {
   const { limit = 10, offset = 0 } = params;

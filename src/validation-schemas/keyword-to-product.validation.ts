@@ -1,7 +1,7 @@
 import * as yup from 'yup';
-import KeywordToProduct from '../models/KeywordToProduct';
-import Product from '../models/Product';
-import Keyword from '../models/Keyword';
+import KeywordToProduct from '../models/keyword-to-product.model';
+import Product from '../models/products.model';
+import Keyword from '../models/keywords.model';
 
 
 const addKeywordToProductPayload = yup.object().shape({

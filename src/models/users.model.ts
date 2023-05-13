@@ -1,5 +1,5 @@
-import Model from "./BaseModel";
-import Product from "./Product";
+import Model from "./base.model";
+import Product from "./products.model";
 
 class User extends Model {
   id: number

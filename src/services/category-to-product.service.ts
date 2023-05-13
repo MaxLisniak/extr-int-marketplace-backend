@@ -1,6 +1,6 @@
 
-import Product from "../models/Product"
-import CategoryToProduct from "../models/CategoryToProduct"
+import Product from "../models/products.model"
+import CategoryToProduct from "../models/category-to-product.model"
 import { AddCategoryToProductPayload, RemoveCategoryFromProductPayload } from "../lib/types/category-to-product.types"
 
 

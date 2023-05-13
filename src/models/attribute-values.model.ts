@@ -1,5 +1,5 @@
-import AttributeName from "./AttributeName";
-import Model from "./BaseModel";
+import AttributeName from "./attribute-names.model";
+import Model from "./base.model";
 
 class AttributeValue extends Model {
   id: number

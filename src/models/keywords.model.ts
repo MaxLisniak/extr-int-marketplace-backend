@@ -1,15 +1,13 @@
+import Model from "./base.model";
 import path from "path";
-import Product from "./Product";
-import Model from "./BaseModel";
 
-class Favorite extends Model {
+class Keyword extends Model {
   id: number
   product_id: number
-  user_id: number
-  product: Product
+  keyword: string
 
   static get tableName() {
-    return "favorites"
+    return "keywords"
   }
 
   static relationMappings = {
@@ -18,10 +16,11 @@ class Favorite extends Model {
       modelClass: path.join(__dirname, "Product"),
       join: {
         from: 'products.id',
-        to: 'favorites.product_id'
+        to: 'keywords.product_id'
       }
     },
   }
+
 }
 
-export default Favorite;
+export default Keyword;

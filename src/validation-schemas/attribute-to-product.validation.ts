@@ -1,7 +1,7 @@
 import * as yup from 'yup';
-import AttributeToProduct from '../models/AttributeToProduct';
-import Product from '../models/Product';
-import AttributeValue from '../models/AttributeValue';
+import AttributeToProduct from '../models/attribute-to-product.model';
+import Product from '../models/products.model';
+import AttributeValue from '../models/attribute-values.model';
 
 
 const addAttributeToProductPayload = yup.object().shape({

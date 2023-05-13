@@ -1,5 +1,5 @@
-import AttributeName from '../models/AttributeName';
-import AttributeValue from '../models/AttributeValue';
+import AttributeName from '../models/attribute-names.model';
+import AttributeValue from '../models/attribute-values.model';
 import * as yup from 'yup';
 
 const attributeValueFindPayload = yup.object().shape({

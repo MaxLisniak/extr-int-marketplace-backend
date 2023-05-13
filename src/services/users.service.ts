@@ -5,7 +5,7 @@ import {
   UserCreatePayload,
   UserUpdatePayload,
 } from "../lib/types/users.types"
-import User from "../models/User";
+import User from "../models/users.model";
 import logger from "../logger";
 
 

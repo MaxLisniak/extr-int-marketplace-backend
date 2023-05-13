@@ -1,5 +1,5 @@
-import User from "../models/User"
-import Favorite from "../models/Favorite"
+import User from "../models/users.model"
+import Favorite from "../models/favorites.model"
 import { AddFavoritePayload, FavoriteProductsFindPayload, RemoveFavoritePayload } from "../lib/types/favorites.types"
 
 async function addFavoriteProduct(payload: AddFavoritePayload) {

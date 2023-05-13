@@ -1,5 +1,5 @@
 
-import Category from "../models/Categoty"
+import Category from "../models/categories.model"
 import { CategoryUpdatePayload, CategoryCreatePayload } from "../lib/types/categories.types"
 
 

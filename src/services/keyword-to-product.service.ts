@@ -2,8 +2,8 @@ import {
   AddKeywordToProductPayload,
   RemoveKeywordFromProductPayload
 } from "../lib/types/keyword-to-product.types"
-import Product from "../models/Product"
-import KeywordToProduct from "../models/KeywordToProduct"
+import Product from "../models/products.model"
+import KeywordToProduct from "../models/keyword-to-product.model"
 
 async function addKeywordToProduct(payload: AddKeywordToProductPayload) {
 

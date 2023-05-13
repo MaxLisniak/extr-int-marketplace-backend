@@ -3,8 +3,8 @@ import {
   ProductUpdatePayload,
   FilterPayload,
 } from "../lib/types/products.types"
-import Product from "../models/Product"
-import AttributeToProduct from "../models/AttributeToProduct"
+import Product from "../models/products.model"
+import AttributeToProduct from "../models/attribute-to-product.model"
 
 
 async function findProductsByFilters(payload: FilterPayload) {

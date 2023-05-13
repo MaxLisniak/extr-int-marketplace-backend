@@ -1,6 +1,6 @@
 
 import { KeywordCreatePayload, KeywordFindPayload, KeywordUpdatePayload } from "../lib/types/keywords.types"
-import Keyword from "../models/Keyword"
+import Keyword from "../models/keywords.model"
 
 async function findKeywords(params: KeywordFindPayload) {
   const query = Keyword.query()

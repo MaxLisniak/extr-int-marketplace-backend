@@ -1,4 +1,4 @@
-import Brand from '../models/Brand';
+import Brand from '../models/brands.model';
 import * as yup from 'yup';
 
 const brandFindPayload = yup.object().shape({

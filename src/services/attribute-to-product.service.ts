@@ -1,5 +1,5 @@
-import Product from "../models/Product"
-import AttributeToProduct from "../models/AttributeToProduct"
+import Product from "../models/products.model"
+import AttributeToProduct from "../models/attribute-to-product.model"
 import { AddAttributeToProductPayload, RemoveAttributeFromProductPayload } from "../lib/types/attribute-to-product.types"
 
 async function addAttributeToProduct(payload: AddAttributeToProductPayload) {

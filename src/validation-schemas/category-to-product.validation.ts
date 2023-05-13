@@ -1,7 +1,7 @@
 import * as yup from 'yup';
-import CategoryToProduct from '../models/CategoryToProduct';
-import Product from '../models/Product';
-import Category from '../models/Categoty';
+import CategoryToProduct from '../models/category-to-product.model';
+import Product from '../models/products.model';
+import Category from '../models/categories.model';
 
 
 const addCategoryToProductPayload = yup.object().shape({

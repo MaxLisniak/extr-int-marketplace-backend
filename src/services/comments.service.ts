@@ -1,6 +1,6 @@
 
 import { CommentCreatePayload, CommentFindPayload, CommentUpdatePayload } from "../lib/types/comments.types"
-import Comment from "../models/Comment"
+import Comment from "../models/comments.model"
 
 async function findComments(params: CommentFindPayload) {
 

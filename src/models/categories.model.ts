@@ -1,4 +1,4 @@
-import Model from "./BaseModel";
+import Model from "./base.model";
 
 class Category extends Model {
   parent_id: number

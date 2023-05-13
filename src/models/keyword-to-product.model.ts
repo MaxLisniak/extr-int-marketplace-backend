@@ -1,4 +1,4 @@
-import Model from "./BaseModel";
+import Model from "./base.model";
 
 class KeywordToProduct extends Model {
   id: number

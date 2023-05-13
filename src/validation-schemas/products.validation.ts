@@ -1,6 +1,6 @@
 import * as yup from 'yup';
-import Product from '../models/Product';
-import Brand from '../models/Brand';
+import Product from '../models/products.model';
+import Brand from '../models/brands.model';
 
 const productCreatePayload = yup.object().shape({
   name: yup

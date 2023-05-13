@@ -1,6 +1,6 @@
 
 import { AttributeValueCreatePayload, AttributeValueFindPayload, AttributeValueUpdatePayload } from "../lib/types/attribute-values.types";
-import AttributeValue from "../models/AttributeValue";
+import AttributeValue from "../models/attribute-values.model";
 
 async function findAttributeValues(params: AttributeValueFindPayload) {
   const { limit = 10, offset = 0, attribute_name_id } = params;

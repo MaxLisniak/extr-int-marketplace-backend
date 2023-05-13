@@ -1,8 +1,8 @@
-import AttributeValue from "./AttributeValue";
-import Model from "./BaseModel";
-import Category from "./Categoty";
-import Comment from "./Comment";
-import Keyword from "./Keyword";
+import AttributeValue from "./attribute-values.model";
+import Model from "./base.model";
+import Category from "./categories.model";
+import Comment from "./comments.model";
+import Keyword from "./keywords.model";
 import path from "path";
 
 
