@@ -2,7 +2,7 @@ import express from 'express';
 import path from 'path';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
-import rootRouter from './routes/root';
+import rootRouter from './routers/root.router';
 import errorHandler from './middleware/errorHandler';
 import { requestLogger } from './middleware/requestLogger';
 

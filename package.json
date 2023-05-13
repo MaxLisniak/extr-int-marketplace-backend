@@ -6,8 +6,7 @@
     "clean": "rimraf dist/*",
     "lint": "eslint . --ext .ts",
     "tsc": "tsc",
-    "copy-assets": "ts-node tools/copyAssets",
-    "build": "npm run clean && npm run lint && npm run tsc && npm run copy-assets",
+    "build": "npm run clean && npm run lint && npm run tsc",
     "node-clean": "dotenv -e .env node ./dist/src/index.js",
     "clean-start": "npm run build && npm run node-clean",
     "dev-start": "dotenv -e .env nodemon ./src/index.ts"
