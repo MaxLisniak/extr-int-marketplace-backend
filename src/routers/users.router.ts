@@ -3,13 +3,13 @@ import { UsersController } from "../controllers/users.controller";
 
 const router = Router();
 
-router.get('/', UsersController.findUsers);
-router.get('/refresh', UsersController.handleRefreshToken);
+router.get('/', UsersController.find);
 router.post('/sign-up', UsersController.signUp);
 router.post('/sign-in', UsersController.signIn);
 router.post('/sign-out', UsersController.signOut);
-router.get('/:id', UsersController.findUserById);
-router.patch('/:id', UsersController.updateUser);
-router.delete('/:id', UsersController.deleteUser);
+router.get('/refresh', UsersController.handleRefreshToken);
+router.get('/:id', UsersController.findById);
+router.patch('/:id', UsersController.updateById);
+router.delete('/:id', UsersController.deleteById);
 
 export default router;

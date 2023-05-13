@@ -4,43 +4,57 @@ import { UsersService } from "../services/users.service";
 import { UsersValidationSchemas } from "../validation-schemas/users.validation";
 
 
-async function findUsers(req: Request, res: Response): Promise<void> {
-	const users = await UsersService.findUsers()
+async function find(req: Request, res: Response): Promise<void> {
+	const payload = await UsersValidationSchemas.findPayload
+		.validate(req.params, { stripUnknown: true })
+
+	const users = await UsersService.find(payload)
+
 	res.json({ data: users });
 }
 
-async function findUserById(req: Request, res: Response): Promise<void> {
-	const payload = await UsersValidationSchemas.userFindOnePayload
+async function findById(req: Request, res: Response): Promise<void> {
+	const payload = await UsersValidationSchemas.findByIdPayload
 		.validate(req.params, { stripUnknown: true })
-	const user = await UsersService.findUserById(payload.id)
+
+	const user = await UsersService.findById(payload.id)
+
 	res.json({ data: user });
 }
 
-async function updateUser(req: Request, res: Response): Promise<void> {
-	const payload = await UsersValidationSchemas.userUpdatePayload
+async function updateById(req: Request, res: Response): Promise<void> {
+	const payload = await UsersValidationSchemas.updateByIdPayload
 		.validate({ ...req.body, ...req.params }, { stripUnknown: true })
-	const user = await UsersService.updateUser(payload.id, payload)
+
+	const user = await UsersService.updateById(payload.id, payload)
+
 	res.json({ data: user })
 }
 
-async function deleteUser(req: Request, res: Response): Promise<void> {
-	const paramsPayload = await UsersValidationSchemas.userDeletePayload
+async function deleteById(req: Request, res: Response): Promise<void> {
+	const payload = await UsersValidationSchemas.deleteByIdPayload
 		.validate(req.params, { stripUnknown: true })
-	await UsersService.deleteUser(paramsPayload.id)
+
+	await UsersService.deleteById(payload.id)
+
 	res.sendStatus(200);
 }
 
 async function signUp(req: Request, res: Response): Promise<void> {
 	logger.info("A user is trying to sign up")
-	const payload = await UsersValidationSchemas.userCreatePayload
+
+	const payload = await UsersValidationSchemas.createPayload
 		.validate(req.body, { stripUnknown: true })
+
 	const registeredUser = await UsersService.signUp(payload)
+
 	res.json({ data: registeredUser });
 }
 
 async function signIn(req: Request, res: Response): Promise<void> {
 	logger.info("A user is trying to sign in")
-	const payload = await UsersValidationSchemas.userSignInPayload
+
+	const payload = await UsersValidationSchemas.signInPayload
 		.validate(req.body, { stripUnknown: true })
 
 	const { signedInUser, accessToken, refreshToken } = await UsersService.signIn(payload)
@@ -72,6 +86,7 @@ async function signOut(req: Request, res: Response): Promise<void> {
 
 async function handleRefreshToken(req: Request, res: Response): Promise<void> {
 	logger.info("User is trying to refresh a token...");
+
 	const cookies = req.cookies;
 	// check if a refresh token was provided
 	if (!cookies?.refreshToken) {
@@ -79,17 +94,18 @@ async function handleRefreshToken(req: Request, res: Response): Promise<void> {
 		res.sendStatus(401);
 		return
 	}
+
 	const refreshToken = cookies.refreshToken;
 	const accessToken = await UsersService.handleRefreshToken(refreshToken)
-	console.log(refreshToken)
+
 	res.json({ accessToken })
 }
 
 export const UsersController = {
-	findUsers,
-	findUserById,
-	updateUser,
-	deleteUser,
+	find,
+	findById,
+	updateById,
+	deleteById,
 	signUp,
 	signIn,
 	signOut,

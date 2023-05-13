@@ -6,7 +6,6 @@ import { CategoriesService } from '../services/categories.service';
 
 async function findCategoriesNested(req: Request, res: Response): Promise<void> {
   const categories = await CategoriesService.findCategoriesNested()
-  console.log(categories)
   const nest = (items: categorySchema[], id: number | null = null): categorySchema[] =>
     items
       .filter(item => item.parent_id === id)

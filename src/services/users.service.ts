@@ -3,29 +3,61 @@ import bcrypt from "bcrypt";
 import {
   UserSignInPayload,
   UserCreatePayload,
-  UserUpdatePayload,
+  UserUpdateByIdPayload,
+  UserFindPayload,
 } from "../lib/types/users.types"
 import User from "../models/users.model";
 import logger from "../logger";
 
 
-async function findUsers() {
-  return await User.query()
+async function find(params: UserFindPayload) {
+  const {
+    limit,
+    offset,
+    first_name,
+    last_name,
+    email,
+    is_admin
+  } = params
+
+  const query = User
+    .query()
+
+  if (first_name) {
+    query.where({ first_name })
+  }
+  if (last_name) {
+    query.where({ last_name })
+  }
+  if (email) {
+    query.where({ email })
+  }
+  if (is_admin) {
+    query.where({ is_admin })
+  }
+  if (limit) {
+    query.limit(limit)
+  }
+  if (offset) {
+    query.offset(offset)
+  }
+
+  return await query
 }
 
-async function findUserById(id: number) {
+async function findById(id: number) {
   return await User
     .query()
     .findById(id)
 }
 
-async function updateUser(id: number, object: UserUpdatePayload) {
+async function updateById(id: number, payload: UserUpdateByIdPayload) {
   return await User
     .query()
-    .patchAndFetchById(id, object)
+    .patchAndFetchById(id, payload)
 }
 
-async function deleteUser(id: number) {
+async function deleteById(id: number) {
   return await User
     .query()
     .deleteById(id)
@@ -37,19 +69,7 @@ async function generatePasswordHash(password: string) {
   return hashedPassword
 }
 
-async function findUserByEmail(email: string) {
-  return await User
-    .query()
-    .findOne({ email })
-}
-
-async function findUserByRefreshToken(refresh_token: string) {
-  return await User
-    .query()
-    .findOne({ refresh_token })
-}
-
-async function createUser(payload: UserCreatePayload) {
+async function create(payload: UserCreatePayload) {
   return await User
     .query()
     .insertAndFetch(payload)
@@ -63,7 +83,10 @@ async function removeRefreshToken(refresh_token: string) {
 }
 
 async function handleRefreshToken(refresh_token: string) {
-  const foundUser = await findUserByRefreshToken(refresh_token)
+  const foundUser = await User
+    .query()
+    .findOne({ refresh_token })
+
   if (!foundUser) {
     throw new Error("A token cannot be refreshed, as the user hasn't been validly authenticated")
   }
@@ -91,7 +114,9 @@ async function handleRefreshToken(refresh_token: string) {
 
 async function signOut(refresh_token: string) {
   // query a user by refresh token and check if it exists
-  const foundUser = await findUserByRefreshToken(refresh_token)
+  const foundUser = await User
+    .query()
+    .findOne({ refresh_token })
 
   if (!foundUser) {
     throw new Error("An error occured while trying to sign out: User with provided refresh token is not signed in")
@@ -104,7 +129,9 @@ async function signOut(refresh_token: string) {
 
 async function signIn(payload: UserSignInPayload) {
   // find user
-  const foundUser = await findUserByEmail(payload.email)
+  const foundUser = await User
+    .query()
+    .findOne({ email: payload.email })
 
   if (!foundUser) {
     throw new Error(`An error occured while trying to sign is, user with the email ${payload.email} doesn't exist`)
@@ -135,8 +162,8 @@ async function signIn(payload: UserSignInPayload) {
   );
 
   // add refresh token to a user in database
-  const signedInUser = await updateUser(
-    userId, { refresh_token: refreshToken } as UserUpdatePayload
+  const signedInUser = await updateById(
+    userId, { refresh_token: refreshToken } as UserUpdateByIdPayload
   )
   logger.info(`A user is logged in as: ${email}`)
 
@@ -148,7 +175,9 @@ async function signUp(payload: UserCreatePayload) {
   const hashedPassword = await generatePasswordHash(payload.password)
 
   // find user 
-  const foundUser = await findUserByEmail(payload.email)
+  const foundUser = await User
+    .query()
+    .findOne({ email: payload.email })
 
   if (foundUser) {
     throw new Error(`A user couldn't sign up since ${payload.email} already exists`)
@@ -160,16 +189,16 @@ async function signUp(payload: UserCreatePayload) {
     password_hash: hashedPassword,
     is_admin: false,
   };
-  const registeredUser = await createUser(newUserPayload as UserCreatePayload)
+  const registeredUser = await create(newUserPayload as UserCreatePayload)
   logger.info(`A user signed up as ${registeredUser.first_name} ${registeredUser.last_name} ${registeredUser.email}`)
   return registeredUser
 }
 
 export const UsersService = {
-  findUsers,
-  findUserById,
-  updateUser,
-  deleteUser,
+  find,
+  findById,
+  updateById,
+  deleteById,
   handleRefreshToken,
   signUp,
   signIn,

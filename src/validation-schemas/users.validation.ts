@@ -1,91 +1,87 @@
 import * as yup from 'yup';
 import User from '../models/users.model';
+import { id, limit, offset } from './common.validation';
 
+const email = yup
+  .string()
+  .email()
+  .max(64)
 
-const userFindOnePayload = yup.object().shape({
-  id: yup
-    .number()
-    .integer()
-    .positive()
+const first_name = yup
+  .string()
+  .min(1)
+  .max(64)
+
+const last_name = yup
+  .string()
+  .min(1)
+  .max(64)
+
+const password = yup
+  .string()
+
+const password_hash = yup
+  .string()
+
+const is_admin = yup
+  .boolean()
+
+const refresh_token = yup
+  .string()
+
+const findPayload = yup.object().shape({
+  limit,
+  offset,
+  email,
+  first_name,
+  last_name,
+})
+
+const findByIdPayload = yup.object().shape({
+  id: id
     .required(),
 })
 
-const userCreatePayload = yup.object().shape({
-  email: yup
-    .string()
-    .email()
-    .max(64)
+const createPayload = yup.object().shape({
+  email: email
     .required(),
-  first_name: yup
-    .string()
-    .min(1)
-    .max(64)
+  first_name: first_name
     .required(),
-  last_name: yup
-    .string()
-    .min(1)
-    .max(64),
-  password: yup
-    .string()
+  last_name: last_name,
+  password: password
     .required(),
-  confPassword: yup
-    .string()
+  password_conf: password
     .required()
     .oneOf([yup.ref('password')], 'Passwords do not match.'),
-  password_hash: yup
-    .string(),
-  is_admin: yup
-    .boolean(),
+  password_hash: password_hash,
+  is_admin: is_admin,
 })
 
-const userUpdatePayload = yup.object().shape({
-  id: yup
-    .number()
-    .integer()
-    .positive()
+const updateByIdPayload = yup.object().shape({
+  id: id
     .required()
     .test(
       'userUpdate-entryDoesNotExist',
       "Can't update user, it does not exist",
       async value => Boolean(await User.query().findById(value))
     ),
-  email: yup
-    .string()
-    .email()
-    .max(64),
-  first_name: yup
-    .string()
-    .min(1)
-    .max(64),
-  last_name: yup
-    .string()
-    .min(1)
-    .max(64),
-  password_hash: yup
-    .string(),
-  is_admin: yup
-    .boolean(),
-  refresh_token: yup
-    .string(),
+  email: email,
+  first_name: first_name,
+  last_name: last_name,
+  password_hash: password_hash,
+  is_admin: is_admin,
+  refresh_token: refresh_token,
 })
 
-const userSignInPayload = yup.object().shape({
-  email: yup
-    .string()
-    .email()
-    .max(64),
-  password: yup
-    .string()
+const signInPayload = yup.object().shape({
+  email: email,
+  password: password
     .required(),
-  password_hash: yup
-    .string(),
+  password_hash: password_hash
 })
 
-const userDeletePayload = yup.object().shape({
-  id: yup
-    .number()
-    .integer()
-    .positive()
+const deleteByIdPayload = yup.object().shape({
+  id: id
     .required()
     .test(
       'userDelete-entryDoesNotExist',
@@ -95,9 +91,10 @@ const userDeletePayload = yup.object().shape({
 })
 
 export const UsersValidationSchemas = {
-  userFindOnePayload,
-  userCreatePayload,
-  userUpdatePayload,
-  userSignInPayload,
-  userDeletePayload,
+  findPayload,
+  findByIdPayload,
+  createPayload,
+  updateByIdPayload,
+  deleteByIdPayload,
+  signInPayload,
 }
