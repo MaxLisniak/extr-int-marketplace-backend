@@ -60,13 +60,6 @@ const createPayload = yup.object().shape({
 })
 
 const updateByIdPayload = yup.object().shape({
-  id: id
-    .required()
-    .test(
-      'userUpdate-entryDoesNotExist',
-      "Can't update user, it does not exist",
-      async value => Boolean(await User.query().findById(value))
-    ),
   email: email,
   first_name: first_name,
   last_name: last_name,
@@ -80,16 +73,6 @@ const signInPayload = yup.object().shape({
   password: password
     .required(),
   password_hash: password_hash
-})
-
-const deleteByIdPayload = yup.object().shape({
-  id: id
-    .required()
-    .test(
-      'userDelete-entryDoesNotExist',
-      "Can't delete user, it does not exist",
-      async value => Boolean(await User.query().findById(value))
-    )
 })
 
 const addFavoriteProductPayload = yup.object().shape({
@@ -120,7 +103,6 @@ export const UsersValidationSchemas = {
   findByIdPayload,
   createPayload,
   updateByIdPayload,
-  deleteByIdPayload,
   signInPayload,
   addFavoriteProductPayload,
   removeFavoriteProductPayload,

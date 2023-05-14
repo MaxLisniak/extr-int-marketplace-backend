@@ -1,5 +1,5 @@
 import Router from "express-promise-router";
-import verifyToken from '../middleware/verifyToken';
+import verifyAuthorization from '../middleware/verifyAuthorization';
 import { CommentsController } from "../controllers/comments.controller";
 
 
@@ -7,10 +7,10 @@ const router = Router();
 
 router.get('/', CommentsController.find);
 
-router.post('/', [verifyToken, CommentsController.create]);
+router.post('/', [verifyAuthorization, CommentsController.create]);
 
-router.patch('/:id', [verifyToken, CommentsController.updateById]);
+router.patch('/:id', [verifyAuthorization, CommentsController.updateById]);
 
-router.delete('/:id', [verifyToken, CommentsController.deleteById]);
+router.delete('/:id', [verifyAuthorization, CommentsController.deleteById]);
 
 export default router;

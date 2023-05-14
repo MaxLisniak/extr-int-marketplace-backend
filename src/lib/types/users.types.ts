@@ -5,7 +5,6 @@ export type UserFindPayload = yup.InferType<typeof UsersValidationSchemas.findPa
 export type UserFindByIdPayload = yup.InferType<typeof UsersValidationSchemas.findByIdPayload>
 export type UserCreatePayload = yup.InferType<typeof UsersValidationSchemas.createPayload>
 export type UserUpdateByIdPayload = yup.InferType<typeof UsersValidationSchemas.updateByIdPayload>
-export type UserDeleteByIdPayload = yup.InferType<typeof UsersValidationSchemas.deleteByIdPayload>
 export type UserSignInPayload = yup.InferType<typeof UsersValidationSchemas.signInPayload>
 export type RemoveFavoriteProductPayload = yup.InferType<typeof UsersValidationSchemas.removeFavoriteProductPayload>
 export type AddFavoriteProductPayload = yup.InferType<typeof UsersValidationSchemas.addFavoriteProductPayload>

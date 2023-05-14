@@ -191,7 +191,9 @@ async function signUp(payload: UserCreatePayload) {
     .findOne({ email: payload.email })
 
   if (foundUser) {
-    throw new Error(`A user couldn't sign up since ${payload.email} already exists`)
+    const error = new Error(`A user couldn't sign up since ${payload.email} already exists`)
+    error.name = ErrorName.ValidationError
+    throw error
   }
   const newUserPayload = {
     first_name: payload.first_name,

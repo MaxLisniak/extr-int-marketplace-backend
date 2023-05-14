@@ -23,20 +23,31 @@ async function findById(req: Request, res: Response): Promise<void> {
 	res.json({ data: user });
 }
 
-async function updateById(req: Request, res: Response): Promise<void> {
-	const payload = await UsersValidationSchemas.updateByIdPayload
-		.validate({ ...req.body, ...req.params }, { stripUnknown: true })
+async function findByToken(req: Request, res: Response) {
+	const refreshToken = req.cookies.refreshToken
+	let user = await UsersService.findByRefreshToken(refreshToken)
+	res.json({ data: user })
+}
 
-	const user = await UsersService.updateById(payload.id, payload)
+async function updateByToken(req: Request, res: Response): Promise<void> {
+	const payload = await UsersValidationSchemas.updateByIdPayload
+		.validate(req.body, { stripUnknown: true })
+
+	const refreshToken = req.cookies.refreshToken
+	let user = await UsersService.findByRefreshToken(refreshToken)
+
+	user = await UsersService.updateById(user.id, payload)
 
 	res.json({ data: user })
 }
 
-async function deleteById(req: Request, res: Response): Promise<void> {
-	const payload = await UsersValidationSchemas.deleteByIdPayload
-		.validate(req.params, { stripUnknown: true })
+async function deleteByToken(req: Request, res: Response): Promise<void> {
 
-	await UsersService.deleteById(payload.id)
+	const refreshToken = req.cookies.refreshToken
+	const user = await UsersService.findByRefreshToken(refreshToken)
+
+	await UsersService.signOut(refreshToken)
+	await UsersService.deleteById(user.id)
 
 	res.sendStatus(200);
 }
@@ -131,8 +142,9 @@ async function removeFavoriteProduct(req: Request, res: Response): Promise<void>
 export const UsersController = {
 	find,
 	findById,
-	updateById,
-	deleteById,
+	findByToken,
+	updateByToken,
+	deleteByToken,
 	signUp,
 	signIn,
 	signOut,

@@ -3,7 +3,7 @@ import { RequestHandler } from 'express';
 
 
 // check if the provided access token is valid
-const verifyToken: RequestHandler = (req, res, next) => {
+const verifyAuthorization: RequestHandler = (req, res, next) => {
 	const authHeader = req.headers['authorization'];
 	if (!authHeader) {
 		// The token is not provided
@@ -25,4 +25,4 @@ const verifyToken: RequestHandler = (req, res, next) => {
 	);
 }
 
-export default verifyToken;
+export default verifyAuthorization;
