@@ -3,44 +3,45 @@ import { ProductsValidationSchemas } from "../validation-schemas/products.valida
 import { ProductsService } from "../services/products.service";
 
 
-async function findProductById(req: Request, res: Response): Promise<void> {
-  const payload = await ProductsValidationSchemas.productFindOnePayload
+async function findById(req: Request, res: Response): Promise<void> {
+  const payload = await ProductsValidationSchemas.findByIdPayload
     .validate(req.params, { stripUnknown: true })
-  const product = await ProductsService.findProductById(payload.id)
+
+  const product = await ProductsService.findById(payload.id)
   res.json({ data: product });
 }
 
-async function findProductsByFilters(req: Request, res: Response): Promise<void> {
-  const payload = await ProductsValidationSchemas.filterPayload.validate({ ...req.body })
-  const [products, total] = await ProductsService.findProductsByFilters(payload);
+async function findByFilters(req: Request, res: Response): Promise<void> {
+  const payload = await ProductsValidationSchemas.findByFiltersPayload.validate({ ...req.body })
+  const [products, total] = await ProductsService.findByFilters(payload);
   res.json({ data: products, total: total[0] })
 }
 
-async function createProduct(req: Request, res: Response): Promise<void> {
-  const payload = await ProductsValidationSchemas.productCreatePayload
+async function create(req: Request, res: Response): Promise<void> {
+  const payload = await ProductsValidationSchemas.createPayload
     .validate({ ...req.body }, { stripUnknown: true })
-  const product = await ProductsService.createProduct(payload)
+  const product = await ProductsService.create(payload)
   res.json({ data: product });
 }
 
-async function updateProduct(req: Request, res: Response): Promise<void> {
-  const payload = await ProductsValidationSchemas.productUpdatePayload
+async function updateById(req: Request, res: Response): Promise<void> {
+  const payload = await ProductsValidationSchemas.updateByIdPayload
     .validate({ ...req.params, ...req.body }, { stripUnknown: true })
-  const product = await ProductsService.updateProduct(payload.id, payload)
+  const product = await ProductsService.updateById(payload.id, payload)
   res.json({ data: product })
 }
 
-async function deleteProduct(req: Request, res: Response): Promise<void> {
-  const payload = await ProductsValidationSchemas.productDeletePayload
+async function deleteById(req: Request, res: Response): Promise<void> {
+  const payload = await ProductsValidationSchemas.deleteByIdPayload
     .validate(req.params, { stripUnknown: true })
-  await ProductsService.deleteProduct(payload.id)
+  await ProductsService.deleteById(payload.id)
   res.sendStatus(200);
 }
 
 export const ProductsController = {
-  findProductById,
-  findProductsByFilters,
-  createProduct,
-  updateProduct,
-  deleteProduct,
+  findById,
+  findByFilters,
+  create,
+  updateById,
+  deleteById,
 }

@@ -1,8 +1,28 @@
 import * as yup from 'yup';
 import Product from '../models/products.model';
 import Brand from '../models/brands.model';
+import { id, limit, offset } from './common.validation';
 
-const productCreatePayload = yup.object().shape({
+const name = yup
+  .string()
+  .min(1)
+  .max(64)
+
+const description = yup
+  .string()
+  .min(1)
+  .max(512)
+
+const image_url = yup
+  .string()
+  .min(1)
+
+const price = yup
+  .number()
+  .integer()
+  .positive()
+
+const createPayload = yup.object().shape({
   name: yup
     .string()
     .min(1)
@@ -30,86 +50,49 @@ const productCreatePayload = yup.object().shape({
     .positive(),
 });
 
-const productUpdatePayload = yup.object().shape({
-  id: yup
-    .number()
-    .integer()
-    .positive()
+const updateByIdPayload = yup.object().shape({
+  id: id
     .required()
     .test(
       'productUpdate-entryDoesNotExist',
       "Can't update product, it does not exist",
       async value => Boolean(await Product.query().findById(value))
     ),
-  name: yup
-    .string()
-    .min(1)
-    .max(64),
-  description: yup
-    .string()
-    .min(1)
-    .max(512),
-  image_url: yup
-    .string()
-    .min(1),
-  brand_id: yup
-    .number()
-    .integer()
-    .positive()
+  name: name,
+  description: description,
+  image_url: image_url,
+  brand_id: id
     .test(
       'productUpdate-brandDoesNotExist',
       "Can't update product, specified brand does not exist",
       async value => !value || Boolean(await Brand.query().findById(value))
     ),
-  price: yup
-    .number()
-    .integer()
-    .positive(),
+  price: price,
 });
 
-const productFindOnePayload = yup.object().shape({
-  id: yup
-    .number()
-    .integer()
-    .positive()
+const findByIdPayload = yup.object().shape({
+  id: id
     .required(),
 });
 
-const filterPayload = yup.object().shape({
+const findByFiltersPayload = yup.object().shape({
   attribute_filters: yup.array().of(
     yup.array().of(
-      yup.number().integer().positive()
+      id
     )
   ),
-  category_id: yup
-    .number()
-    .integer()
-    .positive(),
-  brands: yup.array().of(
-    yup
-      .number()
-      .integer()
-      .positive(),
-  ),
+  category_id: id,
+  brands: yup.array().of(id),
   price: yup.object().shape({
-    min: yup.number().integer().positive(),
-    max: yup.number().integer().positive()
+    min: price,
+    max: price
   }),
-  offset: yup
-    .number()
-    .integer()
-    .positive(),
-  limit: yup
-    .number()
-    .integer()
-    .positive()
+  offset: offset,
+  limit: limit
 })
 
-const productDeletePayload = yup.object().shape({
-  id: yup
-    .number()
-    .integer()
-    .positive()
+const deleteByIdPayload = yup.object().shape({
+  id: id
     .required()
     .test(
       'productDelete-entryDoesNotExist',
@@ -119,9 +102,9 @@ const productDeletePayload = yup.object().shape({
 })
 
 export const ProductsValidationSchemas = {
-  productCreatePayload,
-  productUpdatePayload,
-  productFindOnePayload,
-  filterPayload,
-  productDeletePayload,
+  createPayload,
+  updateByIdPayload,
+  findByIdPayload,
+  findByFiltersPayload,
+  deleteByIdPayload,
 }

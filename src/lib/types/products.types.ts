@@ -1,8 +1,8 @@
 import * as yup from 'yup';
 import { ProductsValidationSchemas } from '../../validation-schemas/products.validation';
 
-export type ProductFindOnePayload = yup.InferType<typeof ProductsValidationSchemas.productFindOnePayload>
-export type FilterPayload = yup.InferType<typeof ProductsValidationSchemas.filterPayload>
-export type ProductUpdatePayload = yup.InferType<typeof ProductsValidationSchemas.productUpdatePayload>
-export type ProductCreatePayload = yup.InferType<typeof ProductsValidationSchemas.productCreatePayload>
-export type ProductDeletePayload = yup.InferType<typeof ProductsValidationSchemas.productDeletePayload> 
+export type ProductFindByIdPayload = yup.InferType<typeof ProductsValidationSchemas.findByIdPayload>
+export type ProductFindByFiltersPayload = yup.InferType<typeof ProductsValidationSchemas.findByFiltersPayload>
+export type ProductUpdateByIdPayload = yup.InferType<typeof ProductsValidationSchemas.updateByIdPayload>
+export type ProductCreatePayload = yup.InferType<typeof ProductsValidationSchemas.createPayload>
+export type ProductDeleteByIdPayload = yup.InferType<typeof ProductsValidationSchemas.deleteByIdPayload> 

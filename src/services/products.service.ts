@@ -1,13 +1,13 @@
 import {
   ProductCreatePayload,
-  ProductUpdatePayload,
-  FilterPayload,
+  ProductUpdateByIdPayload,
+  ProductFindByFiltersPayload,
 } from "../lib/types/products.types"
 import Product from "../models/products.model"
 import AttributeToProduct from "../models/attribute-to-product.model"
 
 
-async function findProductsByFilters(payload: FilterPayload) {
+async function findByFilters(payload: ProductFindByFiltersPayload) {
 
   const {
     attribute_filters,
@@ -62,34 +62,34 @@ async function findProductsByFilters(payload: FilterPayload) {
   return await Promise.all([query, total])
 }
 
-async function findProductById(id: number) {
+async function findById(id: number) {
   return await Product
     .query()
     .findById(id)
 }
 
-async function createProduct(object: ProductCreatePayload) {
+async function create(object: ProductCreatePayload) {
   return await Product
     .query()
     .insertAndFetch(object)
 }
 
-async function updateProduct(id: number, object: ProductUpdatePayload) {
+async function updateById(id: number, object: ProductUpdateByIdPayload) {
   return await Product
     .query()
     .patchAndFetchById(id, object)
 }
 
-async function deleteProduct(id: number) {
+async function deleteById(id: number) {
   return await Product
     .query()
     .deleteById(id)
 }
 
 export const ProductsService = {
-  findProductsByFilters,
-  findProductById,
-  createProduct,
-  updateProduct,
-  deleteProduct,
+  findByFilters,
+  findById,
+  create,
+  updateById,
+  deleteById,
 }
