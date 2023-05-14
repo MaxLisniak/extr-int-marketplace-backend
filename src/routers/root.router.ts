@@ -6,7 +6,7 @@ import productsRouter from './products.router';
 import commentsRouter from './comments.router';
 import keywordsRouter from './keywords.router';
 import attributeNamesRouter from './attribute-names.router';
-import attributeValuesRouter from './attribute-values.router';
+import attributesController from './attributes.router';
 import brandsRouter from "./brands.router"
 import attributeToProductRouter from './attribute-to-product.router'
 import categoryToProductRouter from './category-to-product.router'
@@ -21,7 +21,7 @@ rootRouter.use('/products', productsRouter);
 rootRouter.use('/comments', commentsRouter);
 rootRouter.use('/keywords', keywordsRouter);
 rootRouter.use('/attribute_names', attributeNamesRouter);
-rootRouter.use('/attribute_values', attributeValuesRouter);
+rootRouter.use('/attributes', attributesController);
 rootRouter.use('/brands', brandsRouter)
 rootRouter.use('/attribute-to-product', attributeToProductRouter)
 rootRouter.use('/category-to-product', categoryToProductRouter)

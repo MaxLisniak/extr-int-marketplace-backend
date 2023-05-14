@@ -8,6 +8,7 @@ class User extends Model {
   password_hash: string
   email: string
   refresh_token: string
+  is_admin: boolean
 
   static get tableName() {
     return "users"
