@@ -6,7 +6,7 @@ import { UsersValidationSchemas } from "../validation-schemas/users.validation";
 
 async function find(req: Request, res: Response): Promise<void> {
 	const payload = await UsersValidationSchemas.findPayload
-		.validate(req.params, { stripUnknown: true })
+		.validate(req.query, { stripUnknown: true })
 
 	const users = await UsersService.find(payload)
 
