@@ -9,7 +9,6 @@ import attributeNamesRouter from './attribute-names.router';
 import attributesController from './attributes.router';
 import brandsRouter from "./brands.router"
 import attributeToProductRouter from './attribute-to-product.router'
-import categoryToProductRouter from './category-to-product.router'
 
 import Router from "express-promise-router";
 const rootRouter = Router();
@@ -24,6 +23,5 @@ rootRouter.use('/attribute_names', attributeNamesRouter);
 rootRouter.use('/attributes', attributesController);
 rootRouter.use('/brands', brandsRouter)
 rootRouter.use('/attribute-to-product', attributeToProductRouter)
-rootRouter.use('/category-to-product', categoryToProductRouter)
 
 export default rootRouter;

@@ -5,6 +5,7 @@ import {
 } from "../lib/types/products.types"
 import Product from "../models/products.model"
 import AttributeToProduct from "../models/attribute-to-product.model"
+import { CategoriesService } from "./categories.service";
 
 
 async function findByFilters(payload: ProductFindByFiltersPayload) {
@@ -36,8 +37,9 @@ async function findByFilters(payload: ProductFindByFiltersPayload) {
   }
 
   if (category_id) {
+    const childrenCategories = await CategoriesService.getChildrenCategories(category_id)
     query.join("category_to_product", "products.id", "category_to_product.product_id")
-      .where("category_id", category_id)
+      .whereIn("category_id", [category_id, ...childrenCategories.map(child => child.id)])
   }
 
   if (brands) {
