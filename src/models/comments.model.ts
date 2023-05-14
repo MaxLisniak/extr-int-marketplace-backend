@@ -17,7 +17,7 @@ class Comment extends Model {
   static relationMappings = {
     user: {
       relation: Model.BelongsToOneRelation,
-      modelClass: path.join(__dirname, "User"),
+      modelClass: path.join(__dirname, "users.model"),
       join: {
         from: 'users.id',
         to: 'comments.user_id'

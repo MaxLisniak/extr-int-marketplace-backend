@@ -5,10 +5,10 @@ import {
 
 const router = Router();
 
-router.get('/', KeywordsController.findKeywords);
-router.post('/', KeywordsController.createKeyword);
-router.get('/:id', KeywordsController.findKeywordById);
-router.patch('/:id', KeywordsController.updateKeyword);
-router.delete('/:id', KeywordsController.deleteKeyword);
+router.get('/:id', KeywordsController.findById);
+router.get('/', KeywordsController.find);
+router.post('/', KeywordsController.create);
+router.patch('/:id', KeywordsController.updateById);
+router.delete('/:id', KeywordsController.deleteById);
 
 export default router;

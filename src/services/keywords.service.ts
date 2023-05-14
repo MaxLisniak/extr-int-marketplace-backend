@@ -1,15 +1,27 @@
 
-import { KeywordCreatePayload, KeywordFindPayload, KeywordUpdatePayload } from "../lib/types/keywords.types"
+import { KeywordCreatePayload, KeywordFindPayload, KeywordUpdateByIdPayload } from "../lib/types/keywords.types"
 import Keyword from "../models/keywords.model"
 
 async function findKeywords(params: KeywordFindPayload) {
+  const {
+    search_query,
+    limit,
+    offset
+  } = params
+
   const query = Keyword.query()
 
-  if (params.search_query) {
-    query.where('keyword', 'like', `%${params.search_query}%`)
+  if (search_query) {
+    query.where('keyword', 'like', `%${search_query}%`)
   }
 
-  query.withGraphFetched('product')
+  query
+    .withGraphFetched('product')
+    .limit(limit)
+
+  if (offset) {
+    query.offset(offset)
+  }
 
   return await query
 }
@@ -30,7 +42,7 @@ async function createKeyword(object: KeywordCreatePayload) {
     .insertAndFetch(object)
 }
 
-async function updateKeyword(id: number, object: KeywordUpdatePayload) {
+async function updateKeyword(id: number, object: KeywordUpdateByIdPayload) {
   return await Keyword
     .query()
     .patchAndFetchById(id, object)

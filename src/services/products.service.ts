@@ -11,8 +11,8 @@ async function findByFilters(payload: ProductFindByFiltersPayload) {
 
   const {
     attribute_filters,
-    offset = 0,
-    limit = 10,
+    offset,
+    limit,
     category_id,
     brands,
     price
@@ -56,9 +56,11 @@ async function findByFilters(payload: ProductFindByFiltersPayload) {
     .clone()
     .count("products.id as total")
 
-  query
-    .offset(offset)
-    .limit(limit)
+  query.limit(limit)
+
+  if (offset) {
+    query.offset(offset)
+  }
   return await Promise.all([query, total])
 }
 

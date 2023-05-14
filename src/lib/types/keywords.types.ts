@@ -2,8 +2,8 @@ import * as yup from 'yup';
 import { KeywordsValidationSchemas } from '../../validation-schemas/keywords.validation';
 
 
-export type KeywordFindPayload = yup.InferType<typeof KeywordsValidationSchemas.keywordFindPayload>
-export type KeywordFindOnePayload = yup.InferType<typeof KeywordsValidationSchemas.keywordFindOnePayload>
-export type KeywordUpdatePayload = yup.InferType<typeof KeywordsValidationSchemas.keywordUpdatePayload>
-export type KeywordCreatePayload = yup.InferType<typeof KeywordsValidationSchemas.keywordCreatePayload>
-export type KeywordDeletePayload = yup.InferType<typeof KeywordsValidationSchemas.keywordDeletePayload>
+export type KeywordFindPayload = yup.InferType<typeof KeywordsValidationSchemas.findPayload>
+export type KeywordFindByIdPayload = yup.InferType<typeof KeywordsValidationSchemas.findByIdPayload>
+export type KeywordUpdateByIdPayload = yup.InferType<typeof KeywordsValidationSchemas.updateByIdPayload>
+export type KeywordCreatePayload = yup.InferType<typeof KeywordsValidationSchemas.createPayload>
+export type KeywordDeleteByIdPayload = yup.InferType<typeof KeywordsValidationSchemas.deleteByIdPayload>

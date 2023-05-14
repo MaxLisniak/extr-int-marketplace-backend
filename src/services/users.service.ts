@@ -35,9 +35,9 @@ async function find(params: UserFindPayload) {
   if (is_admin) {
     query.where({ is_admin })
   }
-  if (limit) {
-    query.limit(limit)
-  }
+
+  query.limit(limit)
+
   if (offset) {
     query.offset(offset)
   }

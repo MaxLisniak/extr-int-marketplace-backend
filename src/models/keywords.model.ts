@@ -13,7 +13,7 @@ class Keyword extends Model {
   static relationMappings = {
     product: {
       relation: Model.BelongsToOneRelation,
-      modelClass: path.join(__dirname, "Product"),
+      modelClass: path.join(__dirname, "products.model"),
       join: {
         from: 'products.id',
         to: 'keywords.product_id'
