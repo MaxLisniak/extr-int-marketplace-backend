@@ -11,7 +11,7 @@ import {
 import User from "../models/users.model";
 import logger from "../logger";
 import Favorite from "../models/favorites.model";
-import { ErrorName } from "../lib/constants";
+import { ACCESS_TOKEN_EXPIRY, ErrorName, REFRESH_TOKEN_EXPIRY } from "../lib/constants";
 
 
 async function find(params: UserFindPayload) {
@@ -115,7 +115,7 @@ async function handleRefreshToken(refresh_token: string) {
       accessToken = jwt.sign(
         { userId: decoded.userId, email: decoded.email },
         process.env.ACCESS_TOKEN_SECRET,
-        { expiresIn: '1m' },
+        { expiresIn: ACCESS_TOKEN_EXPIRY },
       );
       logger.info(`The access token is refreshed`)
     }
@@ -163,13 +163,13 @@ async function signIn(payload: UserSignInPayload) {
   const accessToken = jwt.sign(
     { userId, email },
     process.env.ACCESS_TOKEN_SECRET,
-    { expiresIn: '1m' }
+    { expiresIn: ACCESS_TOKEN_EXPIRY }
   );
 
   const refreshToken = jwt.sign(
     { userId, email },
     process.env.REFRESH_TOKEN_SECRET,
-    { expiresIn: '7d' }
+    { expiresIn: REFRESH_TOKEN_EXPIRY }
   );
 
   // add refresh token to a user in database

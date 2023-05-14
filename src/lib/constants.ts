@@ -8,5 +8,7 @@ export enum ErrorName {
   DBError = 'DBError',
   NotNullViolationError = 'NotNullViolationError',
   UniqueViolationError = 'UniqueViolationError',
-
 }
+
+export const ACCESS_TOKEN_EXPIRY = '1m'
+export const REFRESH_TOKEN_EXPIRY = '15m'
