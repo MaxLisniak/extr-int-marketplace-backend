@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import logger from "../logger";
 import { UsersService } from "../services/users.service";
 import { UsersValidationSchemas } from "../validation-schemas/users.validation";
+import { AddFavoriteProductPayload, RemoveFavoriteProductPayload } from "../lib/types/users.types";
 
 
 async function find(req: Request, res: Response): Promise<void> {
@@ -102,15 +103,27 @@ async function handleRefreshToken(req: Request, res: Response): Promise<void> {
 }
 
 async function addFavoriteProduct(req: Request, res: Response): Promise<void> {
-	const payload = await UsersValidationSchemas.addFavoriteProductPayload
-		.validate(req.params, { stripUnknown: true })
+	const payload: Partial<AddFavoriteProductPayload & { user_id: number }> =
+		await UsersValidationSchemas.addFavoriteProductPayload
+			.validate(req.params, { stripUnknown: true })
+
+	const refreshToken = req.cookies.refreshToken
+	const user = await UsersService.findByRefreshToken(refreshToken)
+	payload.user_id = user.id
+
 	await UsersService.addFavoriteProduct(payload)
 	res.sendStatus(200)
 }
 
 async function removeFavoriteProduct(req: Request, res: Response): Promise<void> {
-	const payload = await UsersValidationSchemas.removeFavoriteProductPayload
-		.validate(req.params, { stripUnknown: true });
+	const payload: Partial<RemoveFavoriteProductPayload & { user_id: number }> =
+		await UsersValidationSchemas.removeFavoriteProductPayload
+			.validate(req.params, { stripUnknown: true });
+
+	const refreshToken = req.cookies.refreshToken
+	const user = await UsersService.findByRefreshToken(refreshToken)
+	payload.user_id = user.id
+
 	await UsersService.removeFavoriteProduct(payload)
 	res.sendStatus(200)
 }

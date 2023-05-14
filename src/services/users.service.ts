@@ -10,6 +10,7 @@ import {
 } from "../lib/types/users.types"
 import User from "../models/users.model";
 import logger from "../logger";
+import Favorite from "../models/favorites.model";
 
 
 async function find(params: UserFindPayload) {
@@ -203,18 +204,46 @@ async function signUp(payload: UserCreatePayload) {
   return registeredUser
 }
 
-async function addFavoriteProduct(payload: AddFavoriteProductPayload) {
+async function addFavoriteProduct(
+  payload: Partial<AddFavoriteProductPayload & { user_id: number }>
+) {
 
   const { user_id, product_id } = payload
+
+  const favorite = await Favorite
+    .query()
+    .findOne({
+      user_id,
+      product_id
+    })
+  if (favorite) {
+    const error = new Error("Can't add to favorite, the product is already user's favorite")
+    error.name = "ValidationError"
+    throw error
+  }
 
   return await User.relatedQuery("favorite_products")
     .for(user_id)
     .relate(product_id)
 }
 
-async function removeFavoriteProduct(payload: RemoveFavoriteProductPayload) {
+async function removeFavoriteProduct(
+  payload: Partial<RemoveFavoriteProductPayload & { user_id: number }>
+) {
 
   const { user_id, product_id } = payload
+
+  const favorite = await Favorite
+    .query()
+    .findOne({
+      user_id,
+      product_id
+    })
+  if (!favorite) {
+    const error = new Error("Can't remove from favorite, the product is not user's favorite")
+    error.name = "ValidationError"
+    throw error
+  }
 
   return await User.relatedQuery("favorite_products")
     .for(user_id)
