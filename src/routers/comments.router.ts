@@ -5,10 +5,12 @@ import { CommentsController } from "../controllers/comments.controller";
 
 const router = Router();
 
-router.get('/', CommentsController.findComments);
-router.post('/', [verifyToken, CommentsController.createComment]);
-router.get('/:id', CommentsController.findCommentById);
-router.patch('/:id', CommentsController.updateComment);
-router.delete('/:id', CommentsController.deleteComment);
+router.get('/', CommentsController.find);
+
+router.post('/', [verifyToken, CommentsController.create]);
+
+router.patch('/:id', [verifyToken, CommentsController.updateById]);
+
+router.delete('/:id', [verifyToken, CommentsController.deleteById]);
 
 export default router;

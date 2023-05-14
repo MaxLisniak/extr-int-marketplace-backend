@@ -87,10 +87,14 @@ async function removeRefreshToken(refresh_token: string) {
     .patch({ refresh_token: null })
 }
 
-async function handleRefreshToken(refresh_token: string) {
-  const foundUser = await User
+async function findByRefreshToken(refresh_token: string) {
+  return await User
     .query()
     .findOne({ refresh_token })
+}
+
+async function handleRefreshToken(refresh_token: string) {
+  const foundUser = await findByRefreshToken(refresh_token)
 
   if (!foundUser) {
     throw new Error("A token cannot be refreshed, as the user hasn't been validly authenticated")
@@ -109,7 +113,7 @@ async function handleRefreshToken(refresh_token: string) {
       accessToken = jwt.sign(
         { userId: decoded.userId, email: decoded.email },
         process.env.ACCESS_TOKEN_SECRET,
-        { expiresIn: '15s' },
+        { expiresIn: '1m' },
       );
       logger.info(`The access token is refreshed`)
     }
@@ -157,7 +161,7 @@ async function signIn(payload: UserSignInPayload) {
   const accessToken = jwt.sign(
     { userId, email },
     process.env.ACCESS_TOKEN_SECRET,
-    { expiresIn: '15s' }
+    { expiresIn: '1m' }
   );
 
   const refreshToken = jwt.sign(
@@ -221,6 +225,7 @@ async function removeFavoriteProduct(payload: RemoveFavoriteProductPayload) {
 export const UsersService = {
   find,
   findById,
+  findByRefreshToken,
   updateById,
   deleteById,
   handleRefreshToken,
