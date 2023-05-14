@@ -22,7 +22,7 @@ async function findRootCategories(params: CategoryFindPayload) {
   return await query
 }
 
-async function findCategoryById(id: number) {
+async function findById(id: number) {
   return await Category
     .query()
     .findById(id)
@@ -46,19 +46,19 @@ async function getChildrenCategories(categoryId: number): Promise<Category[]> {
   return children.concat(...childrenIds);
 }
 
-async function createCategory(object: CategoryCreatePayload) {
+async function create(object: CategoryCreatePayload) {
   return await Category
     .query()
     .insertAndFetch(object)
 }
 
-async function updateCategory(id: number, object: CategoryUpdateByIdPayload) {
+async function updateById(id: number, object: CategoryUpdateByIdPayload) {
   return await Category
     .query()
     .patchAndFetchById(id, object)
 }
 
-async function deleteCategory(id: number) {
+async function deleteById(id: number) {
   return await Category
     .query()
     .deleteById(id)
@@ -87,11 +87,11 @@ async function removeProduct(payload: CategoryRemoveProductPayload) {
 
 export const CategoriesService = {
   findRootCategories,
-  findCategoryById,
+  findById,
   getChildrenCategories,
-  createCategory,
-  updateCategory,
-  deleteCategory,
+  create,
+  updateById,
+  deleteById,
   addProduct,
   removeProduct,
 }

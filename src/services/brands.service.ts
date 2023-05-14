@@ -1,8 +1,8 @@
 
-import { BrandCreatePayload, BrandFindPayload, BrandUpdatePayload } from "../lib/types/brands.types";
+import { BrandCreatePayload, BrandFindPayload, BrandUpdateByIdPayload } from "../lib/types/brands.types";
 import Brand from "../models/brands.model";
 
-async function findBrands(params: BrandFindPayload) {
+async function find(params: BrandFindPayload) {
   const { limit = 10, offset = 0 } = params;
   return await Brand
     .query()
@@ -11,34 +11,34 @@ async function findBrands(params: BrandFindPayload) {
     .orderBy('name', 'DESC');
 }
 
-async function findBrandById(id: number) {
+async function findById(id: number) {
   return await Brand
     .query()
     .findById(id)
 }
 
-async function createBrand(object: BrandCreatePayload) {
+async function create(object: BrandCreatePayload) {
   return await Brand
     .query()
     .insertAndFetch(object)
 }
 
-async function updateBrand(id: number, object: BrandUpdatePayload) {
+async function updateById(id: number, object: BrandUpdateByIdPayload) {
   return await Brand
     .query()
     .patchAndFetchById(id, object)
 }
 
-async function deleteBrand(id: number) {
+async function deleteById(id: number) {
   return await Brand
     .query()
     .deleteById(id)
 }
 
 export const BrandsService = {
-  findBrands,
-  findBrandById,
-  createBrand,
-  updateBrand,
-  deleteBrand,
+  find,
+  findById,
+  create,
+  updateById,
+  deleteById,
 }

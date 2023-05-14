@@ -3,45 +3,45 @@ import { BrandsValidationSchemas } from "../validation-schemas/brands.validation
 import { BrandsService } from "../services/brands.service";
 
 
-async function findBrands(req: Request, res: Response): Promise<void> {
-  const payload = await BrandsValidationSchemas.brandFindPayload
+async function find(req: Request, res: Response): Promise<void> {
+  const payload = await BrandsValidationSchemas.findPayload
     .validate(req.query, { stripUnknown: true })
-  const brands = await BrandsService.findBrands(payload)
+  const brands = await BrandsService.find(payload)
   res.json({ data: brands });
 }
 
-async function findBrandById(req: Request, res: Response): Promise<void> {
-  const payload = await BrandsValidationSchemas.brandFindOnePayload
+async function findById(req: Request, res: Response): Promise<void> {
+  const payload = await BrandsValidationSchemas.findByIdPayload
     .validate(req.params, { stripUnknown: true })
-  const brand = await BrandsService.findBrandById(payload.id)
+  const brand = await BrandsService.findById(payload.id)
   res.json({ data: brand });
 }
 
-async function createBrand(req: Request, res: Response): Promise<void> {
-  const payload = await BrandsValidationSchemas.brandCreatePayload
+async function create(req: Request, res: Response): Promise<void> {
+  const payload = await BrandsValidationSchemas.createPayload
     .validate(req.body, { stripUnknown: true })
-  const brand = await BrandsService.createBrand(payload)
+  const brand = await BrandsService.create(payload)
   res.json({ data: brand });
 }
 
-async function updateBrand(req: Request, res: Response): Promise<void> {
-  const payload = await BrandsValidationSchemas.brandUpdatePayload
+async function updateById(req: Request, res: Response): Promise<void> {
+  const payload = await BrandsValidationSchemas.updateByIdPayload
     .validate({ ...req.body, ...req.params }, { stripUnknown: true })
-  const brand = await BrandsService.updateBrand(payload.id, payload)
+  const brand = await BrandsService.updateById(payload.id, payload)
   res.json({ data: brand });
 }
 
-async function deleteBrand(req: Request, res: Response): Promise<void> {
-  const payload = await BrandsValidationSchemas.brandDeletePayload
+async function deleteById(req: Request, res: Response): Promise<void> {
+  const payload = await BrandsValidationSchemas.deleteByIdPaylaod
     .validate(req.params, { stripUnknown: true })
-  await BrandsService.deleteBrand(payload.id)
+  await BrandsService.deleteById(payload.id)
   res.sendStatus(200);
 }
 
 export const BrandsController = {
-  findBrands,
-  findBrandById,
-  createBrand,
-  updateBrand,
-  deleteBrand,
+  find,
+  findById,
+  create,
+  updateById,
+  deleteById,
 }

@@ -11,31 +11,31 @@ async function findRootCategories(req: Request, res: Response): Promise<void> {
   res.json({ data: categories })
 }
 
-async function findCategoryById(req: Request, res: Response): Promise<void> {
+async function findById(req: Request, res: Response): Promise<void> {
   const payload = await CategoriesValidationSchemas.findByIdPayload
     .validate(req.params, { stripUnknown: true });
-  const category = await CategoriesService.findCategoryById(payload.id)
+  const category = await CategoriesService.findById(payload.id)
   res.json({ data: category });
 }
 
-async function createCategory(req: Request, res: Response): Promise<void> {
+async function create(req: Request, res: Response): Promise<void> {
   const payload = await CategoriesValidationSchemas.createPayload
     .validate(req.body, { stripUnknown: true })
-  const category = await CategoriesService.createCategory(payload)
+  const category = await CategoriesService.create(payload)
   res.json({ data: category });
 }
 
-async function updateCategory(req: Request, res: Response): Promise<void> {
+async function updateById(req: Request, res: Response): Promise<void> {
   const payload = await CategoriesValidationSchemas.updateByIdPayload
     .validate({ ...req.body, ...req.params }, { stripUnknown: true })
-  const category = await CategoriesService.updateCategory(payload.id, payload)
+  const category = await CategoriesService.updateById(payload.id, payload)
   res.json({ data: category });
 }
 
-async function deleteCategory(req: Request, res: Response): Promise<void> {
+async function deleteById(req: Request, res: Response): Promise<void> {
   const payload = await CategoriesValidationSchemas.deleteByIdPayload
     .validate(req.params, { stripUnknown: true })
-  await CategoriesService.deleteCategory(payload.id)
+  await CategoriesService.deleteById(payload.id)
   res.sendStatus(200);
 }
 
@@ -55,10 +55,10 @@ async function removeProduct(req: Request, res: Response): Promise<void> {
 
 export const CategoriesController = {
   findRootCategories,
-  findCategoryById,
-  createCategory,
-  updateCategory,
-  deleteCategory,
+  findById,
+  create,
+  updateById,
+  deleteById,
   addProduct,
   removeProduct,
 }

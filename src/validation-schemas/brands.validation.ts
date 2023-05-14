@@ -1,7 +1,7 @@
 import Brand from '../models/brands.model';
 import * as yup from 'yup';
 
-const brandFindPayload = yup.object().shape({
+const findPayload = yup.object().shape({
   limit: yup
     .number()
     .integer()
@@ -12,7 +12,7 @@ const brandFindPayload = yup.object().shape({
     .positive()
 })
 
-const brandFindOnePayload = yup.object().shape({
+const findByIdPayload = yup.object().shape({
   id: yup
     .number()
     .integer()
@@ -20,7 +20,7 @@ const brandFindOnePayload = yup.object().shape({
     .required(),
 })
 
-const brandCreatePayload = yup.object().shape({
+const createPayload = yup.object().shape({
   name: yup
     .string()
     .min(1)
@@ -28,7 +28,7 @@ const brandCreatePayload = yup.object().shape({
     .required(),
 })
 
-const brandUpdatePayload = yup.object().shape({
+const updateByIdPayload = yup.object().shape({
   id: yup
     .number()
     .integer()
@@ -45,7 +45,7 @@ const brandUpdatePayload = yup.object().shape({
     .max(64),
 })
 
-const brandDeletePayload = yup.object().shape({
+const deleteByIdPaylaod = yup.object().shape({
   id: yup
     .number()
     .integer()
@@ -59,10 +59,10 @@ const brandDeletePayload = yup.object().shape({
 })
 
 export const BrandsValidationSchemas = {
-  brandFindPayload,
-  brandFindOnePayload,
-  brandCreatePayload,
-  brandUpdatePayload,
-  brandDeletePayload,
+  findPayload,
+  findByIdPayload,
+  createPayload,
+  updateByIdPayload,
+  deleteByIdPaylaod,
 }
 

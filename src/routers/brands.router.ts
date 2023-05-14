@@ -7,13 +7,13 @@ import verifyAdmin from "../middleware/verifyAdmin";
 
 const router = Router();
 
-router.get('/:id', BrandsController.findBrandById);
-router.get('/', BrandsController.findBrands);
+router.get('/:id', BrandsController.findById);
+router.get('/', BrandsController.find);
 
-router.post('/', [verifyAuthorization, verifyAdmin, BrandsController.createBrand]);
+router.post('/', [verifyAuthorization, verifyAdmin, BrandsController.create]);
 
-router.patch('/:id', [verifyAuthorization, verifyAdmin, BrandsController.updateBrand]);
+router.patch('/:id', [verifyAuthorization, verifyAdmin, BrandsController.updateById]);
 
-router.delete('/:id', [verifyAuthorization, verifyAdmin, BrandsController.deleteBrand]);
+router.delete('/:id', [verifyAuthorization, verifyAdmin, BrandsController.deleteById]);
 
 export default router;
