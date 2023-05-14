@@ -1,8 +1,9 @@
 
-import { KeywordCreatePayload, KeywordFindPayload, KeywordUpdateByIdPayload } from "../lib/types/keywords.types"
+import Product from "../models/products.model"
+import { KeywordAddToProductPayload, KeywordCreatePayload, KeywordFindPayload, KeywordRemoveFromProductPayload, KeywordUpdateByIdPayload } from "../lib/types/keywords.types"
 import Keyword from "../models/keywords.model"
 
-async function findKeywords(params: KeywordFindPayload) {
+async function find(params: KeywordFindPayload) {
   const {
     search_query,
     limit,
@@ -16,7 +17,7 @@ async function findKeywords(params: KeywordFindPayload) {
   }
 
   query
-    .withGraphFetched('product')
+    .withGraphFetched('products')
     .limit(limit)
 
   if (offset) {
@@ -26,7 +27,7 @@ async function findKeywords(params: KeywordFindPayload) {
   return await query
 }
 
-async function findKeywordById(id: number) {
+async function findById(id: number) {
   const query = Keyword
     .query()
     .findById(id)
@@ -36,28 +37,51 @@ async function findKeywordById(id: number) {
   return await query
 }
 
-async function createKeyword(object: KeywordCreatePayload) {
+async function create(object: KeywordCreatePayload) {
   return await Keyword
     .query()
     .insertAndFetch(object)
 }
 
-async function updateKeyword(id: number, object: KeywordUpdateByIdPayload) {
+async function updateById(id: number, object: KeywordUpdateByIdPayload) {
   return await Keyword
     .query()
     .patchAndFetchById(id, object)
 }
 
-async function deleteKeyword(id: number) {
+async function deleteById(id: number) {
   return await Keyword
     .query()
     .deleteById(id)
 }
 
+async function addToProduct(payload: KeywordAddToProductPayload) {
+
+  const { keyword_id, product_id } = payload
+
+  return await Product
+    .relatedQuery('keywords')
+    .for(product_id)
+    .relate(keyword_id)
+}
+
+async function removeFromProduct(payload: KeywordRemoveFromProductPayload) {
+
+  const { keyword_id, product_id } = payload
+
+  return await Product
+    .relatedQuery('keywords')
+    .for(product_id)
+    .unrelate()
+    .where('keywords.id', keyword_id)
+}
+
 export const KeywordsService = {
-  findKeywords,
-  findKeywordById,
-  createKeyword,
-  updateKeyword,
-  deleteKeyword,
+  find,
+  findById,
+  create,
+  updateById,
+  deleteById,
+  addToProduct,
+  removeFromProduct
 }

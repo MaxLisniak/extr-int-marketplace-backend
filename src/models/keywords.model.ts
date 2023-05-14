@@ -11,15 +11,19 @@ class Keyword extends Model {
   }
 
   static relationMappings = {
-    product: {
-      relation: Model.BelongsToOneRelation,
+    products: {
+      relation: Model.ManyToManyRelation,
       modelClass: path.join(__dirname, "products.model"),
       join: {
         from: 'products.id',
-        to: 'keywords.product_id'
+        through: {
+          from: 'keyword_to_product.keyword_id',
+          to: 'keyword_to_product.product_id',
+        },
+        to: 'keywords.id'
       }
-    },
-  }
+    }
+  };
 
 }
 

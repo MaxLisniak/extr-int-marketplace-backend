@@ -7,3 +7,5 @@ export type KeywordFindByIdPayload = yup.InferType<typeof KeywordsValidationSche
 export type KeywordUpdateByIdPayload = yup.InferType<typeof KeywordsValidationSchemas.updateByIdPayload>
 export type KeywordCreatePayload = yup.InferType<typeof KeywordsValidationSchemas.createPayload>
 export type KeywordDeleteByIdPayload = yup.InferType<typeof KeywordsValidationSchemas.deleteByIdPayload>
+export type KeywordAddToProductPayload = yup.InferType<typeof KeywordsValidationSchemas.addToProductPayload>
+export type KeywordRemoveFromProductPayload = yup.InferType<typeof KeywordsValidationSchemas.removeFromProductPayload>
