@@ -14,7 +14,7 @@ class User extends Model {
   }
 
   static relationMappings = {
-    favoriteProducts: {
+    favorite_products: {
       relation: Model.ManyToManyRelation,
       modelClass: Product,
       join: {

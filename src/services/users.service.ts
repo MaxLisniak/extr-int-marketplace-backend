@@ -5,6 +5,8 @@ import {
   UserCreatePayload,
   UserUpdateByIdPayload,
   UserFindPayload,
+  AddFavoriteProductPayload,
+  RemoveFavoriteProductPayload,
 } from "../lib/types/users.types"
 import User from "../models/users.model";
 import logger from "../logger";
@@ -36,7 +38,9 @@ async function find(params: UserFindPayload) {
     query.where({ is_admin })
   }
 
-  query.limit(limit)
+  query
+    .withGraphFetched('favorite_products')
+    .limit(limit)
 
   if (offset) {
     query.offset(offset)
@@ -49,6 +53,7 @@ async function findById(id: number) {
   return await User
     .query()
     .findById(id)
+    .withGraphFetched('favorite_products')
 }
 
 async function updateById(id: number, payload: UserUpdateByIdPayload) {
@@ -194,6 +199,25 @@ async function signUp(payload: UserCreatePayload) {
   return registeredUser
 }
 
+async function addFavoriteProduct(payload: AddFavoriteProductPayload) {
+
+  const { user_id, product_id } = payload
+
+  return await User.relatedQuery("favorite_products")
+    .for(user_id)
+    .relate(product_id)
+}
+
+async function removeFavoriteProduct(payload: RemoveFavoriteProductPayload) {
+
+  const { user_id, product_id } = payload
+
+  return await User.relatedQuery("favorite_products")
+    .for(user_id)
+    .unrelate()
+    .where('products.id', product_id)
+}
+
 export const UsersService = {
   find,
   findById,
@@ -202,5 +226,7 @@ export const UsersService = {
   handleRefreshToken,
   signUp,
   signIn,
-  signOut
+  signOut,
+  addFavoriteProduct,
+  removeFavoriteProduct,
 }

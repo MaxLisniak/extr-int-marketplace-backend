@@ -101,6 +101,20 @@ async function handleRefreshToken(req: Request, res: Response): Promise<void> {
 	res.json({ accessToken })
 }
 
+async function addFavoriteProduct(req: Request, res: Response): Promise<void> {
+	const payload = await UsersValidationSchemas.addFavoriteProductPayload
+		.validate(req.params, { stripUnknown: true })
+	await UsersService.addFavoriteProduct(payload)
+	res.sendStatus(200)
+}
+
+async function removeFavoriteProduct(req: Request, res: Response): Promise<void> {
+	const payload = await UsersValidationSchemas.removeFavoriteProductPayload
+		.validate(req.params, { stripUnknown: true });
+	await UsersService.removeFavoriteProduct(payload)
+	res.sendStatus(200)
+}
+
 export const UsersController = {
 	find,
 	findById,
@@ -110,4 +124,6 @@ export const UsersController = {
 	signIn,
 	signOut,
 	handleRefreshToken,
+	addFavoriteProduct,
+	removeFavoriteProduct,
 }
