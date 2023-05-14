@@ -17,6 +17,13 @@ async function findByFilters(req: Request, res: Response): Promise<void> {
   res.json({ data: products, total: total[0] })
 }
 
+async function getFilterList(req: Request, res: Response): Promise<void> {
+  const payload = await ProductsValidationSchemas.getFilterList
+    .validate(req.query, { stripUnknown: true });
+  const filterList = await ProductsService.getFilterList(payload.category_id)
+  res.json({ data: filterList });
+}
+
 async function create(req: Request, res: Response): Promise<void> {
   const payload = await ProductsValidationSchemas.createPayload
     .validate({ ...req.body }, { stripUnknown: true })
@@ -38,10 +45,29 @@ async function deleteById(req: Request, res: Response): Promise<void> {
   res.sendStatus(200);
 }
 
+async function addAttribute(req: Request, res: Response): Promise<void> {
+  const payload = await ProductsValidationSchemas.addAttributePayload
+    .validate({ ...req.body, ...req.params }, { stripUnknown: true })
+
+  await ProductsService.addAttribute(payload)
+  res.sendStatus(200);
+}
+
+async function removeAttribute(req: Request, res: Response): Promise<void> {
+  const payload = await ProductsValidationSchemas.removeAttributePayload
+    .validate(req.params, { stripUnknown: true })
+
+  await ProductsService.removeAttribute(payload)
+  res.sendStatus(200);
+}
+
 export const ProductsController = {
   findById,
   findByFilters,
   create,
   updateById,
   deleteById,
+  addAttribute,
+  removeAttribute,
+  getFilterList,
 }

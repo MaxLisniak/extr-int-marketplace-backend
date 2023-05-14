@@ -1,5 +1,4 @@
 import { Request, Response } from 'express';
-import { categorySchema } from '../lib/interfaces/categorySchema';
 import { CategoriesValidationSchemas } from '../validation-schemas/categories.validation';
 import { CategoriesService } from '../services/categories.service';
 
@@ -9,11 +8,6 @@ async function findRootCategories(req: Request, res: Response): Promise<void> {
     .validate(req.query, { stripUnknown: true });
 
   const categories = await CategoriesService.findRootCategories(payload)
-  // const nest = (items: categorySchema[], id: number | null = null): categorySchema[] =>
-  //   items
-  //     .filter(item => item.parent_id === id)
-  //     .map(item => ({ ...item, subcategories: nest(items, item.id) }));
-  // res.json({ data: nest(categories) });
   res.json({ data: categories })
 }
 

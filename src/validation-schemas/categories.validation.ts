@@ -114,5 +114,5 @@ export const CategoriesValidationSchemas = {
   updateByIdPayload,
   deleteByIdPayload,
   addProductPayload,
-  removeProductPayload
+  removeProductPayload,
 }

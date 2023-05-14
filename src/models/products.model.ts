@@ -13,6 +13,11 @@ class Product extends Model {
   image_url: string
   brand_id: number
   price: number
+  attributes: {
+    name: string,
+    value: string,
+    attribute_id: number,
+  }[]
 
   static get tableName() {
     return "products"
