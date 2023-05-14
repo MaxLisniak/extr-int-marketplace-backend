@@ -11,6 +11,7 @@ import {
 import User from "../models/users.model";
 import logger from "../logger";
 import Favorite from "../models/favorites.model";
+import { ErrorName } from "../lib/constants";
 
 
 async function find(params: UserFindPayload) {
@@ -218,7 +219,7 @@ async function addFavoriteProduct(
     })
   if (favorite) {
     const error = new Error("Can't add to favorite, the product is already user's favorite")
-    error.name = "ValidationError"
+    error.name = ErrorName.ValidationError
     throw error
   }
 
@@ -241,7 +242,7 @@ async function removeFavoriteProduct(
     })
   if (!favorite) {
     const error = new Error("Can't remove from favorite, the product is not user's favorite")
-    error.name = "ValidationError"
+    error.name = ErrorName.ValidationError
     throw error
   }
 
